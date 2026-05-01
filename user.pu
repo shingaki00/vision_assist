@@ -3,11 +3,20 @@
 left to right direction
 title 視覚障がい者のための画面設計
 
-state ホーム画面 as Home
-state 新規登録画面 as newUser
-state 管理者ログイン画面 as adminlogin
-state ユーザーログイン画面 as UserLogin
-state 歩行ログ確認画面 as log
+state "ホーム画面" as Home
+state "ユーザーログイン画面" as UserLogin
+state "新規登録画面" as newUser
+state "歩行ログ確認画面" as log
+state "緊急連絡" as Alart
+state "デバイス状態表示" as Device
 
-[*] --> Home    
+
+[*] --> UserLogin
+[*] --> newUser
+
+UserLogin --> Home
+newUser --> UserLogin
+Home --> log
+Home --> Alart
+Home --> Device
 
