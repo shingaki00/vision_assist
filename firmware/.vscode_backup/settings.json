@@ -1,0 +1,18 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/.pio/libdeps/m5stick-c-plus2/M5StickCPlus2/src",
+        "${workspaceFolder}/.pio/libdeps/m5stick-c-plus2/M5Unified/src",
+        "${workspaceFolder}/.pio/libdeps/m5stick-c-plus2/M5GFX/src",
+        "${workspaceFolder}/.pio/libdeps/m5stick-c-plus2/*/src",
+        "${env:USERPROFILE}/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/**"
+    ],
+    "C_Cpp.default.intelliSenseMode": "gcc-x64",
+    "C_Cpp.formatting": "Disabled",
+    "[cpp]": {
+        "editor.defaultFormatter": null
+    }
+}

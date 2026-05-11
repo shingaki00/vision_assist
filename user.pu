@@ -1,0 +1,13 @@
+@startuml ITwordbook
+
+left to right direction
+title 視覚障がい者のための画面設計
+
+state ホーム画面 as Home
+state 新規登録画面 as newUser
+state 管理者ログイン画面 as adminlogin
+state ユーザーログイン画面 as UserLogin
+state 歩行ログ確認画面 as log
+
+[*] --> Home    
+
