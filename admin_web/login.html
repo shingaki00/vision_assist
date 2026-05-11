@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン</title>
+
+    <!-- CSS読み込み -->
+    <link rel="stylesheet" href="./css/login.css">
+    <script src="./js/login.js"></script>
+
+</head>
+
+<body>
+
+    <main>
+        <div class="login-container">
+
+            <h1>ログイン</h1>
+
+            <form class="login-form">
+
+                <div class="form-group">
+                    <label for="userId">ユーザーID</label>
+                    <input 
+                        type="text" 
+                        id="userId" 
+                        name="userId"
+                        required
+                    >
+
+                    <label for="password">パスワード</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="login-button">
+                    ログイン
+                </button>
+
+                <label for="forgot-password">パスワードを忘れたら</label>
+
+            </form>
+
+        </div>
+    </main>
+
+</body>
+</html>
