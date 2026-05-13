@@ -13,6 +13,7 @@ state "デバイス状態表示" as Device
 [*] --> UserLogin
 [*] --> newUser
 
+
 UserLogin --> Home
 newUser --> UserLogin
 Home --> log
