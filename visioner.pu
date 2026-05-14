@@ -1,2 +1,78 @@
 @startuml
+!theme plain
+skinparam linetype ortho
+
+entity "Facilities (施設)" as facility {
+  * id : UUID [PK]
+  --
+  name : 施設名
+  address : 住所
+  representative_name : 代表者名
+  emergency_contact : 緊急連絡先(電話番号)
+}
+
+entity "Admins (施設管理者)" as admin {
+  * id : UUID [PK]
+  --
+  facility_id : UUID [FK]
+  login_id : ログインID
+  password_hash : パスワードハッシュ
+  name : 管理者名
+}
+
+entity "Patients (視覚障がい利用者)" as patient {
+  * id : UUID [PK]
+  --
+  facility_id : UUID [FK]
+  name : 氏名
+  age : 年齢
+  emergency_note : 特記事項（既往歴等）
+  login_id : アプリログインID
+  password_hash : アプリパスワードハッシュ
+}
+
+entity "Devices (配布デバイス)" as device {
+  * id : UUID [PK]
+  --
+  patient_id : UUID [FK]
+  device_mac_address : MACアドレス(StickC識別用)
+  battery_status : 電池残量
+  last_heartbeat : 最終通信確認日時
+}
+
+entity "WalkingLogs (歩行ログ)" as log {
+  * id : UUID [PK]
+  --
+  patient_id : UUID [FK]
+  start_time : 開始日時
+  end_time : 終了日時
+}
+
+entity "GPSData (位置情報詳細)" as gps {
+  * id : BIGINT [PK]
+  --
+  log_id : UUID [FK]
+  latitude : 緯度
+  longitude : 経度
+  timestamp : 記録日時
+}
+
+' entity "ObstacleAlerts (障害物検知履歴)" as alert {
+'   * id : UUID [PK]
+'   --
+'   log_id : UUID [FK]
+'   distance : 検知距離(cm)
+'   latitude : 緯度（検知場所）
+'   longitude : 経度（検知場所）
+'   created_at : 検知日時
+' }
+
+' リレーションシップ
+facility ||--o{ admin
+facility ||--o{ patient
+patient ||--o| device
+patient ||--o{ log
+log ||--o{ gps
+' log ||--o{ alert
+
 @enduml
