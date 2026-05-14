@@ -58,7 +58,7 @@
 
 .quick-card:hover {
     transform: translateY(-3px);
-    border-color: #10b981;
+    border-color: #EEB1FF;
 }
 
 /* アイコンとテキストのスタイル */
@@ -71,6 +71,7 @@
 .text h4 {
     margin: 0;
     font-size: 18px;
+    color: #804893;
 }
 
 .text p {
@@ -83,7 +84,7 @@
 .arrow {
     margin-left: auto;
     font-size: 30px;
-    color: #9ca3af;
+    color: #3A2C3D;
 }
 
 
@@ -117,6 +118,7 @@
 }
 
 .activity-title {
+    color: #804893;
     margin: 0;
     font-weight: bold;
 }

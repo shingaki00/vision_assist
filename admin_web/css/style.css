@@ -2,10 +2,15 @@
 /* ヘッダー */
 /* -------------*/
 h1{
+    color: #3A2C3D;
     font-size: 30px;
     font-weight: normal;
     margin-left: 20px;
     margin-bottom: 0px;
+}
+
+h3{
+    color: #3A2C3D;
 }
 
 header {
@@ -41,7 +46,7 @@ header {
 .btn-logout {
   padding: 8px 12px;
   color: white;
-  background-color: #ef0520;
+  background-color: #BA1A1A;
   border: none;
   border-radius: 6px;
   cursor: pointer;
