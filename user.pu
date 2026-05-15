@@ -10,9 +10,9 @@ state "歩行ログ確認画面" as log
 state "緊急連絡" as Alart
 state "デバイス状態表示" as Device
 
-
 [*] --> UserLogin
 [*] --> newUser
+
 
 UserLogin --> Home
 newUser --> UserLogin
@@ -20,3 +20,4 @@ Home --> log
 Home --> Alart
 Home --> Device
 
+@enduml

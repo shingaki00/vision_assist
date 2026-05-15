@@ -17,3 +17,6 @@ Home --> newUser
 Home --> log
 Home --> UserList
 Home --> Alart
+
+@enduml
+
