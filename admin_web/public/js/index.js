@@ -1,8 +1,10 @@
-import { activities } from "./testData.js";
 import { formatTimeAgo } from "./style.js";
 
 // 最新５件の通知を取得する
-function renderActivities() {
+async function renderActivities() {
+    const res = await fetch("./testData.json");
+    const { activities } = await res.json();
+
     const list = document.getElementById("activity-list");
     list.innerHTML = "";
 
