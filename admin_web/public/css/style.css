@@ -44,10 +44,14 @@ header {
 }
 
 .btn-logout {
-  padding: 8px 12px;
-  color: white;
-  background-color: #BA1A1A;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+    padding: 12px 14px;
+    color: white;
+    background-color: #BA1A1A;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-logout:hover {
+    box-shadow: 0 4px 14px #8c7790;
 }
