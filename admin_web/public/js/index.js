@@ -2,7 +2,7 @@ import { formatTimeAgo } from "./style.js";
 
 // 最新５件の通知を取得する
 async function renderActivities() {
-    const res = await fetch("./testData.json");
+    const res = await fetch("../testData.json");
     const { activities } = await res.json();
 
     const list = document.getElementById("activity-list");
