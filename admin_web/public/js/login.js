@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const user = data.users.find(u => u.login_id === login_id);
 
         if (user && user.password === password) {
+            sessionStorage.setItem("loggedInUser", JSON.stringify(user)); //sessionStorageにユーザ情報を保存
             window.location.href = "index.html";
         } else {
             alert("IDまたはパスワードが違います");

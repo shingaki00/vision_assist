@@ -1,3 +1,12 @@
+// header.htmlを読み込む
+fetch("header.html")
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById("header").innerHTML = data;
+    Logout(); // ログアウト機能を初期化
+});
+
+
 // 時間を「〇分前」などの形式で表示する関数
 export function formatTimeAgo(dateString) {
     const now = new Date();
@@ -14,8 +23,19 @@ export function formatTimeAgo(dateString) {
     return `${diffDay}日前`;
 }
 
-fetch("header.html")
-  .then(response => response.text())
-  .then(data => {
-    document.getElementById("header").innerHTML = data;
-  });
+
+// ログアウト処理
+export function Logout() {
+    const logoutBtn = document.querySelector(".btn-logout");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            const confirmed = confirm("ログアウトしますか？"); // ← 追加
+            if (!confirmed) return;                            // ← キャンセルで中断
+
+            sessionStorage.removeItem("loggedInUser");
+            window.location.href = "../public/login.html";
+        });
+    }
+}
+document.addEventListener("DOMContentLoaded", () => { Logout();});
