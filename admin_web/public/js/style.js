@@ -1,9 +1,20 @@
 // header.htmlを読み込む
-fetch("header.html")
-  .then(response => response.text())
-  .then(data => {
-    document.getElementById("header").innerHTML = data;
-    Logout(); // ログアウト機能を初期化
+document.addEventListener("DOMContentLoaded", () => {
+    const headerEl = document.getElementById("header");
+    if (!headerEl) return;
+
+    const scriptSrc = document.querySelector('script[src*="style.js"]')?.src;
+    const headerPath = scriptSrc
+        ? new URL("../header.html", scriptSrc).href
+        : "../header.html";
+
+    fetch(headerPath)
+        .then(res => res.text())
+        .then(data => {
+        headerEl.innerHTML = data;
+        Logout();
+        })
+        .catch(err => console.error("ヘッダーの読み込みに失敗しました:", err));
 });
 
 
