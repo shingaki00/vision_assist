@@ -1,25 +1,35 @@
+/*背景色*/
+body{
+    background-color: #f0f0f0;
+    margin: 0;
+}
+
+
 /* -------------*/
 /* ヘッダー */
 /* -------------*/
 h1{
     color: #3A2C3D;
-    font-size: 30px;
+    font-size: 26px;
     font-weight: normal;
     margin-left: 20px;
     margin-bottom: 0px;
+    margin-top: 14px;
 }
 
 h3{
     color: #3A2C3D;
+    margin-left: 15px;
 }
 
 header {
     width: 100%;
-    height: 80px;
+    height: 90px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     background-color: white;
+    border-bottom: 2px solid #ccc;
 }
 
 /* 左側 */
@@ -45,14 +55,19 @@ header {
 }
 
 .btn-logout {
-    padding: 10px 14px;
-    color: white;
-    background-color: #BA1A1A;
-    border: none;
+    font-size: 14px;
+    padding: 8px 14px;
+    color:dimgrey;
+    background-color: white;
+    border:white solid 1px;
     border-radius: 6px;
     cursor: pointer;
 }
 
 .btn-logout:hover {
-    box-shadow: 0 4px 14px #8c7790;
+    color: white;
+    background-color: #BA1A1A;
+    border: none;
+    border-radius: 6px;
+    transition: 0.3s;
 }
