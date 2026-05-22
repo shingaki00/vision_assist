@@ -1,18 +1,10 @@
 /* 横並びにする */
 .home-container {
     display: flex;
-    gap: 20px;
-    margin: 20px;
-}
-
-/* 左：クイックアクセス */
-.quick-access {
-    flex: 2; /* 広めに */
-}
-
-/* 右：アクティビティ */
-.activity-feed {
-    flex: 1; /* 少し狭く */
+    margin: 20px auto;
+    max-width: 1080px;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 /* 共通のスタイル */
@@ -31,6 +23,11 @@
 /* -------------------------------------- */
 /* クイックアクセスの配置 */
 /* -------------------------------------- */
+
+.quick-access {
+    flex: 2; /* 広めに */
+}
+
 .quick-access-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -87,6 +84,7 @@
 /* アクティビティフィードのアイテム */
 /* -------------------------------------- */
 .activity-feed {
+    flex: 1;  /* 少し狭く */
     margin: 10px;
     border: 2px solid #ccc;
     border-radius: 12px;

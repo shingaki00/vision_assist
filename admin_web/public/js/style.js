@@ -1,6 +1,6 @@
 // header.htmlを読み込む
 document.addEventListener("DOMContentLoaded", () => {
-    const headerEl = document.getElementById("header");
+    const headerEl = document.getElementById("header-inner");
     if (!headerEl) return;
 
     const scriptSrc = document.querySelector('script[src*="style.js"]')?.src;
