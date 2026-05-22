@@ -18,10 +18,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const response = await fetch("../testData.json");
         const data = await response.json();
 
-        const user = data.users.find(u => u.login_id === login_id);
+        const admin = data.admins.find(a => a.login_id === login_id);
 
-        if (user && user.password === password) {
-            sessionStorage.setItem("loggedInUser", JSON.stringify(user)); //sessionStorageにユーザ情報を保存
+        if (admin && admin.password === password) {
+            sessionStorage.setItem("loggedInUser", JSON.stringify(admin)); //sessionStorageにユーザ情報を保存
             window.location.href = "index.html";
         } else {
             alert("IDまたはパスワードが違います");

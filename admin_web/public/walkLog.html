@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>歩行ログ</title>
+    <title>歩行ログ確認</title>
 
     <!-- 読み込み -->
-    <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/style.css">
-    <script type="module" src="./js/index.js" defer></script>
     <script type="module" src="./js/style.js" defer></script>
-    
 
 </head>
 
@@ -18,6 +15,40 @@
     <div id="header-inner"></div>
 
     <main class="">
+
+        <a href="./index.html" class="back-link">
+            <div class="arrow"><</div>
+            ダッシュボードに戻る
+        </a>
+
+        <h2>クイックアクセス</h2>
+
+        <!-- 検索 -->
+        <div class="search-wrap">
+            <input class="search-input" type="text" placeholder="ユーザー名またはデバイスで検索..." id="searchInput">
+        </div>
+
+        <!-- フィルタータブ -->
+        <div class="filter-tabs">
+            <button class="tab active" data-filter="all">すべて</button>
+            <button class="tab" data-filter="active">アクティブ</button>
+            <button class="tab" data-filter="inactive">非アクティブ</button>
+        </div>
+
+
+        <!-- 統計カード -->
+        <!-- アクティブユーザーとか本日のログ数を表示するカードを配置 -->
+
+
+        <!-- ユーザー一覧 -->
+        <div class="list-card">
+            <div class="list-header">
+                <span class="list-title">ユーザー 一覧</span>
+                <span class="list-count" id="listCount">0件のユーザー</span>
+                <span class="sort-note">使用時間順</span>
+            </div>
+            <div id="userList"></div>
+        </div>
 
 
     </main>
