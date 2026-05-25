@@ -14,7 +14,7 @@
             "id": 1,
             "facility_id": 1,
             "name": "user1",
-            "age": "abcd",
+            "age": "72",
             "emergency_note": "山田 花子",
             "login_id": "user1",
             "password": "abcd"
@@ -23,10 +23,72 @@
             "id": 2,
             "facility_id": 1,
             "name": "user2",
-            "age": "efgh",
+            "age": "65",
             "emergency_note": "佐藤 次郎",
             "login_id": "user2",
             "password": "efgh"
+        }
+    ],
+
+    "walkingLogs": [
+        {
+            "id": 1,
+            "patient_id": 1,
+            "start_time": "2026-04-01T08:00:00",
+            "end_time": "2026-04-01T08:30:00"
+        },
+        {
+            "id": 2,
+            "patient_id": 2,
+            "start_time": "2026-04-01T09:00:00",
+            "end_time": "2026-04-01T09:30:00"
+        },
+        {
+            "id": 3,
+            "patient_id": 1,
+            "start_time": "2026-04-02T10:00:00",
+            "end_time": "2026-04-02T10:45:00"
+        }
+    ],
+
+    "gpsData": [
+        {
+            "id": 1,
+            "log_id": 1,
+            "latitude": 35.6895,
+            "longitude": 139.6917,
+            "timestamp": "2026-04-01T08:15:00"
+        },
+        {
+            "id": 2,
+            "log_id": 1,
+            "latitude": 35.6896,
+            "longitude": 139.6918,
+            "timestamp": "2026-04-01T08:20:00"
+        },
+        {
+            "id": 3,
+            "log_id": 2,
+            "latitude": 35.6897,
+            "longitude": 139.6919,
+            "timestamp": "2026-04-01T09:15:00"
+        }
+    ],
+
+    "devices": [
+        {
+            "id": 1,
+            "patient_id": 1,
+            "device_mac_address": "00:11:22:33:44:55",
+            "battery_status": "センサー",
+            "last_heartbeat": "2026-04-01T08:30:00"
+        },
+        {
+            "id": 2,
+            "patient_id": 2,
+            "device_mac_address": "00:11:22:33:44:56",
+            "battery_status": "トラッカー",
+            "last_heartbeat": "2026-05-01T09:15:00"
         }
     ],
 

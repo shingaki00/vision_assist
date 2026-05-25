@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歩行ログ確認</title>
+
+    <!-- 読み込み -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/walkLog.css">
+    <script type="module" src="../js/style.js" defer></script>
+    
+
+</head>
+
+<body>
+    <div id="header-inner"></div>
+
+    <main class="">
+
+        <a href="../pages/walkLogs.html" class="back-link">
+            <div class="arrow"><</div>
+            歩行ログ一覧に戻る
+        </a>
+
+        <h2>ユーザー名</h2>
+
+        <!-- 歩行ログ一覧 -->
+        <div class="list-card">
+            <div class="list-header">
+                <span class="list-title">歩行ログ</span>
+                <span class="sort-note">新しい順</span>
+            </div>
+            <div id="walkLogList"></div>
+        </div>
+
+
+        <!-- google mapを表示するエリア -->
+        <div id="map"></div>
+
+    </main>
+
+</body>
+</html>

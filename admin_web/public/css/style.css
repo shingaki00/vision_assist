@@ -1,3 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 /*背景色*/
 body{
     background-color: #f6f5f5;
@@ -11,7 +17,6 @@ body{
 h1{
     color: #3A2C3D;
     font-size: 26px;
-    font-weight: normal;
     margin-left: 20px;
     margin-bottom: 0px;
     margin-top: 14px;

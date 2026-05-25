@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => console.error("ヘッダーの読み込みに失敗しました:", err));
 });
 
+// 今日の日付を "YYYY-MM-DD" 形式で返す 
+export function getToday() {
+  return new Date().toISOString().slice(0, 10);
+}
 
 // 時間を「〇分前」などの形式で表示する関数
 export function formatTimeAgo(dateString) {
