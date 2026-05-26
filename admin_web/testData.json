@@ -80,14 +80,14 @@
             "id": 1,
             "patient_id": 1,
             "device_mac_address": "00:11:22:33:44:55",
-            "battery_status": "センサー",
+            "battery_status": "40%",
             "last_heartbeat": "2026-04-01T08:30:00"
         },
         {
             "id": 2,
             "patient_id": 2,
             "device_mac_address": "00:11:22:33:44:56",
-            "battery_status": "トラッカー",
+            "battery_status": "30%",
             "last_heartbeat": "2026-05-01T09:15:00"
         }
     ],

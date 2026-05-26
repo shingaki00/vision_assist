@@ -76,3 +76,19 @@ header {
     border-radius: 6px;
     transition: 0.3s;
 }
+
+/* -----戻るボタン--------*/
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--secondary);
+  text-decoration: none;
+  padding-bottom: 30px;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--focus);
+}

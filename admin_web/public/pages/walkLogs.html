@@ -16,27 +16,26 @@
 <body>
     <div id="header-inner"></div>
 
-    <main class="">
+    <main class="walklog-page">
 
         <a href="../index.html" class="back-link">
-            <div class="arrow"><</div>
-            ダッシュボードに戻る
+            ← ダッシュボードに戻る
         </a>
 
-        <h2>歩行ログ</h2>
+        <h2>歩行ログの確認</h2>
+        <p class="page-subtitle">利用者の歩行記録を確認できます</p>
 
         <!-- 検索 -->
-        <div class="search-wrap">
-            <input class="search-input" type="text" placeholder="ユーザー名またはデバイスで検索..." id="searchInput">
+        <div class="filter-tabs">
+            <input class="search-box" type="text" placeholder="ユーザー名またはデバイスで検索..." id="searchInput">
         </div>
 
         <!-- フィルタータブ -->
         <div class="filter-tabs">
-            <button class="tab active" data-filter="all">すべて</button>
-            <button class="tab" data-filter="active">アクティブ</button>
-            <button class="tab" data-filter="inactive">非アクティブ</button>
+            <button class="filter-btn active" data-filter="all">すべて</button>
+            <button class="filter-btn" data-filter="active">アクティブ</button>
+            <button class="filter-btn" data-filter="inactive">非アクティブ</button>
         </div>
-
 
         <!-- 統計カード -->
         <!-- アクティブユーザーとか本日のログ数を表示するカードを配置 -->

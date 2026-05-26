@@ -23,7 +23,6 @@ async function loadTestData() {
 
 
 // ─── testDataからusers配列を組み立て ────────────────
-// walkLog.jsのrenderList()が期待するusersの形に変換する
 function buildUsers() {
   const today = getToday(); // 今日の日付を取得
 
@@ -44,14 +43,8 @@ function buildUsers() {
       (a, b) => new Date(b.start_time) - new Date(a.start_time)
     )[0];
     const lastUsed = lastLog
-      ? lastLog.start_time.slice(0, 10)
+      ? lastLog.start_time.slice(0, 16).replace("T", " ")
       : "なし";
-
-    // デバイス情報（patient_idで紐付け）
-    const device = testData.devices.find(
-      d => d.patient_id === patient.id
-    );
-    const deviceLabel = device ? device.battery_status : "未登録";
 
     // アクティブ判定（直近7日以内にログがあればactive）
     const sevenDaysAgo = new Date(today);
@@ -61,21 +54,44 @@ function buildUsers() {
     );
 
     return {
-      id:        patient.id,
-      name:      patient.name,
-      initial:   patient.name.charAt(0),
-      device:    deviceLabel,
-      lastUsed:  lastUsed,
-      totalLogs: logs.length,
-      todayLogs: todayLogs,
-      status:    isActive ? "active" : "inactive",
+        id:        patient.id,
+        name:      patient.name,
+        initial:   patient.name.charAt(0),
+        lastUsed:  lastUsed,
+        totalLogs: logs.length,
+        todayLogs: todayLogs,
+        status:    isActive ? "active" : "inactive",
     };
   });
 }
 
 
 // ─── イベント設定 ─────────────────────────────────
-// ――――――――――――――――――――――――――――――――――――――
+function setupEvents() {
+  // 検索ボックス
+  const searchBox = document.getElementById("searchInput");
+  if (searchBox) {
+    searchBox.addEventListener("input", e => {
+      searchQuery = e.target.value;
+      renderList();
+    });
+  }
+ 
+  // フィルターボタン（all / active / inactive）
+  document.querySelectorAll("[data-filter]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentFilter = btn.dataset.filter;
+ 
+      // ボタンのactive状態を切り替え
+      document.querySelectorAll("[data-filter]").forEach(b =>
+        b.classList.remove("active")
+      );
+      btn.classList.add("active");
+ 
+      renderList();
+    });
+  });
+}
 
 // ─── リスト描画 ──────────────────────────────────
 function renderList() {
@@ -85,8 +101,7 @@ function renderList() {
       currentFilter === "all" ||
       (currentFilter === "active"   && u.status === "active") ||
       (currentFilter === "inactive" && u.status === "inactive");
-    const matchSearch =
-      !q || u.name.includes(q) || u.device.toLowerCase().includes(q);
+    const matchSearch = !q || u.name.includes(q);
     return matchFilter && matchSearch;
   });
 
@@ -102,7 +117,7 @@ function renderList() {
   container.innerHTML = filtered.map((u, i) => `
     <div class="user-row"
          style="animation-delay:${i * 0.04}s"
-         onclick="showLogs(${u.id})">
+         data-id="${u.id}">
 
       <div class="avatar ${u.status === 'inactive' ? 'inactive' : ''}">
         ${u.initial}
@@ -118,12 +133,6 @@ function renderList() {
         <div class="user-meta">
           <span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="5" y="2" width="14" height="20" rx="2"/>
-            </svg>
-            ${u.device}
-          </span>
-          <span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="4" width="18" height="18" rx="2"/>
               <line x1="16" y1="2" x2="16" y2="6"/>
               <line x1="8" y1="2" x2="8" y2="6"/>
@@ -137,11 +146,11 @@ function renderList() {
       <div class="user-stats">
         <div class="total-log">
           ${u.totalLogs}件
-          <span style="font-size:10px;color:var(--text-muted)">総ログ数</span>
+          <span style="font-size:11px;color:var(--text-muted)">総ログ数</span>
         </div>
         <div class="today-log ${u.todayLogs === 0 ? 'zero' : ''}">
           ${u.todayLogs}件
-          <span style="font-size:10px;font-weight:400;color:var(--text-muted)">本日</span>
+          <span style="font-size:11px;color:var(--text-muted)">本日</span>
         </div>
       </div>
     
@@ -149,10 +158,14 @@ function renderList() {
     
     </div>
   `).join("");
+
+    container.querySelectorAll(".user-row").forEach(row => {
+        row.addEventListener("click", () => showLogs(Number(row.dataset.id)));
+    });
+
 }
 
 // ─── 歩行ログ詳細表示（クリック時） ──────────────────
-// ※今はalertで確認。あとでwalkLogs-user.htmlへ遷移に変更する
 function showLogs(patientId) {
   const patient = testData.patients.find(p => p.id === patientId);
   const logs = testData.walkingLogs.filter(
@@ -164,12 +177,7 @@ function showLogs(patientId) {
     return;
   }
 
-  // TODO: walkLogs-user.htmlへパラメータ付きで遷移
-  // window.location.href = `walkLogs-user.html?patient_id=${patientId}`;
+  // walkLogs-user.htmlへパラメータ付きで遷移
+  window.location.href = `walkLogs-user.html?patient_id=${patientId}`;
 
-  // 今はログ一覧をalertで確認
-  const logList = logs.map(
-    log => `・${log.start_time.slice(0, 16)} 〜 ${log.end_time.slice(11, 16)}`
-  ).join("\n");
-  alert(`【${patient.name} の歩行ログ】\n${logList}`);
 }
