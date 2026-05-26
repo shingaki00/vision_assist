@@ -59,6 +59,8 @@ header {
     align-items: center;
 }
 
+
+/* ログアウトボタン */
 .btn-logout {
     font-size: 14px;
     padding: 8px 14px;
@@ -77,7 +79,27 @@ header {
     transition: 0.3s;
 }
 
-/* -----戻るボタン--------*/
+
+/* ------ シェブロン（＞矢印）-------*/
+.chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color 0.2s, transform 0.2s;
+}
+
+/* ※ 戻るアイコンを表示するときのコマンド　以下、右と左
+<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="9 18 15 12 9 6"/>
+</svg>
+
+<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="15 18 9 12 15 6"/>
+</svg> */
+
+
+/* ------- 戻るボタン（矢印で表示する） --------*/
 .back-link {
   display: inline-flex;
   align-items: center;

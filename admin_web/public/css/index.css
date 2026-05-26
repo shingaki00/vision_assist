@@ -38,6 +38,7 @@
 .quick-card {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 15px;
     background-color: white;
     padding: 20px;

@@ -290,15 +290,7 @@ h2 {
   font-weight: 400;
 }
  
-/* ─── シェブロン（＞矢印） ──────────────────── */
-.chevron {
-  width: 18px;
-  height: 18px;
-  color: var(--text-muted);
-  flex-shrink: 0;
-  transition: color 0.2s, transform 0.2s;
-}
- 
+/* ─── シェブロン（＞矢印）のホバー ──────────────────── */ 
 .user-row:hover .chevron {
   color: var(--primary);
   transform: translateX(2px);
