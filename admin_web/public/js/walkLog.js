@@ -1,12 +1,11 @@
 import { getToday } from "./style.js";
 
-// ─── 状態管理 ────────────────────────────────────
+// ─── testData.json 読み込み ───────────────────────
 let testData = null;
 let users = [];
 let currentFilter = "all";
 let searchQuery = "";
 
-// ─── 初期化 ──────────────────────────────────────
 document.addEventListener("DOMContentLoaded", async () => {
   await loadTestData();
   buildUsers();
@@ -14,7 +13,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupEvents();
 });
 
-// ─── testData.json 読み込み ───────────────────────
 async function loadTestData() {
   // testData.jsonはプロジェクトルート(admin_web直下)に置く想定
   const res = await fetch("../../testData.json");

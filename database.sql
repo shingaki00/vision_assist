@@ -43,7 +43,7 @@ CREATE TABLE WalkingLogs (
     end_time DATETIME
 );
 
-CREATE TABLE CPSData (
+CREATE TABLE GPSData (
     id BIGINT(100) PRIMARY KEY,
     log_id BINARY(16) FOREIGN KEY,
     latitude DECIMAL(7,4),
