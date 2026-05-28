@@ -1,7 +1,82 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:battery_plus/battery_plus.dart';
+import 'package:geolocator/geolocator.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // 状態管理用の変数
+  String _batteryLevel = "読み込み中...";
+  String _gpsStatus = "OFF";
+  String _syncStatus = "停止中";
+
+  // バッテリーとGPS監視用のインスタンス・サブスクリプション
+  final Battery _battery = Battery();
+  StreamSubscription<ServiceStatus>? _gpsServiceStatusSubscription;
+  Timer? _batteryTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _initDeviceStates();
+  }
+
+  // デバイス状態の初期化・監視開始
+  void _initDeviceStates() async {
+    // 1. バッテリーの初期値取得と定期監視（10秒ごと）
+    _updateBatteryLevel();
+    _batteryTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _updateBatteryLevel();
+    });
+
+    // 2. GPSの初期状態取得
+    bool isGpsEnabled = await Geolocator.isLocationServiceEnabled();
+    setState(() {
+      _gpsStatus = isGpsEnabled ? "ON" : "OFF";
+      _syncStatus = isGpsEnabled ? "同期中" : "停止中";
+    });
+
+    // 3. GPSのON/OFF状態の変化をリアルタイムに監視
+    _gpsServiceStatusSubscription = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+      setState(() {
+        if (status == ServiceStatus.enabled) {
+          _gpsStatus = "ON";
+          _syncStatus = "同期中"; // GPSがONになったらログ同期を開始
+        } else {
+          _gpsStatus = "OFF";
+          _syncStatus = "停止中";
+        }
+      });
+    });
+  }
+
+  // バッテリー残量を更新する関数
+  void _updateBatteryLevel() async {
+    try {
+      final level = await _battery.batteryLevel;
+      if (mounted) {
+        setState(() {
+          _batteryLevel = "$level%";
+        });
+      }
+    } catch (e) {
+      _batteryLevel = "エラー";
+    }
+  }
+
+  @override
+  void dispose() {
+    // 画面が閉じられたら監視を解除してメモリリークを防ぐ
+    _batteryTimer?.cancel();
+    _gpsServiceStatusSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +103,27 @@ class HomePage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildStatusItem(Icons.battery_charging_full, '85%', 'バッテリー', Colors.green),
-                    _buildStatusItem(Icons.bluetooth_connected, '接続済み', 'デバイス連携', Colors.blue),
-                    _buildStatusItem(Icons.sync, '同期中', '移動ログ', Colors.orange),
+                    // バッテリー状態の連動
+                    _buildStatusItem(
+                      Icons.battery_charging_full, 
+                      _batteryLevel, 
+                      'スマホバッテリー', 
+                      _batteryLevel.contains('100') || _batteryLevel.startsWith('9') || _batteryLevel.startsWith('8') ? Colors.green : Colors.orange
+                    ),
+                    // GPS状態の連動（ON/OFFで色を変える）
+                    _buildStatusItem(
+                      Icons.location_on, 
+                      _gpsStatus, 
+                      'GPS連携', 
+                      _gpsStatus == "ON" ? Colors.blue : Colors.grey
+                    ),
+                    // 移動ログ状態の連動
+                    _buildStatusItem(
+                      Icons.sync, 
+                      _syncStatus, 
+                      '移動ログ', 
+                      _syncStatus == "同期中" ? Colors.orange : Colors.grey
+                    ),
                   ],
                 ),
               ),
