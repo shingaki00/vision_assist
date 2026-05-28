@@ -39,14 +39,14 @@ function renderList(patientId) {
     .sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
 
   const container = document.getElementById("logList");
-  document.getElementById("logCount").textContent = `${logs.length}件`;
+  document.getElementById("listCount").textContent = `${logs.length}件`;
 
   if (logs.length === 0) {
     container.innerHTML = `<div class="log-empty">歩行ログがありません</div>`;
     return;
   }
 
-  container.innerHTML = logs.map(log => {
+  container.innerHTML = logs.map((log, i) => {
     const duration = calcDuration(log.start_time, log.end_time);
     const date = log.start_time.slice(0, 10);
     const startT = log.start_time.slice(11, 16);
@@ -66,6 +66,10 @@ function renderList(patientId) {
         </div>
     `;
   }).join("");
+
+    container.querySelectorAll(".user-row").forEach(row => {
+    row.addEventListener("click", () => {selectLog(parseInt(row.dataset.id));});
+});
 }
 
 // ─── ログ選択時の処理 ────────────────────────────
