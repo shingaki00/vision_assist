@@ -18,10 +18,7 @@
 
     <main class="walklog-page">
 
-        <a href="../index.html" class="back-link">
-            ← ダッシュボードに戻る
-        </a>
-
+        <a href="../index.html" class="back-link">← ダッシュボードに戻る</a>
         <h2>歩行ログの確認</h2>
         <p class="page-subtitle">利用者の歩行記録を確認できます</p>
 
@@ -37,16 +34,13 @@
             <button class="filter-btn" data-filter="inactive">非アクティブ</button>
         </div>
 
-        <!-- 統計カード -->
-        <!-- アクティブユーザーとか本日のログ数を表示するカードを配置 -->
-
-
         <!-- ユーザー一覧 -->
         <div class="list-card">
             <div class="list-header">
-                <span class="list-title">ユーザー 一覧</span>
-                <span class="list-count" id="listCount">0件のユーザー</span>
-                <span class="sort-note">使用時間順</span>
+                <div class="list-header-left">
+                    <span class="list-title">ユーザー 一覧</span>
+                    <span class="list-count" id="listCount"></span>
+                </div>
             </div>
             <div id="userList"></div>
         </div>

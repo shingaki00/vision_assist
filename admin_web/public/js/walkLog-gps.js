@@ -5,14 +5,24 @@ let testData = null;
 let currentPatient = null;
 let selectedLogId = null;
 
+// Google Mapsインスタンス
+let googleMap = null;
+let routePolyline = null;
+let mapMarkers = [];
+
+// Google Maps APIの読み込み完了判定
+window.initGoogleMaps = function () {
+    window._googleMapsReady = true;
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
-  await loadTestData();
-  initPage();
+    await loadTestData();
+    initPage();
 });
 
 async function loadTestData() {
-  const res = await fetch("../../testData.json");
-  testData = await res.json();
+    const res = await fetch("../../testData.json");
+    testData = await res.json();
 }
 
 // ─── URLパラメータからpatient_idを取得して初期化 ──
@@ -22,27 +32,29 @@ function initPage() {
 
   currentPatient = testData.patients.find(p => p.id === patientId);
   if (!currentPatient) {
-    document.getElementById("patientName").textContent = "患者が見つかりません";
+    document.getElementById("patientName").textContent = "利用者が見つかりません";
     return;
   }
 
   document.getElementById("patientName").textContent =
-    `${currentPatient.name} の歩行ログ`;
+    `${currentPatient.name} さんの歩行ログ`;
 
   renderList(patientId);
 }
 
+// ────────────────────────────────────────────────
 // ─── 左パネル：歩行ログ一覧を描画 ────────────────
+// ────────────────────────────────────────────────
 function renderList(patientId) {
   const logs = testData.walkingLogs
     .filter(log => log.patient_id === patientId)
     .sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
 
   const container = document.getElementById("logList");
-  document.getElementById("listCount").textContent = `${logs.length}件`;
+  document.getElementById("listCount").textContent = `${logs.length}件のログ`;
 
   if (logs.length === 0) {
-    container.innerHTML = `<div class="log-empty">歩行ログがありません</div>`;
+    container.innerHTML = `<div class="log-empty">ログがありません</div>`;
     return;
   }
 
@@ -60,26 +72,25 @@ function renderList(patientId) {
             <div class="log-date">${date}</div>
             <div class="log-time">${startT} 〜 ${endT}</div>
             <div class="log-duration">${duration}</div>
-            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="9 18 15 12 9 6"/>
-            </svg>
         </div>
     `;
   }).join("");
 
     container.querySelectorAll(".user-row").forEach(row => {
-    row.addEventListener("click", () => {selectLog(parseInt(row.dataset.id));});
-});
+        row.addEventListener("click", () => {
+            // アクティブ状態の切り替え
+            container.querySelectorAll(".user-row").forEach(r => r.classList.remove("active"));
+            row.classList.add("active");
+            selectLog(parseInt(row.dataset.id));
+        });
+    });
 }
 
+// ────────────────────────────────────────────────
 // ─── ログ選択時の処理 ────────────────────────────
+// ────────────────────────────────────────────────
 function selectLog(logId) {
   selectedLogId = logId;
-
-  // アクティブ状態の切り替え
-  document.querySelectorAll(".log-item").forEach(el => {
-    el.classList.toggle("active", parseInt(el.dataset.logId) === logId);
-  });
 
   const log = testData.walkingLogs.find(l => l.id === logId);
   const gpsPoints = testData.gpsData
@@ -94,51 +105,64 @@ function selectLog(logId) {
   updateStats(log, gpsPoints);
 
   // 地図を更新
-  updateMap(gpsPoints);
+  waitForMapsAndUpdate(gpsPoints);
 }
 
-// ─── 統計カードを更新 ─────────────────────────────
+// ─── Google Maps APIの準備を待ってから地図を更新 ──
+function waitForMapsAndUpdate(gpsPoints) {
+    if (window._googleMapsReady || (window.google && window.google.maps)) {
+        updateMap(gpsPoints);
+    } else {
+        // APIがまだ読み込まれていない場合は少し待つ
+        const interval = setInterval(() => {
+        if (window.google && window.google.maps) {
+            clearInterval(interval);
+            updateMap(gpsPoints);
+        }
+        }, 100);
+    }
+}
+
+
+// ────────────────────────────────────────────────
+// ─── 統計カードを更新 ────────────────────────────
+// ────────────────────────────────────────────────
 function updateStats(log, gpsPoints) {
-  const startT  = log.start_time.slice(0, 16).replace("T", " ");
-  const endT    = log.end_time.slice(11, 16);
-  const duration = calcDuration(log.start_time, log.end_time);
+    const startT  = log.start_time.slice(0, 16).replace("T", " ");
+    const endT    = log.end_time.slice(11, 16);
 
-  document.getElementById("statDatetime").textContent =
-    `${startT} 〜 ${endT}`;
-  document.getElementById("statDuration").textContent = duration;
+    if (gpsPoints.length < 2) {
+        document.getElementById("statDistance").textContent   = "データ不足";
+        document.getElementById("statTimeToStay").textContent = "データ不足";
+        document.getElementById("stayLocation").textContent   = "—";
+        document.getElementById("stayDuration").textContent   = "";
+        return;
+    }
 
-  if (gpsPoints.length < 2) {
-    document.getElementById("statDistance").textContent   = "データ不足";
-    document.getElementById("statTimeToStay").textContent = "データ不足";
-    document.getElementById("stayLocation").textContent   = "—";
-    document.getElementById("stayDuration").textContent   = "";
-    return;
-  }
+    // 最長滞在地点を計算
+    const stayResult = calcLongestStay(gpsPoints);
 
-  // 最長滞在地点を計算
-  const stayResult = calcLongestStay(gpsPoints);
+    // 開始地点から最長滞在地点までの距離・所要時間
+    const startPoint = gpsPoints[0];
+    const distM = calcDistanceM(
+        startPoint.latitude, startPoint.longitude,
+        stayResult.latitude, stayResult.longitude
+    );
+    const distStr = distM >= 1000
+        ? `${(distM / 1000).toFixed(2)} km`
+        : `${Math.round(distM)} m`;
 
-  // 開始地点から最長滞在地点までの距離・所要時間
-  const startPoint = gpsPoints[0];
-  const distM = calcDistanceM(
-    startPoint.latitude, startPoint.longitude,
-    stayResult.latitude, stayResult.longitude
-  );
-  const distStr = distM >= 1000
-    ? `${(distM / 1000).toFixed(2)} km`
-    : `${Math.round(distM)} m`;
+    const timeToStay = calcDuration(log.start_time, stayResult.arrivedAt);
 
-  const timeToStay = calcDuration(log.start_time, stayResult.arrivedAt);
-
-  document.getElementById("statDistance").textContent   = distStr;
-  document.getElementById("statTimeToStay").textContent = timeToStay;
-  document.getElementById("stayLocation").textContent   =
-    `${stayResult.latitude.toFixed(5)}, ${stayResult.longitude.toFixed(5)}`;
-  document.getElementById("stayDuration").textContent   =
-    `滞在 ${stayResult.stayMinutes} 分`;
+    document.getElementById("statDistance").textContent   = distStr;
+    document.getElementById("statTimeToStay").textContent = timeToStay;
+    document.getElementById("stayLocation").textContent   =
+        `${stayResult.latitude.toFixed(5)}, ${stayResult.longitude.toFixed(5)}`;
+    document.getElementById("stayDuration").textContent   =
+        `滞在 ${stayResult.stayMinutes} 分`;
 }
 
-// ─── 最長滞在地点を計算（案A：誤差15m以内を同一地点と判定） ──
+// 最長滞在地点を計算（案A：誤差15m以内を同一地点と判定）
 function calcLongestStay(gpsPoints) {
   const THRESHOLD_M = 15; // 同一地点とみなす距離（メートル）
   let best = null;
@@ -178,58 +202,132 @@ function calcLongestStay(gpsPoints) {
   return best;
 }
 
-// ─── SVGダミー地図を更新 ──────────────────────────
+// ────────────────────────────────────────────────
+//  Google Maps で地図・ルートを表示 
+// ────────────────────────────────────────────────
 function updateMap(gpsPoints) {
   if (gpsPoints.length === 0) return;
 
-  // GPS座標をSVG座標（0〜600, 0〜340）にマッピング
-  const lats = gpsPoints.map(p => p.latitude);
-  const lngs = gpsPoints.map(p => p.longitude);
-  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
-  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
-  const PAD = 60;
+  const mapEl = document.getElementById("map");
 
-  function toSVG(lat, lng) {
-    const rangeL = maxLng - minLng || 0.0001;
-    const rangeA = maxLat - minLat || 0.0001;
-    const x = PAD + ((lng - minLng) / rangeL) * (600 - PAD * 2);
-    const y = (340 - PAD) - ((lat - minLat) / rangeA) * (340 - PAD * 2);
-    return { x, y };
+  // 地図をまだ初期化していなければ生成
+  if (!googleMap) {
+    googleMap = new google.maps.Map(mapEl, {
+      zoom: 15,
+      mapTypeId: "roadmap",
+      // シンプルなスタイル（任意で変更可）
+      styles: [
+        { featureType: "poi", stylers: [{ visibility: "off" }] },
+        { featureType: "transit", stylers: [{ visibility: "off" }] },
+      ],
+    });
   }
 
-  // ルート描画
-  const points = gpsPoints.map(p => {
-    const { x, y } = toSVG(p.latitude, p.longitude);
-    return `${x},${y}`;
-  }).join(" ");
-  document.getElementById("routeLine").setAttribute("points", points);
+  // 既存のマーカー・ポリラインをクリア
+  mapMarkers.forEach(m => m.setMap(null));
+  mapMarkers = [];
+  if (routePolyline) routePolyline.setMap(null);
 
-  // 開始マーカー
-  const start = toSVG(gpsPoints[0].latitude, gpsPoints[0].longitude);
-  const markerStart = document.getElementById("markerStart");
-  markerStart.setAttribute("cx", start.x);
-  markerStart.setAttribute("cy", start.y);
-
-  // 終了マーカー
-  const end = toSVG(
-    gpsPoints[gpsPoints.length - 1].latitude,
-    gpsPoints[gpsPoints.length - 1].longitude
+  // GPS点を LatLng に変換
+  const latLngs = gpsPoints.map(p =>
+    new google.maps.LatLng(p.latitude, p.longitude)
   );
-  const markerEnd = document.getElementById("markerEnd");
-  markerEnd.setAttribute("cx", end.x);
-  markerEnd.setAttribute("cy", end.y);
 
-  // 最長滞在マーカー
+  // ── ルートラインを描画 ──
+  routePolyline = new google.maps.Polyline({
+    path: latLngs,
+    geodesic: true,
+    strokeColor: "#1a73e8",
+    strokeOpacity: 0.85,
+    strokeWeight: 4,
+    map: googleMap,
+  });
+
+  // ── 地図の表示範囲を自動フィット ──
+  const bounds = new google.maps.LatLngBounds();
+  latLngs.forEach(ll => bounds.extend(ll));
+  googleMap.fitBounds(bounds, { top: 40, bottom: 40, left: 40, right: 40 });
+
+  // ── 開始マーカー（緑） ──
+  const startMarker = new google.maps.Marker({
+    position: latLngs[0],
+    map: googleMap,
+    title: "出発地点",
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 9,
+      fillColor: "#34a853",
+      fillOpacity: 1,
+      strokeColor: "#fff",
+      strokeWeight: 2,
+    },
+  });
+  mapMarkers.push(startMarker);
+
+  // ── 終了マーカー（赤） ──
+  const endMarker = new google.maps.Marker({
+    position: latLngs[latLngs.length - 1],
+    map: googleMap,
+    title: "到着地点",
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 9,
+      fillColor: "#ea4335",
+      fillOpacity: 1,
+      strokeColor: "#fff",
+      strokeWeight: 2,
+    },
+  });
+  mapMarkers.push(endMarker);
+
+  // ── 最長滞在マーカー（黄） ──
   const stay = calcLongestStay(gpsPoints);
-  const stayPos = toSVG(stay.latitude, stay.longitude);
-  const markerStay = document.getElementById("markerStay");
-  markerStay.setAttribute("cx", stayPos.x);
-  markerStay.setAttribute("cy", stayPos.y);
+  const stayLatLng = new google.maps.LatLng(stay.latitude, stay.longitude);
+
+  const stayMarker = new google.maps.Marker({
+    position: stayLatLng,
+    map: googleMap,
+    title: `最長滞在：${stay.stayMinutes}分`,
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 11,
+      fillColor: "#fbbc04",
+      fillOpacity: 1,
+      strokeColor: "#fff",
+      strokeWeight: 2,
+    },
+  });
+  mapMarkers.push(stayMarker);
+
+  // ── 吹き出し（InfoWindow） ──
+  const infoWindow = new google.maps.InfoWindow({
+    content: `<div style="font-size:13px;line-height:1.6;">
+      <b>最長滞在地点</b><br>
+      ${stay.stayMinutes}分間滞在<br>
+      <span style="color:#888;font-size:11px;">
+        ${stay.latitude.toFixed(5)}, ${stay.longitude.toFixed(5)}
+      </span>
+    </div>`,
+  });
+
+  stayMarker.addListener("click", () => {
+    infoWindow.open(googleMap, stayMarker);
+  });
+
+  // 開始・終了にもシンプルなInfoWindow
+  [
+    { marker: startMarker, label: "出発地点" },
+    { marker: endMarker,   label: "到着地点" },
+  ].forEach(({ marker, label }) => {
+    marker.addListener("click", () => {
+      new google.maps.InfoWindow({ content: `<b>${label}</b>` }).open(googleMap, marker);
+    });
+  });
 }
 
 // ─── ユーティリティ：歩行時間を計算 ──────────────
 function calcDuration(start, end) {
-  const ms = new Date(end) - new Date(start);
+  const ms  = new Date(end) - new Date(start);
   const min = Math.round(ms / 60000);
   if (min < 60) return `${min} 分`;
   const h = Math.floor(min / 60);
@@ -237,10 +335,9 @@ function calcDuration(start, end) {
   return `${h} 時間 ${m} 分`;
 }
 
-// ─── ユーティリティ：2点間の距離（メートル）────────
-// Haversine公式
+// ─── ユーティリティ：2点間の距離（メートル・Haversine） ──
 function calcDistanceM(lat1, lng1, lat2, lng2) {
-  const R = 6371000;
+  const R    = 6371000;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLng = (lng2 - lng1) * Math.PI / 180;
   const a =
@@ -251,5 +348,5 @@ function calcDistanceM(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// グローバルに公開（HTML onclickから呼ぶため）
+// グローバルに公開
 window.selectLog = selectLog;

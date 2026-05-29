@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>歩行ログ確認</title>
+    <title>歩行ログの詳細</title>
 
     <!-- 読み込み -->
     <link rel="stylesheet" href="../css/style.css">
@@ -11,32 +11,72 @@
     <script type="module" src="../js/style.js" defer></script>
     <script type="module" src="../js/walkLog-gps.js" defer></script>
 
+    <!-- Google Maps API（差し替え必須） -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initGoogleMaps"
+      async defer>
+    </script>
+
 </head>
 
 <body>
     <div id="header-inner"></div>
 
-    <main class="">
+    <main class="walklog-page">
 
-        <a href="../pages/walkLogs.html" class="back-link">
-            ← 歩行ログ一覧に戻る
-        </a>
-
+        <a href="../pages/walkLogs.html" class="back-link">← 歩行ログ一覧に戻る</a>
         <h2 id="patientName">ユーザー名</h2>
+        <p class="page-subtitle">利用者の歩行記録を確認できます</p>
 
-        <!-- 歩行ログ一覧 -->
-        <div class="list-card">
-            <div class="list-header">
-                <span class="list-title">履歴</span>
-                <span class="list-count" id="listCount">0件</span>
-                <span class="sort-note">使用時間順</span>
+        <div class="walk-layout">
+
+            <!-- 左：ログ一覧 -->
+            <div class="list-card">
+                <div class="list-header">
+                    <div class="list-header-left">
+                        <span class="list-title">過去の履歴</span>
+                        <span class="list-count" id="listCount"></span>
+                    </div>
+                    <span class="sort-note">新しい順</span>
+                </div>
+                <div id="logList"></div>
             </div>
-            <div id="logList"></div>
+
+
+            <!-- 右：詳細パネル -->
+            <div class="detail-panel">
+
+                <!-- ログ未選択時 -->
+                <div id="emptyState">ログを選択すると地図が表示されます</div>
+
+                <!-- ログ選択後 -->
+                <div id="detailContent">
+
+                    <!-- 統計カード -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">総距離</div>
+                            <div class="stat-value" id="statTotalDist">—</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">開始〜最長滞在地点</div>
+                            <div class="stat-value" id="statDistance">—</div>
+                            <div class="stat-sub" id="statTimeToStay"></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">最長滞在地点</div>
+                            <div class="stat-value" style="font-size:13px;" id="stayLocation">—</div>
+                            <div class="stat-sub" id="stayDuration"></div>
+                        </div>
+                    </div>
+
+                    <!-- Google Map -->
+                    <div id="map"></div>
+
+                </div>
+            </div>
+
         </div>
-
-
-        <!-- google mapを表示するエリア -->
-        <div id="map"></div>
 
     </main>
 

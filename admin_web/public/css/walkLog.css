@@ -15,7 +15,8 @@
  
   /* 背景 */
   --bg-card:      #FFFFFF;
-  --bg-active:    #F3E8F7;    /* アクティブ行のハイライト */
+  --bg-active:    #f3d1ff;    /* アクティブ行のハイライト */
+  --bg-hover:     rgb(230, 230, 230);
  
   /* バッジ */
   --badge-active-bg:   #F3E8F7;
@@ -32,7 +33,7 @@
  
 /* ─── メインコンテンツ領域 ────────────────────── */
 .walklog-page {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 24px 16px;
 }
@@ -101,12 +102,15 @@ h2 {
   font-weight: 600;
 }
 
- 
-/* ─── リストカード全体 ──────────────────────── */
+/* ──────────────────────────────────────────── */
+/* ─── リストカードの設定 ─────────────────────── */
+/* ──────────────────────────────────────────── */
+
+/* リストカード全体　*/
 .list-card {
   background: var(--bg-card);
   border-radius: var(--radius-card);
-  border: 1.5px solid var(--border);
+  border: 1.6px solid rgb(197, 197, 197);
   box-shadow: var(--shadow-card);
   overflow: hidden;
 }
@@ -117,21 +121,26 @@ h2 {
   align-items: center;
   gap: 12px;
   padding: 14px 18px;
-  border-bottom: 1.5px solid var(--border);
+  border-bottom: 1.6px solid rgb(197, 197, 197);
   background: var(--bg-card);
+}
+
+.list-header-left {
+  display: flex;
+  flex-direction: column;     /* タイトルと件数を縦並びに */
+  gap: 2px;
+  flex: 1;
 }
 
 .list-title {
   font-size: 15px;
   font-weight: 700;
   color: var(--text-main);
-  flex: 1;
 }
 
 .list-count {
   font-size: 12px;
   color: var(--text-sub);
-  padding: 3px 10px;
 }
 
 .sort-note {
@@ -161,9 +170,18 @@ h2 {
 }
  
 .user-row:hover {
-  border-color: var(--primary);
-  background: var(--bg-active);
+  background: var(--bg-hover);
   transform: translateY(-1px);
+}
+
+.user-row.active {
+  background: var(--badge-active-bg);
+  border-left: 3px solid purple;
+}
+
+/* ─── シェブロン（＞矢印）のホバー ──────────────────── */ 
+.user-row:hover .chevron {
+  transform: translateX(2px);
 }
  
 @keyframes fadeInUp {
@@ -290,16 +308,100 @@ h2 {
   font-weight: 400;
 }
  
-/* ─── シェブロン（＞矢印）のホバー ──────────────────── */ 
-.user-row:hover .chevron {
-  color: var(--primary);
-  transform: translateX(2px);
-}
- 
 /* ─── 空状態 ────────────────────────────────── */
 .empty {
   text-align: center;
   padding: 48px 0;
   color: var(--text-muted);
   font-size: 14px;
+}
+
+
+/* ────────────────────────────────────────────────── */
+/* ─── 地図のレイアウト ────────────────────────────── */
+/* ────────────────────────────────────────────────── */
+
+/* ── レイアウト：左リスト ＋ 右詳細 ── */
+.walk-layout {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-top: 16px;
+}
+
+
+/* 右：詳細パネル */
+.detail-panel {
+    flex: 1;
+    min-width: 0;
+}
+
+/* 空状態メッセージ */
+#emptyState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    color: #999;
+    font-size: 15px;
+    border: 2px dashed #e0e0e0;
+}
+
+/* 詳細コンテンツ（初期は非表示） */
+#detailContent {
+    display: none;
+}
+
+/* 統計カード群 */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.stat-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 4px;
+    letter-spacing: .05em;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+}
+
+.stat-sub {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 2px;
+}
+
+/* Google Map 本体 */
+#map {
+    width: 100%;
+    height: 420px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    background: #eee;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    .walk-layout { flex-direction: column; }
+    .list-card   { flex: none; width: 100%; }
+    .stats-grid  { grid-template-columns: 1fr 1fr; }
+    #map         { height: 300px; }
 }
