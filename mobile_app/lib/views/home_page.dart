@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   // 音声読み上げ（Text-To-Speech）の初期設定
   void _initTtsSettings() async {
     await _flutterTts.setLanguage("ja-JP"); // 言語を日本語に設定
-    await _flutterTts.setSpeechRate(1.5);   // 読み上げ速度 (0.0 〜 1.0)
+    await _flutterTts.setSpeechRate(1.5);   // 読み上げ速度 (0.0 〜 1.5)
     await _flutterTts.setVolume(1.0);       // 音量 (0.0 〜 1.0)
     await _flutterTts.setPitch(1.0);        // 声の高さ (0.5 〜 2.0)
   }
