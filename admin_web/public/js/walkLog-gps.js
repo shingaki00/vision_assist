@@ -27,19 +27,20 @@ async function loadTestData() {
 
 // ─── URLパラメータからpatient_idを取得して初期化 ──
 function initPage() {
-  const params = new URLSearchParams(window.location.search);
-  const patientId = parseInt(params.get("patient_id"));
+    const params = new URLSearchParams(window.location.search);
+    const patientId = parseInt(params.get("patient_id"));
 
-  currentPatient = testData.patients.find(p => p.id === patientId);
-  if (!currentPatient) {
-    document.getElementById("patientName").textContent = "利用者が見つかりません";
-    return;
-  }
+    currentPatient = testData.patients.find(p => p.id === patientId);
+    if (!currentPatient) {
+        document.getElementById("patientName").textContent = "利用者が見つかりません";
+        return;
+    }
 
-  document.getElementById("patientName").textContent =
-    `${currentPatient.name} さんの歩行ログ`;
+    document.getElementById("patientName").textContent =
+        `${currentPatient.name} さんの歩行ログ`;
 
-  renderList(patientId);
+    updateUserStats(patientId);
+    renderList(patientId);
 }
 
 // ────────────────────────────────────────────────
@@ -101,9 +102,6 @@ function selectLog(logId) {
   document.getElementById("emptyState").style.display = "none";
   document.getElementById("detailContent").style.display = "block";
 
-  // 統計を更新
-  updateStats(log, gpsPoints);
-
   // 地図を更新
   waitForMapsAndUpdate(gpsPoints);
 }
@@ -127,39 +125,45 @@ function waitForMapsAndUpdate(gpsPoints) {
 // ────────────────────────────────────────────────
 // ─── 統計カードを更新 ────────────────────────────
 // ────────────────────────────────────────────────
-function updateStats(log, gpsPoints) {
-    const startT  = log.start_time.slice(0, 16).replace("T", " ");
-    const endT    = log.end_time.slice(11, 16);
+function updateUserStats(patientId) {
+  const logs = testData.walkingLogs.filter(l => l.patient_id === patientId);
 
-    if (gpsPoints.length < 2) {
-        document.getElementById("statDistance").textContent   = "データ不足";
-        document.getElementById("statTimeToStay").textContent = "データ不足";
-        document.getElementById("stayLocation").textContent   = "—";
-        document.getElementById("stayDuration").textContent   = "";
-        return;
+  // 登録日
+  document.getElementById("statRegisteredAt").textContent =
+    currentPatient.registered_at ?? "—";
+
+  // 総ログ数
+  document.getElementById("statLogCount").textContent = `${logs.length}件`;
+
+  // 総歩行距離（全ログの GPS 軌跡を合計）
+  let totalDistM = 0;
+  logs.forEach(log => {
+    const pts = testData.gpsData
+      .filter(g => g.log_id === log.id)
+      .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    for (let i = 1; i < pts.length; i++) {
+      totalDistM += calcDistanceM(
+        pts[i - 1].latitude, pts[i - 1].longitude,
+        pts[i].latitude,     pts[i].longitude
+      );
     }
+  });
+  document.getElementById("statTotalDistance").textContent =
+    totalDistM >= 1000
+      ? `${(totalDistM / 1000).toFixed(1)} km`
+      : `${Math.round(totalDistM)} m`;
 
-    // 最長滞在地点を計算
-    const stayResult = calcLongestStay(gpsPoints);
-
-    // 開始地点から最長滞在地点までの距離・所要時間
-    const startPoint = gpsPoints[0];
-    const distM = calcDistanceM(
-        startPoint.latitude, startPoint.longitude,
-        stayResult.latitude, stayResult.longitude
-    );
-    const distStr = distM >= 1000
-        ? `${(distM / 1000).toFixed(2)} km`
-        : `${Math.round(distM)} m`;
-
-    const timeToStay = calcDuration(log.start_time, stayResult.arrivedAt);
-
-    document.getElementById("statDistance").textContent   = distStr;
-    document.getElementById("statTimeToStay").textContent = timeToStay;
-    document.getElementById("stayLocation").textContent   =
-        `${stayResult.latitude.toFixed(5)}, ${stayResult.longitude.toFixed(5)}`;
-    document.getElementById("stayDuration").textContent   =
-        `滞在 ${stayResult.stayMinutes} 分`;
+  // 平均歩行時間（ログ1件あたりの平均所要時間）
+  if (logs.length === 0) {
+    document.getElementById("statAvgDuration").textContent = "—";
+    return;
+  }
+  const totalMs = logs.reduce((sum, log) => {
+    const ms = new Date(log.end_time) - new Date(log.start_time);
+    return sum + (ms > 0 ? ms : 0);
+  }, 0);
+  const avgMin = Math.round(totalMs / logs.length / 60000);
+  document.getElementById("statAvgDuration").textContent = `${avgMin}分`;
 }
 
 // 最長滞在地点を計算（案A：誤差15m以内を同一地点と判定）
