@@ -8,6 +8,7 @@ import '../services/tts_service.dart';
 import '../widgets/device_status_card.dart';
 import '../widgets/radar_display.dart';
 import '../widgets/emergency_button.dart';
+import 'login_page.dart'; // ログアウト後に戻るためのインポート
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   bool _hasObstacle = false;
 
   final Battery _battery = Battery();
-  final TtsService _ttsService = TtsService(); // 分離したTTSサービス
+  final TtsService _ttsService = TtsService(); 
   
   StreamSubscription<ServiceStatus>? _gpsServiceStatusSubscription;
   Timer? _batteryTimer;
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _ttsService.init(); // 音声読み上げ初期化
+    _ttsService.init(); 
     _initDeviceStates();
   }
 
@@ -75,7 +76,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // 障害物データ受け取り時の処理
   void _handleObstacleDetected(String type, double distance) async {
     String message = "";
     if (type == "stairs") {
@@ -91,7 +91,6 @@ class _HomePageState extends State<HomePage> {
       _hasObstacle = true;
     });
 
-    // 読み上げサービスの呼び出し
     await _ttsService.speakObstacle(type, distance);
   }
 
@@ -102,11 +101,90 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // ★ 誤操作を防ぐ文字入力付きログアウト確認ダイアログ
+  void _showLogoutConfirmation(BuildContext context) {
+    final TextEditingController confirmController = TextEditingController();
+    bool isInputValid = false;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // ダイアログの外をタップしても閉じないようにする
+      builder: (context) {
+        return StatefulBuilder( // ダイアログ内の文字入力をリアルタイムに検知してボタン状態を変える
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              backgroundColor: Colors.grey[900], // 全体に合わせてダーク系に
+              title: const Row(
+                children: [
+                  Icon(Icons.warning_amber_rounded, color: Colors.orangeAccent),
+                  SizedBox(width: 8),
+                  Text('ログアウトの確認', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '安全のため、確認として下に「ログアウト」と入力してください。',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: confirmController,
+                    style: const TextStyle(color: Colors.white),
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: 'ログアウト',
+                      hintStyle: const TextStyle(color: Colors.white30),
+                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
+                      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.greenAccent)),
+                    ),
+                    onChanged: (text) {
+                      // 入力された文字が「ログアウト」と完全一致しているか判定
+                      setDialogState(() {
+                        isInputValid = (text.trim() == 'ログアウト');
+                      });
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('キャンセル', style: TextStyle(color: Colors.white60)),
+                ),
+                ElevatedButton(
+                  // 文字が正しく入力されているときだけ関数を有効化（それ以外はボタンが無効＝灰色になる）
+                  onPressed: isInputValid
+                      ? () {
+                          Navigator.pop(context); // ダイアログを閉じる
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => const LoginPage()), // ログイン画面へ戻る
+                          );
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red[700],
+                    disabledBackgroundColor: Colors.white10, // 無効化されているときのボタンの色
+                    disabledForegroundColor: Colors.white30, // 無効化されているときの文字の色
+                  ),
+                  child: const Text('確定', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _batteryTimer?.cancel();
     _gpsServiceStatusSubscription?.cancel();
-    _ttsService.stop(); // 画面遷移時に音声を安全に停止
+    _ttsService.stop(); 
     super.dispose();
   }
 
@@ -118,7 +196,11 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         actions: [
-          IconButton(icon: const Icon(Icons.logout), onPressed: () => Navigator.pop(context)),
+          // ログアウトボタン押下時に確認アラートを呼ぶように変更
+          IconButton(
+            icon: const Icon(Icons.logout), 
+            onPressed: () => _showLogoutConfirmation(context),
+          ),
         ],
       ),
       body: SingleChildScrollView(
