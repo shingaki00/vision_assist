@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (admin && admin.password === password) {
             sessionStorage.setItem("loggedInUser", JSON.stringify(admin)); //sessionStorageにユーザ情報を保存
-            window.location.href = "index.html";
+            window.location.href = "home.html";
         } else {
             alert("IDまたはパスワードが違います");
         }
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     if (result.success) {
-        window.location.href = "index.html";
+        window.location.href = "home.html";
     } else {
         alert("IDまたはパスワードが違います");
     }

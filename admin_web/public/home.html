@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホーム</title>
+
+    <!-- 読み込み -->
+    <link rel="stylesheet" href="./css/home.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script type="module" src="./js/home.js" defer></script>
+    <script type="module" src="./js/style.js" defer></script>
+    
+
+</head>
+
+<body>
+    <div id="header-inner"></div>
+
+    <main class="home-container">
+
+        <!-- クイックアクセスのボタン集 -->
+        <div class="quick-access">
+            <h3>クイックアクセス</h3>
+
+            <div class="quick-access-list">
+                <a href="#" class="quick-card">
+                    <div class="icon">👤</div>
+                    <div class="text">
+                        <h4>ユーザー登録</h4>
+                        <p>新規ユーザーの登録・アカウント作成</p>
+                    </div>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                </a>
+               
+                <a href="./pages/walkLogs.html" class="quick-card">
+                    <div class="icon">📍</div>
+                    <div class="text">
+                        <h4>歩行ログ確認</h4>
+                        <p>利用者の歩行履歴・経路データの確認</p>
+                    </div>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+
+                <a href="#" class="quick-card">
+                    <div class="icon">👥</div>
+                    <div class="text">
+                        <h4>ユーザー一覧</h4>
+                        <p>登録済みユーザーの管理・検索</p>
+                    </div>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+
+                <a href="#" class="quick-card">
+                    <div class="icon">⚙</div>
+                    <div class="text">
+                        <h4>設定</h4>
+                        <p>システム設定・環境設定</p>
+                    </div>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+                
+            </div>
+            
+        </div>
+
+
+        <!-- 最新の通知を表示する -->
+        <div class="activity-feed">
+            <h3>最近のアクティビティ</h3>
+
+            <ul class="activity-list" id="activity-list">
+                <!-- JavaScriptで動的にアクティビティを追加 -->
+            </ul>
+            
+        </div>
+
+    </main>
+
+</body>
+</html>

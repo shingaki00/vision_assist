@@ -3,86 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ホーム</title>
+    <title>ログイン</title>
 
-    <!-- 読み込み -->
-    <link rel="stylesheet" href="./css/index.css">
-    <link rel="stylesheet" href="./css/style.css">
-    <script type="module" src="./js/index.js" defer></script>
-    <script type="module" src="./js/style.js" defer></script>
-    
+    <!-- CSS読み込み -->
+    <link rel="stylesheet" href="./css/login.css">
+    <script src="./js/login.js" defer></script>
 
 </head>
 
 <body>
-    <div id="header-inner"></div>
 
-    <main class="home-container">
+    <main>
+        <div class="login-container">
 
-        <!-- クイックアクセスのボタン集 -->
-        <div class="quick-access">
-            <h3>クイックアクセス</h3>
+            <h1>ログイン</h1>
 
-            <div class="quick-access-list">
-                <a href="#" class="quick-card">
-                    <div class="icon">👤</div>
-                    <div class="text">
-                        <h4>ユーザー登録</h4>
-                        <p>新規ユーザーの登録・アカウント作成</p>
-                    </div>
-                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"/>
-                        </svg>
-                </a>
-               
-                <a href="./pages/walkLogs.html" class="quick-card">
-                    <div class="icon">📍</div>
-                    <div class="text">
-                        <h4>歩行ログ確認</h4>
-                        <p>利用者の歩行履歴・経路データの確認</p>
-                    </div>
-                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"/>
-                    </svg>
-                </a>
+            <form method="POST" class="login-form">
 
-                <a href="#" class="quick-card">
-                    <div class="icon">👥</div>
-                    <div class="text">
-                        <h4>ユーザー一覧</h4>
-                        <p>登録済みユーザーの管理・検索</p>
-                    </div>
-                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"/>
-                    </svg>
-                </a>
+                <div class="form-group">
+                    <label for="login_id">ユーザーID</label>
+                    <input 
+                        type="text" 
+                        id="login_id" 
+                        name="login_id"
+                        required
+                    >
 
-                <a href="#" class="quick-card">
-                    <div class="icon">⚙</div>
-                    <div class="text">
-                        <h4>設定</h4>
-                        <p>システム設定・環境設定</p>
-                    </div>
-                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"/>
-                    </svg>
-                </a>
-                
-            </div>
-            
+                    <label for="password">パスワード</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="login-button">
+                    ログイン
+                </button>
+
+                <p class="forgot-password">パスワードを忘れたら</p>
+            </form>
+
         </div>
-
-
-        <!-- 最新の通知を表示する -->
-        <div class="activity-feed">
-            <h3>最近のアクティビティ</h3>
-
-            <ul class="activity-list" id="activity-list">
-                <!-- JavaScriptで動的にアクティビティを追加 -->
-            </ul>
-            
-        </div>
-
     </main>
 
 </body>
