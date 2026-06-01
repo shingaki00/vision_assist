@@ -113,7 +113,7 @@ function renderList() {
   }
 
   container.innerHTML = filtered.map((u, i) => `
-    <div class="user-row"
+    <div class="users-row"
          style="animation-delay:${i * 0.04}s"
          data-id="${u.id}">
 
@@ -160,7 +160,7 @@ function renderList() {
     </div>
   `).join("");
 
-    container.querySelectorAll(".user-row").forEach(row => {
+    container.querySelectorAll(".users-row").forEach(row => {
         row.addEventListener("click", () => showLogs(Number(row.dataset.id)));
     });
 

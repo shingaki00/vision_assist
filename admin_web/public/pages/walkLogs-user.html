@@ -31,7 +31,7 @@
         <div class="stat-labels">
 
             <div class="stat-item">
-                <label class="stat-label">総距離</label>
+                <label class="stat-label">登録日</label>
                 <label class="stat-value" id="statRegisteredAt">—</label>
             </div>
             <div class="stat-item">
@@ -46,7 +46,6 @@
                 <label class="stat-label">総ログ数</label>
                 <label class="stat-value" id="statLogCount">—</label>
             </div>
-
         </div>
 
         <div class="walk-layout">
@@ -56,9 +55,8 @@
                 <div class="list-header">
                     <div class="list-header-left">
                         <span class="list-title">過去の履歴</span>
-                        <span class="list-count" id="listCount"></span>
+                        <span class="list-count" id="listCount">ログをクリックすると地図にルートが表示されます</span>
                     </div>
-                    <span class="sort-note">新しい順</span>
                 </div>
                 <div id="logList"></div>
             </div>
@@ -68,32 +66,13 @@
             <div class="detail-panel">
 
                 <!-- ログ未選択時 -->
-                <div id="emptyState">ログを選択すると地図が表示されます</div>
+                <div id="emptyState">ログを選択するとルートが表示されます</div>
 
                 <!-- ログ選択後 -->
                 <div id="detailContent">
 
-                    <!-- 統計カード -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-label">総距離</div>
-                            <div class="stat-value" id="statTotalDist">—</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">開始〜最長滞在地点</div>
-                            <div class="stat-value" id="statDistance">—</div>
-                            <div class="stat-sub" id="statTimeToStay"></div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">最長滞在地点</div>
-                            <div class="stat-value" style="font-size:13px;" id="stayLocation">—</div>
-                            <div class="stat-sub" id="stayDuration"></div>
-                        </div>
-                    </div>
-
                     <!-- Google Map -->
                     <div id="map"></div>
-
                 </div>
             </div>
 

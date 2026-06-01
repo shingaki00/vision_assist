@@ -47,35 +47,56 @@ function initPage() {
 // ─── 左パネル：歩行ログ一覧を描画 ────────────────
 // ────────────────────────────────────────────────
 function renderList(patientId) {
-  const logs = testData.walkingLogs
-    .filter(log => log.patient_id === patientId)
-    .sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
+    const container = document.getElementById("logList");
+    const logs = testData.walkingLogs
+        .filter(log => log.patient_id === patientId)
+        .sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
+    ;
 
-  const container = document.getElementById("logList");
-  document.getElementById("listCount").textContent = `${logs.length}件のログ`;
+    if (logs.length === 0) {
+        container.innerHTML = `<div class="log-empty">ログがありません</div>`;
+        return;
+    }
 
-  if (logs.length === 0) {
-    container.innerHTML = `<div class="log-empty">ログがありません</div>`;
-    return;
-  }
+    container.innerHTML = logs.map((log, i) => {
+        const duration = calcDuration(log.start_time, log.end_time);
+        const date = log.start_time.slice(0, 10);
+        const startT = log.start_time.slice(11, 16);
+        const endT   = log.end_time.slice(11, 16);
+        const pts = testData.gpsData
+            .filter(g => g.log_id === log.id)
+            .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+        ;
+        let distStr = "—";
 
-  container.innerHTML = logs.map((log, i) => {
-    const duration = calcDuration(log.start_time, log.end_time);
-    const date = log.start_time.slice(0, 10);
-    const startT = log.start_time.slice(11, 16);
-    const endT   = log.end_time.slice(11, 16);
+        if (pts.length >= 2) {
+            let totalDistM = 0;
+            for (let k = 1; k < pts.length; k++) {
+                totalDistM += calcDistanceM(
+                    pts[k - 1].latitude, pts[k - 1].longitude,
+                    pts[k].latitude,     pts[k].longitude
+                );
+            }
+            distStr = totalDistM >= 1000
+                ? `${(totalDistM / 1000).toFixed(1)} km`
+                : `${Math.round(totalDistM)} m`;
+        }
 
-    return `
-        <div class="user-row"
-             style="animation-delay:${i * 0.04}s"
-             data-id="${log.id}">
-
-            <div class="log-date">${date}</div>
-            <div class="log-time">${startT} 〜 ${endT}</div>
-            <div class="log-duration">${duration}</div>
-        </div>
-    `;
-  }).join("");
+        return `
+            <div class="user-row"
+                style="animation-delay:${i * 0.04}s"
+                data-id="${log.id}">
+                <div class="log-row-top">
+                    <span class="log-date">${date}</span>
+                    <span class="log-time">${startT} 〜 ${endT}</span>
+                    <span class="log-duration">${duration}</span>
+                </div>
+                <div class="log-meta">
+                    <span>📍 ${distStr}</span>
+                </div>
+            </div>
+        `;
+    }).join("");
 
     container.querySelectorAll(".user-row").forEach(row => {
         row.addEventListener("click", () => {

@@ -108,11 +108,13 @@ h2 {
 
 /* リストカード全体　*/
 .list-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-card);
-  border: 1.6px solid rgb(197, 197, 197);
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
+    flex: 4;
+    min-width: 0;
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    border: 1.6px solid rgb(197, 197, 197);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
 }
 
 /* ─── リストヘッダー ─────────────────────────── */
@@ -121,7 +123,7 @@ h2 {
   align-items: center;
   gap: 12px;
   padding: 14px 18px;
-  border-bottom: 1.6px solid rgb(197, 197, 197);
+  border-bottom: 2px solid rgb(197, 197, 197);
   background: var(--bg-card);
 }
 
@@ -154,22 +156,43 @@ h2 {
   gap: 10px;
 }
  
-/* ─── ユーザー行（カード） ────────────────────── */
-.user-row {
+/* ユーザー行（walkLogsの行） */
+.users-row {
   display: flex;
   align-items: center;
   gap: 14px;
+
   background: var(--bg-card);
   padding: 14px 16px;
   cursor: pointer;
-  box-shadow: var(--shadow-card);
   transition: border-color 0.2s, background 0.2s, transform 0.15s;
- 
-  /* フェードインアニメーション */
   animation: fadeInUp 0.3s ease both;
 }
+
+/* ユーザー行（walkLogs-userの行) */
+.user-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-bottom: 1px solid rgb(197, 197, 197);
+    background: var(--bg-card);
+
+    gap: 4px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    animation: fadeInUp 0.3s ease both;
+}
+
+.log-row-top {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text-main);
+}
  
-.user-row:hover {
+.users-row:hover, .user-row:hover {
   background: var(--bg-hover);
   transform: translateY(-1px);
 }
@@ -180,7 +203,7 @@ h2 {
 }
 
 /* ─── シェブロン（＞矢印）のホバー ──────────────────── */ 
-.user-row:hover .chevron {
+.users-row:hover .chevron {
   transform: translateX(2px);
 }
  
@@ -276,8 +299,18 @@ h2 {
   height: 13px;
   flex-shrink: 0;
 }
+
+/* ─── ログ行のメタ情報（距離・最長滞在） ─────── */
+.log-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
  
-/* ─── 統計（総ログ数・本日） ─────────────────── */
+
+/* ─────────── ユーザー一覧の統計（総ログ数・本日） ─────────── */
 .user-stats {
   display: flex;
   flex-direction: row;
@@ -307,7 +340,40 @@ h2 {
   color: var(--text-muted);
   font-weight: 400;
 }
+
+/*─────────── 1ユーザーあたりの統計 ─────────── */
+.stat-labels {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+}
+
+.stat-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: #fff;
+    padding: 12px;
+    border-radius: var(--radius-card);
+    border: 1.6px solid rgb(197, 197, 197);
+    box-shadow: var(--shadow-card);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-main);
+}
  
+
 /* ─── 空状態 ────────────────────────────────── */
 .empty {
   text-align: center;
@@ -332,7 +398,7 @@ h2 {
 
 /* 右：詳細パネル */
 .detail-panel {
-    flex: 1;
+    flex: 6;
     min-width: 0;
 }
 
@@ -402,6 +468,7 @@ h2 {
 @media (max-width: 768px) {
     .walk-layout { flex-direction: column; }
     .list-card   { flex: none; width: 100%; }
+    .detail-panel { flex: none; width: 100%; }
     .stats-grid  { grid-template-columns: 1fr 1fr; }
-    #map         { height: 300px; }
+    #map         { height: 420px; }
 }
