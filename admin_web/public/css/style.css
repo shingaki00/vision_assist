@@ -112,5 +112,6 @@ header {
 }
 
 .back-link:hover {
-  color: var(--focus);
+    color: var(--focus);
+    text-decoration: underline;
 }
