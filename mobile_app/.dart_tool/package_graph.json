@@ -10,6 +10,7 @@
         "battery_plus",
         "cupertino_icons",
         "flutter",
+        "flutter_tts",
         "geolocator"
       ],
       "devDependencies": [
@@ -394,6 +395,14 @@
       "dependencies": [
         "collection",
         "meta"
+      ]
+    },
+    {
+      "name": "flutter_tts",
+      "version": "4.2.5",
+      "dependencies": [
+        "flutter",
+        "flutter_web_plugins"
       ]
     }
   ],
