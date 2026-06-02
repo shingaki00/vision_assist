@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.11.5
+  sdk: ^3.5.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,7 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   battery_plus: ^6.1.0  # ← 行の頭は「半角スペース2個」になっているか？
-  geolocator: ^13.0.0    # ← 全角スペースが紛れ込んでいないか？     # GPS状態取得用
+  geolocator: ^13.0.0 
+  flutter_tts: ^4.1.1   # ← 全角スペースが紛れ込んでいないか？     # GPS状態取得用
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
