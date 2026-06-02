@@ -38,19 +38,25 @@ export function formatTimeAgo(dateString) {
     return `${diffDay}日前`;
 }
 
+// エラーメッセージを表示する関数
+export function showError(message) {
+    const el = document.getElementById("error-message");
+    el.textContent = message;
+    el.style.display = "block";
+}
 
 // ログアウト処理
 export function Logout() {
     const logoutBtn = document.querySelector(".btn-logout");
+    if (!logoutBtn) return; // ← 早期リターンで明示的に
 
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-            const confirmed = confirm("ログアウトしますか？"); // ← 追加
-            if (!confirmed) return;                            // ← キャンセルで中断
-
-            sessionStorage.removeItem("loggedInUser");
-            window.location.href = "../public/login.html";
-        });
-    }
+    // 二重登録防止
+    logoutBtn.removeEventListener("click", handleLogout);
+    logoutBtn.addEventListener("click", handleLogout);
 }
-document.addEventListener("DOMContentLoaded", () => { Logout();});
+
+function handleLogout() {
+    if (!confirm("ログアウトしますか？")) return;
+    sessionStorage.removeItem("loggedInUser");
+    window.location.href = "../public/login.html";
+}

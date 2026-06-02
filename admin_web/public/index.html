@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン</title>
+    <title>ログイン｜VisionAssist</title>
 
     <!-- CSS読み込み -->
     <link rel="stylesheet" href="./css/login.css">
     <script src="./js/login.js" defer></script>
+    <script src="./js/style.js" defer></script>
 
 </head>
 
@@ -16,7 +17,7 @@
     <main>
         <div class="login-container">
 
-            <h1>ログイン</h1>
+            <h1>管理画面ログイン</h1>
 
             <form method="POST" class="login-form">
 
@@ -38,11 +39,14 @@
                     >
                 </div>
 
+                <!-- エラー表示エリア -->
+                <p id="error-message"></p>
+
                 <button type="submit" class="login-button">
                     ログイン
                 </button>
 
-                <p class="forgot-password">パスワードを忘れたら</p>
+                <!-- <p class="forgot-password">パスワードを忘れたら</p> -->
             </form>
 
         </div>

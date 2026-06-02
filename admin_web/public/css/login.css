@@ -82,3 +82,11 @@ body {
     cursor: pointer;
     margin-top: 20px;
 }
+
+/* ------ エラー文 -------*/
+#error-message {
+    text-align: center;
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}

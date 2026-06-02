@@ -115,3 +115,10 @@ header {
     color: var(--focus);
     text-decoration: underline;
 }
+
+/* ------ エラー文 -------*/
+#error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
