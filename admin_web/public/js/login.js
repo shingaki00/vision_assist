@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const user = await authenticate(login_id, password); // ← ここだけ意識する
             sessionStorage.setItem("uid", user.uid);
-            window.location.href = "../home.html";
+            window.location.href = "./home.html";
         } catch (error) {
             showError("IDまたはパスワードが違います");
             console.error(error);
