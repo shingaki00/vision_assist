@@ -13,7 +13,7 @@ class AuthService {
 
     // --- テスト用ログイン条件 ---
     // 他の人が設計したDBの初期ユーザーに合わせて変更してください
-    if (id == 'adminS' && password == 'password123') {
+    if (id == 'admin' && password == 'pass') {
       return true;
     }
     
