@@ -12,11 +12,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _idController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _passwordFocusNode = FocusNode();
   final _authService = AuthService();
   bool _isLoading = false;
   String _errorMessage = "";
 
   void _login() async {
+    if (_isLoading) return;
+
     setState(() {
       _isLoading = true;
       _errorMessage = "";
@@ -45,6 +48,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void dispose() {
+    _idController.dispose();
+    _passwordController.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // 全体を元の黒・ダーク系の背景に統一
@@ -66,6 +77,8 @@ class _LoginPageState extends State<LoginPage> {
               // ID入力欄
               TextField(
                 controller: _idController,
+                textInputAction: TextInputAction.next,
+                onSubmitted: (_) => _passwordFocusNode.requestFocus(),
                 style: const TextStyle(color: Colors.white), // 入力文字を白に
                 decoration: InputDecoration(
                   labelText: 'ユーザーID',
@@ -80,7 +93,10 @@ class _LoginPageState extends State<LoginPage> {
               // パスワード入力欄
               TextField(
                 controller: _passwordController,
+                focusNode: _passwordFocusNode,
                 obscureText: true,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _login(),
                 style: const TextStyle(color: Colors.white), // 入力文字を白に
                 decoration: InputDecoration(
                   labelText: 'パスワード',
