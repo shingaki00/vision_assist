@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>歩行ログの詳細</title>
+    <title>歩行ログの詳細｜VisionAssist</title>
 
     <!-- 読み込み -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/walkLog.css">
     <script type="module" src="../js/style.js" defer></script>
     <script type="module" src="../js/walkLog-gps.js" defer></script>
+
+    <script>
+        (function () {
+            if (sessionStorage.getItem('uid') === null) {
+                window.location.replace('../index.html');
+            }
+        })();
+    </script>
 
     <!-- Google Maps API（差し替え必須） -->
     <script

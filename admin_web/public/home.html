@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ホーム</title>
+    <title>ホーム｜VisionAssist</title>
 
     <!-- 読み込み -->
     <link rel="stylesheet" href="./css/home.css">
@@ -11,7 +11,13 @@
     <script type="module" src="./js/home.js" defer></script>
     <script type="module" src="./js/style.js" defer></script>
     
-
+    <script>
+        (function () {
+            if (sessionStorage.getItem('uid') === null) {
+                window.location.replace('index.html');
+            }
+        })();
+    </script>
 </head>
 
 <body>

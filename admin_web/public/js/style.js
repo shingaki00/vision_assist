@@ -57,6 +57,6 @@ export function Logout() {
 
 function handleLogout() {
     if (!confirm("ログアウトしますか？")) return;
-    sessionStorage.removeItem("loggedInUser");
-    window.location.href = "../public/login.html";
+    sessionStorage.removeItem("uid");
+    window.location.replace('../public/login.html');
 }
