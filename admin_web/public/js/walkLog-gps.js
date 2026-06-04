@@ -149,10 +149,6 @@ function waitForMapsAndUpdate(gpsPoints) {
 function updateUserStats(patientId) {
   const logs = testData.walkingLogs.filter(l => l.patient_id === patientId);
 
-  // 登録日
-  document.getElementById("statRegisteredAt").textContent =
-    currentPatient.registered_at ?? "—";
-
   // 総ログ数
   document.getElementById("statLogCount").textContent = `${logs.length}件`;
 
