@@ -81,12 +81,28 @@
 
         <!-- 最新の通知を表示する -->
         <div class="activity-feed">
-            <h3>最近のアクティビティ</h3>
+            <div class="activity-feed-header">
+                <h3>最近のアクティビティ</h3>
+                <div class="activity-header-actions">
+                    <span id="unread-badge" hidden>0</span>
+                    <button id="btn-mark-all">すべて既読</button>
+                </div>
+            </div>
+            <ul class="activity-list" id="activity-list"></ul>
+        </div>
 
-            <ul class="activity-list" id="activity-list">
-                <!-- JavaScriptで動的にアクティビティを追加 -->
-            </ul>
-            
+        <!-- モーダル -->
+        <div id="activity-modal-overlay">
+            <div class="activity-modal" role="dialog" aria-modal="true">
+                <div class="modal-header">
+                    <h4 id="modal-title"></h4>
+                    <button class="modal-close" aria-label="閉じる">✕</button>
+                </div>
+                <div class="modal-body">
+                    <p id="modal-desc"></p>
+                    <p class="modal-time" id="modal-time"></p>
+                </div>
+            </div>
         </div>
 
     </main>
