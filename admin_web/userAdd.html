@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>会員登録</title>
+
+    <link rel="stylesheet" href="./css/userAdd.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+
+  <body>
+    <main>
+      <div class="register-container">
+        <h1 class="register-title">会員登録</h1>
+
+        <form method="post" class="form-group">
+          <p class="form-label">ID</p>
+          <input type="text" maxlength="10" class="form-input" id="id" />
+          <p class="form-label">パスワード</p>
+          <input
+            type="password"
+            maxlength="10"
+            class="form-input"
+            placeholder="**********"
+            id="password"
+          />
+          <p class="form-label">氏名</p>
+          <input type="text" maxlength="10" class="form-input" id="name" />
+          <p class="form-label">年齢</p>
+          <input type="text" maxlength="3" class="form-input" id="age" />
+          <p class="form-label">持病などについて</p>
+          <textarea
+            name="emergency_note"
+            class="form-input"
+            id="emergency_note"
+            maxlength="100"
+          ></textarea>
+          <button type="button" class="register-button" id="touroku">
+            登録
+          </button>
+        </form>
+      </div>
+      <script src="./js/userAdd.js"></script>
+    </main>
+  </body>
+</html>
