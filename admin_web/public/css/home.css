@@ -83,7 +83,7 @@
 .activity-feed {
     flex: 1;  /* 少し狭く */
     margin: 12px;
-    padding: 20px;
+    padding: 15px;
     border: 2px solid #ccc;
     border-radius: 12px;
     background-color: white;
@@ -102,7 +102,20 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding:  12px 8px;
+    padding:  8px 8px;
+    margin: 10px;
+}
+
+.activity-feed-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.activity-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 /* ----- 左側 ------*/
@@ -143,6 +156,25 @@
     color: #9ca3af;
 }
 
+/*  既読ボタン */
+#btn-mark-all{
+    font-size: 11px;
+    padding: 6px 10px;
+    color:dimgrey;
+    background-color: white;
+    border:2px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+#btn-mark-all:hover {
+    transform: translateY(-3px);
+    border-color: #714876;
+    color: #714876;
+}
+
 /* ----- 左側(時間) ------*/
 .activity-time {
     font-size: 12px;
@@ -151,6 +183,11 @@
 
 
 /* --- -- モーダル ------ */
+#modal-title{
+    font-size: 20px;
+    color: #804893;
+}
+
 #activity-modal-overlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,.35);
@@ -175,3 +212,18 @@
 .modal-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
 .modal-close { background: none; border: none; cursor: pointer; font-size: 14px; }
 .modal-time { font-size: .75rem; color: #6b7280; margin-top: 12px; }
+
+
+/* ──────────────────────────────────────────── */
+/*      レスポンシブ                               */
+/* ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .home-container {
+        flex-direction: column;
+    }
+
+    .quick-access,
+    .activity-feed {
+        width: 100%;
+    }
+}
