@@ -113,12 +113,12 @@ class _HomePageState extends State<HomePage> {
         return StatefulBuilder( // ダイアログ内の文字入力をリアルタイムに検知してボタン状態を変える
           builder: (context, setDialogState) {
             return AlertDialog(
-              backgroundColor: Colors.grey[900], // 全体に合わせてダーク系に
+              backgroundColor: Colors.white, // 全体に合わせてダーク系に
               title: const Row(
                 children: [
-                  Icon(Icons.warning_amber_rounded, color: Colors.orangeAccent),
+                  Icon(Icons.warning_amber_rounded, color: Colors.orange),
                   SizedBox(width: 8),
-                  Text('ログアウトの確認', style: TextStyle(color: Colors.white)),
+                  Text('ログアウトの確認', style: TextStyle(color: Colors.black87)),
                 ],
               ),
               content: Column(
@@ -127,18 +127,18 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const Text(
                     '安全のため、確認として下に「ログアウト」と入力してください。',
-                    style: TextStyle(color: Colors.white70),
+                    style: TextStyle(color: Colors.black54),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: confirmController,
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.black87),
                     autofocus: true,
                     decoration: InputDecoration(
                       hintText: 'ログアウト',
-                      hintStyle: const TextStyle(color: Colors.white30),
-                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
-                      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.greenAccent)),
+                      hintStyle: const TextStyle(color: Colors.black38),
+                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black26)),
+                      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)),
                     ),
                     onChanged: (text) {
                       // 入力された文字が「ログアウト」と完全一致しているか判定
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('キャンセル', style: TextStyle(color: Colors.white60)),
+                  child: const Text('キャンセル', style: TextStyle(color: Colors.black54)),
                 ),
                 ElevatedButton(
                   // 文字が正しく入力されているときだけ関数を有効化（それ以外はボタンが無効＝灰色になる）
@@ -167,8 +167,8 @@ class _HomePageState extends State<HomePage> {
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red[700],
-                    disabledBackgroundColor: Colors.white10, // 無効化されているときのボタンの色
-                    disabledForegroundColor: Colors.white30, // 無効化されているときの文字の色
+                    disabledBackgroundColor: Colors.black12, // 無効化されているときのボタンの色
+                    disabledForegroundColor: Colors.black38, // 無効化されているときの文字の色
                   ),
                   child: const Text('確定', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
@@ -193,8 +193,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('デバイス制御パネル'),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
         actions: [
           // ログアウトボタン押下時に確認アラートを呼ぶように変更
           IconButton(

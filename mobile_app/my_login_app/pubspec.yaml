@@ -38,6 +38,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    battery_plus: ^6.1.0  # ← 行の頭は「半角スペース2個」になっているか？
+    geolocator: ^13.0.0    # ← 全角スペースが紛れ込んでいないか？     # GPS状態取得用
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
