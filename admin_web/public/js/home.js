@@ -134,6 +134,25 @@ function closeModal() {
     if (overlay) overlay.classList.remove("open");
 }
 
+async function openAllModal() {
+    const activities = await fetchActivities();
+    const sorted = [...activities].sort((a, b) => new Date(b.time) - new Date(a.time));
+
+    const overlay = document.getElementById("activity-modal-overlay");
+    overlay.querySelector("#modal-title").textContent = "すべてのアクティビティ";
+    overlay.querySelector("#modal-desc").innerHTML = sorted.map(item => `
+        <div class="all-activity-item">
+            <div>
+                <p class="activity-title">${item.title}</p>
+                <p class="activity-desc">${item.description}</p>
+            </div>
+            <span class="activity-time">${formatTimeAgo(item.time)}</span>
+        </div>
+    `).join("");
+    overlay.querySelector("#modal-time").textContent = `全${sorted.length}件`;
+    overlay.classList.add("open");
+}
+
 
 // ─────────────────────────────────────────────
 // 「すべて既読」ボタン（HTML側に id="btn-mark-all" があれば動く）
@@ -146,6 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.querySelector(".modal-close").addEventListener("click", closeModal);
     overlay.addEventListener("click", e => { if (e.target === overlay) closeModal(); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+    document.getElementById("btn-show-all").addEventListener("click", () => { openAllModal(); });
  
     const btnMarkAll = document.getElementById("btn-mark-all");
     if (btnMarkAll) {
