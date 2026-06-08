@@ -48,7 +48,7 @@ function openModal(patient) {
 
         <p>ID: ${patient.login_id}</p>
 
-        <p>パスワード: ${patient.password_hash}</p>
+        <p>パスワード: ********</p>
 
         <p>名前: ${patient.name}</p>
 
@@ -59,6 +59,24 @@ function openModal(patient) {
     `;
 
   modal.style.display = "block";
+}
+
+document.getElementById("searchBtn").addEventListener("click", searchPatient);
+
+async function searchPatient() {
+  const keyword = document.getElementById("searchBox").value;
+  const response = await fetch(
+    `/patients/search?keyword=${encodeURIComponent(keyword)}`,
+  );
+  const patients = await response.json();
+  displayPatients(patients);
+}
+
+function displayPatients(patients) {
+  patientList.innerHTML = "";
+  patients.forEach((patient) => {
+    createPatientCard(patient);
+  });
 }
 
 // 閉じる
