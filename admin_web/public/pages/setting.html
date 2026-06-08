@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設定｜VisionAssist</title>
+
+    <!-- 読み込み -->
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script type="module" src="../js/style.js" defer></script>
+    
+    <script>
+        (function () {
+            if (sessionStorage.getItem('uid') === null) {
+                window.location.replace('index.html');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div id="header-inner"></div>
+
+    <main class="home-container">
+
+
+
+    </main>
+</body>
+</html>
