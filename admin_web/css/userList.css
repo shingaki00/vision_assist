@@ -17,6 +17,72 @@ h1 {
   margin-bottom: 30px;
 }
 
+/* 検索エリア */
+.search-area {
+  display: flex;
+
+  justify-content: center;
+
+  margin-bottom: 30px;
+}
+
+.search-icon {
+  font-size: 30px;
+  border: none;
+  border-radius: 10%;
+
+  background-color: #3498db;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s,
+    transform 0.1s,
+    box-shadow 0.2s;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.search-icon:hover {
+  background-color: #2980b9;
+
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.search-icon:active {
+  transform: scale(0.9);
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* 検索ボックス */
+#searchBox {
+  width: 400px;
+
+  max-width: 90%;
+
+  padding: 12px 15px;
+
+  font-size: 16px;
+
+  border: 2px solid #dcdfe6;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  transition: 0.2s;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* フォーカス時 */
+#searchBox:focus {
+  border-color: #3498db;
+
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
 /* 一覧全体 */
 #patientList {
   display: grid;

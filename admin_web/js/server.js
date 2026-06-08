@@ -76,6 +76,19 @@ app.post("/addUser", async (req, res) => {
     res.status(500).json(error);
   }
 });
+//ユーザ検索
+app.get("/patients/search", (req, res) => {
+  const keyword = req.query.keyword;
+  const sql = `SELECT login_id,name,age,emergency_note FROM Patients WHERE name LIKE ? OR login_id LIKE ?`;
+  const searchWord = `%${keyword}%`;
+  connection.query(sql, [searchWord, searchWord], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+    res.json(results);
+  });
+});
 
 app.listen(3000, () => {
   console.log("サーバー起動");
