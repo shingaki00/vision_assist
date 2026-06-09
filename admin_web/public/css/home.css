@@ -1,6 +1,7 @@
 /* 横並びにする */
 .home-container {
     display: flex;
+    flex-direction: column;
     margin: 20px auto;
     max-width: 1080px;
     padding: 0 20px;
@@ -12,6 +13,50 @@
 .activity-feed {
     padding: 10px;
 }
+
+/* -------------------------------------- */
+/* サマリーカードの配置 */
+/* -------------------------------------- */
+.summary-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 8px;
+}
+
+.summary-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid #ccc;
+    transition: 0.2s;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    border-color: #714876;
+}
+
+.summary-label {
+    margin: 0 0 4px;
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+.summary-value {
+    margin: 0 0 3px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #804893;
+    line-height: 1.1;
+}
+
+.summary-change { margin: 0; font-size: 12px; }
+.summary-change.up   { color: #0F6E56; }
+.summary-change.down { color: #A32D2D; }
 
 
 /* -------------------------------------- */
