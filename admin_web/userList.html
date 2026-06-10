@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ユーザ一覧</title>
+
+    <link rel="stylesheet" href="./css/userList.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <main>
+      <div>
+        <a href="/admin_web/index.html">< 戻る</a>
+        <h1>ユーザ一覧</h1>
+        <div class="search-area">
+          <button class="search-icon" id="searchBtn">🔍</button>
+          <input type="text" id="searchBox" placeholder="患者名・IDを検索" />
+        </div>
+        <div id="patientList"></div>
+        <div id="modal" class="modal">
+          <div class="modal-content">
+            <button id="closeBtn">閉じる</button>
+
+            <div id="detailArea"></div>
+          </div>
+        </div>
+      </div>
+      <script src="./js/userList.js"></script>
+    </main>
+  </body>
+</html>
+<!-- データ概要を一覧で表示、クリック時に詳細を表示する -->
