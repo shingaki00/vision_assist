@@ -43,8 +43,8 @@
         {
             "id": 2,
             "patient_id": 2,
-            "start_time": "2026-04-01T09:00:00",
-            "end_time": "2026-04-01T09:30:00",
+            "start_time": "2026-06-10T09:00:00",
+            "end_time": "2026-06-10T09:30:00",
             "log_id": 2
         },
         {
@@ -66,17 +66,17 @@
         },
         {
             "id": 2,
-            "log_id": 1,
+            "log_id": 2,
             "latitude": 35.6896,
             "longitude": 139.6918,
             "timestamp": "2026-04-01T08:20:00"
         },
         {
             "id": 3,
-            "log_id": 2,
+            "log_id": 3,
             "latitude": 35.6897,
             "longitude": 139.6919,
-            "timestamp": "2026-04-01T09:15:00"
+            "timestamp": "2026-06-10T09:15:00"
         }
     ],
 

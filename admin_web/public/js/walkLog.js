@@ -44,12 +44,8 @@ function buildUsers() {
       ? lastLog.start_time.slice(0, 16).replace("T", " ")
       : "なし";
 
-    // アクティブ判定（直近7日以内にログがあればactive）
-    const sevenDaysAgo = new Date(today);
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    const isActive = logs.some(
-      log => new Date(log.start_time) >= sevenDaysAgo
-    );
+    // アクティブ判定（現在進行中）
+    const isActive = logs.some( log => !log.end_time );
 
     return {
         id:        patient.id,

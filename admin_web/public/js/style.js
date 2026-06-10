@@ -58,5 +58,5 @@ export function Logout() {
 function handleLogout() {
     if (!confirm("ログアウトしますか？")) return;
     sessionStorage.removeItem("uid");
-    window.location.replace('../public/index.html');
+    window.location.replace('/admin_web/public/index.html');
 }

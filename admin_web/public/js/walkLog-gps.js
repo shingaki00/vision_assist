@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadTestData() {
     const res = await fetch("../../testData.json");
     testData = await res.json();
+    console.log("取得完了:", testData);         // ← 追加
+    console.log("gpsData:", testData.gpsData); // ← 追加
 }
 
 // ─── URLパラメータからpatient_idを取得して初期化 ──
@@ -116,8 +118,13 @@ function selectLog(logId) {
 
   const log = testData.walkingLogs.find(l => l.id === logId);
   const gpsPoints = testData.gpsData
-    .filter(g => g.log_id === logId)
+    .filter(g => String(g.log_id) === String(logId))
     .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+  
+  console.log("logId:", logId, typeof logId);
+  console.log("log_idの型:", testData.gpsData[0].log_id, typeof testData.gpsData[0].log_id);
+  console.log("filter結果:", testData.gpsData.filter(g => String(g.log_id) === String(logId)));
 
   // 詳細エリアを表示
   document.getElementById("emptyState").style.display = "none";
