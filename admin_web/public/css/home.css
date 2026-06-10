@@ -1,7 +1,7 @@
 /* 横並びにする */
 .home-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     margin: 20px auto;
     max-width: 1080px;
     padding: 0 20px;
@@ -14,14 +14,21 @@
     padding: 10px;
 }
 
+.left-col {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
 /* -------------------------------------- */
 /* サマリーカードの配置 */
 /* -------------------------------------- */
 .summary-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
-    margin-bottom: 8px;
+    padding: 20px 30px 30px 30px;
+    list-style: none;
 }
 
 .summary-card {
@@ -35,37 +42,28 @@
     transition: 0.2s;
 }
 
-.summary-card:hover {
-    transform: translateY(-3px);
-    border-color: #714876;
-}
-
 .summary-label {
     margin: 0 0 4px;
     font-size: 14px;
-    color: #9ca3af;
+    color: #49454F;
 }
 
 .summary-value {
     margin: 0 0 3px;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: bold;
-    color: #804893;
+    color: black;
     line-height: 1.1;
 }
 
-.summary-change { margin: 0; font-size: 12px; }
-.summary-change.up   { color: #0F6E56; }
-.summary-change.down { color: #A32D2D; }
+.summary-change { margin: 0; font-size: 13px; }
+.summary-change.up   { color: #1aac88; }
+.summary-change.down { color: #c52c2c; }
 
 
 /* -------------------------------------- */
 /* クイックアクセスの配置 */
 /* -------------------------------------- */
-
-.quick-access {
-    flex: 2; /* 広めに */
-}
 
 .quick-access-list {
     display: grid;
@@ -132,6 +130,7 @@
     border: 2px solid #ccc;
     border-radius: 12px;
     background-color: white;
+    align-self: flex-start;
 }
 
 .activity-list {
@@ -297,7 +296,7 @@
 /* ──────────────────────────────────────────── */
 /*      レスポンシブ                               */
 /* ──────────────────────────────────────────── */
-@media (max-width: 900px) {
+@media (max-width: 950px) {
     .home-container {
         flex-direction: column;
     }

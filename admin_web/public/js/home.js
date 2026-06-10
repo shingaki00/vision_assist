@@ -1,5 +1,56 @@
 import { formatTimeAgo } from "./style.js";
 
+// ─────────────────────────────────────────────
+// サマリーカードの描画
+// ─────────────────────────────────────────────
+
+async function fetchSummary() {
+    const res = await fetch("../testData.json");
+    const { patients, walkingLogs } = await res.json();
+
+    const today = new Date().toISOString().slice(0, 10); // "2026-06-10"
+
+    // 今週の範囲を計算
+    const now = new Date();
+    const weekAgo = new Date(now);
+    weekAgo.setDate(weekAgo.getDate() - 7);
+
+    // 総ユーザー数
+    const totalUsers = patients.length;
+
+    // 本日の歩行ログ数
+    const todayLogs = walkingLogs.filter(log =>
+        log.start_time.slice(0, 10) === today
+    );
+    const todayLogCount = todayLogs.length;
+
+    // 本日のアクティブユーザー（今日ログがあるユニークなpatient_id）
+    const activeUserIds = new Set(todayLogs.map(log => log.patient_id));
+    const activeUserCount = activeUserIds.size;
+
+    // 週間利用率（今週ログがある患者 ÷ 全患者）
+    const weeklyActiveIds = new Set(
+        walkingLogs
+            .filter(log => new Date(log.start_time) >= weekAgo)
+            .map(log => log.patient_id)
+    );
+    const weeklyRate = Math.round((weeklyActiveIds.size / patients.length) * 100);
+
+    return { totalUsers, activeUserCount, todayLogCount, weeklyRate };
+}
+
+function renderSummary({ totalUsers, activeUserCount, todayLogCount, weeklyRate }) {
+    document.querySelector(".summary-card:nth-child(1) .summary-value").textContent
+        = totalUsers.toLocaleString();
+    document.querySelector(".summary-card:nth-child(2) .summary-value").textContent
+        = activeUserCount.toLocaleString();
+    document.querySelector(".summary-card:nth-child(3) .summary-value").textContent
+        = todayLogCount.toLocaleString();
+    document.querySelector(".summary-card:nth-child(4) .summary-value").textContent
+        = weeklyRate + "%";
+}
+
+
 //　------ 以下ホーム画面通知の処理 -------
 
 // ─────────────────────────────────────────────
@@ -159,6 +210,7 @@ async function openAllModal() {
 // ─────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
     renderActivities();
+    fetchSummary().then(renderSummary);
 
     // モーダルの閉じる処理（HTML側に書いたので、ここでイベントを登録）
     const overlay = document.getElementById("activity-modal-overlay");
