@@ -11,13 +11,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Business Auth App',
+      title: '障害物検知システム',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-        useMaterial3: true,
+      // アプリ全体のテーマをダーク（黒基調）に設定
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: Colors.white,
+        primaryColor: Colors.green[700],
       ),
-      home: const LoginPage(),
+      home: const LoginPage(), 
     );
   }
 }
