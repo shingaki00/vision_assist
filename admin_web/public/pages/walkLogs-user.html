@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歩行ログの詳細｜VisionAssist</title>
+
+    <!-- 読み込み -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/walkLog.css">
+    <script type="module" src="../js/style.js" defer></script>
+    <script type="module" src="../js/walkLog-gps.js" defer></script>
+
+    <script>
+        (function () {
+            if (sessionStorage.getItem('uid') === null) {
+                window.location.replace('../index.html');
+            }
+        })();
+    </script>
+
+    <!-- Google Maps API（差し替え必須） -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initGoogleMaps"
+      async defer>
+    </script>
+
+</head>
+
+<body>
+    <div id="header-inner"></div>
+
+    <main class="walklog-page">
+
+        <a href="../pages/walkLogs.html" class="back-link">← 歩行ログ一覧に戻る</a>
+        <h2 id="patientName">ユーザー名</h2>
+        <p class="page-subtitle">利用者の歩行記録を確認できます</p>
+
+        <div class="stat-labels">
+
+            <div class="stat-item">
+                <label class="stat-label">総歩行距離</label>
+                <label class="stat-value" id="statTotalDistance">—</label>
+            </div>
+            <div class="stat-item">
+                <label class="stat-label">平均歩行時間</label>
+                <label class="stat-value" id="statAvgDuration">—</label>
+            </div>
+            <div class="stat-item">
+                <label class="stat-label">総ログ数</label>
+                <label class="stat-value" id="statLogCount">—</label>
+            </div>
+        </div>
+
+        <div class="walk-layout">
+
+            <!-- 左：ログ一覧 -->
+            <div class="list-card">
+                <div class="list-header">
+                    <div class="list-header-left">
+                        <span class="list-title">過去の履歴</span>
+                        <span class="list-count" id="listCount">ログをクリックすると地図にルートが表示されます</span>
+                    </div>
+                </div>
+                <div id="logList"></div>
+            </div>
+
+
+            <!-- 右：詳細パネル -->
+            <div class="detail-panel">
+
+                <!-- ログ未選択時 -->
+                <div id="emptyState">ログを選択するとルートが表示されます</div>
+
+                <!-- ログ選択後 -->
+                <div id="detailContent">
+
+                    <!-- Google Map -->
+                    <div id="map"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
