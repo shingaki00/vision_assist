@@ -1,0 +1,231 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", "Hiragino Sans", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f4f7fb 0%, #e9eef5 100%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 40px 20px;
+}
+
+/* メインカード */
+.register-container {
+  width: 700px;
+
+  background: #ffffff;
+
+  border-radius: 24px;
+
+  padding: 48px;
+
+  box-shadow:
+    0 20px 40px rgba(15, 23, 42, 0.08),
+    0 8px 16px rgba(15, 23, 42, 0.05);
+
+  border: 1px solid #e5e7eb;
+}
+
+/* タイトル */
+.register-title {
+  text-align: center;
+
+  font-size: 36px;
+  font-weight: 700;
+
+  color: #1e293b;
+
+  margin-bottom: 40px;
+
+  letter-spacing: 1px;
+}
+
+/* 入力グループ */
+.form-group {
+  margin-bottom: 24px;
+}
+
+/* ラベル */
+.form-label {
+  display: block;
+
+  margin-bottom: 10px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: #475569;
+}
+
+/* 入力欄 */
+.form-input {
+  width: 100%;
+
+  padding: 16px 18px;
+
+  border-radius: 14px;
+
+  border: 1.5px solid #cbd5e1;
+
+  background: #f8fafc;
+
+  font-size: 16px;
+
+  color: #1e293b;
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.form-input::placeholder {
+  color: #94a3b8;
+}
+
+/* フォーカス時 */
+.form-input:focus {
+  outline: none;
+
+  background: #ffffff;
+
+  border-color: #2563eb;
+
+  box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.12);
+}
+
+/* 登録ボタン */
+.register-button {
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding: 16px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+
+  color: #ffffff;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+/* ホバー */
+.register-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+/* クリック */
+.register-button:active {
+  transform: scale(0.99);
+}
+
+/* 下部テキスト */
+.register-footer {
+  margin-top: 28px;
+
+  text-align: center;
+
+  font-size: 14px;
+
+  color: #64748b;
+}
+
+/* ログインリンク */
+.register-footer a {
+  color: #2563eb;
+
+  text-decoration: none;
+
+  font-weight: 600;
+
+  margin-left: 4px;
+
+  transition: color 0.2s ease;
+}
+
+.register-footer a:hover {
+  color: #1d4ed8;
+
+  text-decoration: underline;
+}
+
+/* PC向けに少し広げる */
+/* @media (min-width: 1200px) {
+  .register-container {
+    max-width: 580px;
+
+    padding: 56px;
+  }
+
+  .register-title {
+    font-size: 40px;
+  }
+
+  .form-input {
+    font-size: 17px;
+  }
+} */
+
+/* タブレット */
+/* @media (max-width: 768px) {
+  .register-container {
+    padding: 40px 32px;
+  }
+
+  .register-title {
+    font-size: 32px;
+  }
+} */
+
+/* スマホ */
+/* @media (max-width: 480px) {
+  body {
+    padding: 16px;
+  }
+
+  .register-container {
+    padding: 30px 22px;
+
+    border-radius: 20px;
+    width: 350px;
+  }
+
+  .register-title {
+    font-size: 28px;
+
+    margin-bottom: 30px;
+  }
+
+  .form-input {
+    padding: 14px 15px;
+
+    font-size: 15px;
+  }
+
+  .register-button {
+    padding: 15px;
+
+    font-size: 16px;
+  }
+} */
