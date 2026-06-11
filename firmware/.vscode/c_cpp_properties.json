@@ -8,11 +8,11 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/src",
-                "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5StickCPlus2/src",
-                "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5Family/src",
-                "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5Unified/src",
-                "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5GFX/src",
+                "C:/Users/user/Desktop/vision_assist/firmware/src",
+                "C:/Users/user/Desktop/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5StickCPlus2/src",
+                "C:/Users/user/Desktop/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5Family/src",
+                "C:/Users/user/Desktop/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5Unified/src",
+                "C:/Users/user/Desktop/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5GFX/src",
                 "C:/Users/user/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 "C:/Users/user/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "C:/Users/user/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
@@ -247,11 +247,11 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/src",
-                    "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5StickCPlus2/src",
-                    "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5Family/src",
-                    "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5Unified/src",
-                    "C:/Users/user/Desktop/卒業研究/vissionassist/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5GFX/src",
+                    "C:/Users/user/Desktop/vision_assist/firmware/src",
+                    "C:/Users/user/Desktop/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5StickCPlus2/src",
+                    "C:/Users/user/Desktop/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5Family/src",
+                    "C:/Users/user/Desktop/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5Unified/src",
+                    "C:/Users/user/Desktop/vision_assist/firmware/.pio/libdeps/m5stick-c-plus2/M5GFX/src",
                     "C:/Users/user/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     "C:/Users/user/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "C:/Users/user/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
