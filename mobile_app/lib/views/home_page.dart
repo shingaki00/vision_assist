@@ -1,17 +1,206 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:battery_plus/battery_plus.dart';
+import 'package:geolocator/geolocator.dart';
 
-class HomePage extends StatelessWidget {
+// 各コンポーネント・サービスのインポート
+import '../services/tts_service.dart';
+import '../widgets/device_status_card.dart';
+import '../widgets/radar_display.dart';
+import '../widgets/emergency_button.dart';
+import 'login_page.dart'; // ログアウト後に戻るためのインポート
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String _batteryLevel = "読み込み中...";
+  String _gpsStatus = "OFF";
+  String _syncStatus = "停止中";
+
+  String _radarMessage = "前方 2.5m 内に障害物なし";
+  bool _hasObstacle = false;
+
+  final Battery _battery = Battery();
+  final TtsService _ttsService = TtsService(); 
+  
+  StreamSubscription<ServiceStatus>? _gpsServiceStatusSubscription;
+  Timer? _batteryTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _ttsService.init(); 
+    _initDeviceStates();
+  }
+
+  void _initDeviceStates() async {
+    _updateBatteryLevel();
+    _batteryTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _updateBatteryLevel();
+    });
+
+    bool isGpsEnabled = await Geolocator.isLocationServiceEnabled();
+    setState(() {
+      _gpsStatus = isGpsEnabled ? "ON" : "OFF";
+      _syncStatus = isGpsEnabled ? "同期中" : "停止中";
+    });
+
+    _gpsServiceStatusSubscription = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+      setState(() {
+        if (status == ServiceStatus.enabled) {
+          _gpsStatus = "ON";
+          _syncStatus = "同期中";
+        } else {
+          _gpsStatus = "OFF";
+          _syncStatus = "停止中";
+        }
+      });
+    });
+  }
+
+  void _updateBatteryLevel() async {
+    try {
+      final level = await _battery.batteryLevel;
+      if (mounted) {
+        setState(() {
+          _batteryLevel = "$level%";
+        });
+      }
+    } catch (e) {
+      _batteryLevel = "エラー";
+    }
+  }
+
+  void _handleObstacleDetected(String type, double distance) async {
+    String message = "";
+    if (type == "stairs") {
+      message = "${distance.toInt()}メートル先に階段があります。";
+    } else if (type == "railway") {
+      message = "${distance.toInt()}メートル先に線路があります。注意してください。";
+    } else {
+      message = "前方、${distance}メートルに障害物があります。";
+    }
+
+    setState(() {
+      _radarMessage = message;
+      _hasObstacle = true;
+    });
+
+    await _ttsService.speakObstacle(type, distance);
+  }
+
+  void _clearObstacleStatus() {
+    setState(() {
+      _radarMessage = "前方 2.5m 内に障害物なし";
+      _hasObstacle = false;
+    });
+  }
+
+  // ★ 誤操作を防ぐ文字入力付きログアウト確認ダイアログ
+  void _showLogoutConfirmation(BuildContext context) {
+    final TextEditingController confirmController = TextEditingController();
+    bool isInputValid = false;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // ダイアログの外をタップしても閉じないようにする
+      builder: (context) {
+        return StatefulBuilder( // ダイアログ内の文字入力をリアルタイムに検知してボタン状態を変える
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              backgroundColor: Colors.white, // 全体に合わせてダーク系に
+              title: const Row(
+                children: [
+                  Icon(Icons.warning_amber_rounded, color: Colors.orange),
+                  SizedBox(width: 8),
+                  Text('ログアウトの確認', style: TextStyle(color: Colors.black87)),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '安全のため、確認として下に「ログアウト」と入力してください。',
+                    style: TextStyle(color: Colors.black54),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: confirmController,
+                    style: const TextStyle(color: Colors.black87),
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: 'ログアウト',
+                      hintStyle: const TextStyle(color: Colors.black38),
+                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black26)),
+                      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)),
+                    ),
+                    onChanged: (text) {
+                      // 入力された文字が「ログアウト」と完全一致しているか判定
+                      setDialogState(() {
+                        isInputValid = (text.trim() == 'ログアウト');
+                      });
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('キャンセル', style: TextStyle(color: Colors.black54)),
+                ),
+                ElevatedButton(
+                  // 文字が正しく入力されているときだけ関数を有効化（それ以外はボタンが無効＝灰色になる）
+                  onPressed: isInputValid
+                      ? () {
+                          Navigator.pop(context); // ダイアログを閉じる
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => const LoginPage()), // ログイン画面へ戻る
+                          );
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red[700],
+                    disabledBackgroundColor: Colors.black12, // 無効化されているときのボタンの色
+                    disabledForegroundColor: Colors.black38, // 無効化されているときの文字の色
+                  ),
+                  child: const Text('確定', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _batteryTimer?.cancel();
+    _gpsServiceStatusSubscription?.cancel();
+    _ttsService.stop(); 
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('デバイス制御パネル'),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
         actions: [
-          IconButton(icon: const Icon(Icons.logout), onPressed: () => Navigator.pop(context)),
+          // ログアウトボタン押下時に確認アラートを呼ぶように変更
+          IconButton(
+            icon: const Icon(Icons.logout), 
+            onPressed: () => _showLogoutConfirmation(context),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -19,107 +208,35 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. デバイス連携機能（状態表示）
             _buildSectionTitle('デバイス状態'),
-            Card(
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildStatusItem(Icons.battery_charging_full, '85%', 'バッテリー', Colors.green),
-                    _buildStatusItem(Icons.bluetooth_connected, '接続済み', 'デバイス連携', Colors.blue),
-                    _buildStatusItem(Icons.sync, '同期中', '移動ログ', Colors.orange),
-                  ],
-                ),
-              ),
+            DeviceStatusCard(
+              batteryLevel: _batteryLevel,
+              gpsStatus: _gpsStatus,
+              syncStatus: _syncStatus,
             ),
             const SizedBox(height: 24),
 
-            // 2. 障害物検知（リアルタイム表示イメージ）
             _buildSectionTitle('障害物検知システム'),
-            Container(
-              height: 120,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.black87,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.radar, color: Colors.greenAccent, size: 40),
-                  SizedBox(height: 8),
-                  Text('前方 2.5m 内に障害物なし', style: TextStyle(color: Colors.greenAccent)),
-                ],
-              ),
+            RadarDisplay(
+              radarMessage: _radarMessage,
+              hasObstacle: _hasObstacle,
+              onClear: _clearObstacleStatus,
+              onTestPressed: _handleObstacleDetected,
             ),
             const SizedBox(height: 24),
 
-            // 3. 緊急連絡機能（管理者に送信）
             _buildSectionTitle('緊急アクション'),
-            SizedBox(
-              width: double.infinity,
-              height: 80,
-              child: ElevatedButton.icon(
-                onPressed: () => _showEmergencyDialog(context),
-                icon: const Icon(Icons.warning_amber_rounded, size: 32),
-                label: const Text('管理者に緊急連絡を送信', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-              ),
-            ),
+            const EmergencyButton(),
           ],
         ),
       ),
     );
   }
 
-  // セクションタイトル用
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-    );
-  }
-
-  // 状態表示アイコン用
-  Widget _buildStatusItem(IconData icon, String value, String label, Color color) {
-    return Column(
-      children: [
-        Icon(icon, color: color, size: 30),
-        const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-      ],
-    );
-  }
-
-  // 緊急連絡ダイアログ
-  void _showEmergencyDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('緊急連絡の送信'),
-        content: const Text('管理者に現在の位置情報とアラートを送信しますか？'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('キャンセル')),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('管理者にメッセージを送信しました'), backgroundColor: Colors.red),
-              );
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('送信'),
-          ),
-        ],
-      ),
     );
   }
 }

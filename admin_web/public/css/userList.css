@@ -1,0 +1,235 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+
+  background-color: #f4f6f9;
+
+  margin: 0;
+
+  padding: 30px;
+}
+
+/* タイトル */
+h1 {
+  text-align: center;
+
+  color: #333;
+
+  margin-bottom: 30px;
+}
+
+/* 検索エリア */
+.search-area {
+  display: flex;
+
+  justify-content: center;
+
+  margin-bottom: 30px;
+}
+
+.search-icon {
+  font-size: 30px;
+  border: none;
+  border-radius: 10%;
+
+  background-color: #3498db;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s,
+    transform 0.1s,
+    box-shadow 0.2s;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.search-icon:hover {
+  background-color: #2980b9;
+
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.search-icon:active {
+  transform: scale(0.9);
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* 検索ボックス */
+#searchBox {
+  width: 400px;
+
+  max-width: 90%;
+
+  padding: 12px 15px;
+
+  font-size: 16px;
+
+  border: 2px solid #dcdfe6;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  transition: 0.2s;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* フォーカス時 */
+#searchBox:focus {
+  border-color: #3498db;
+
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+/* 一覧全体 */
+#patientList {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+  gap: 20px;
+}
+
+/* カード */
+.patient-card {
+  background-color: white;
+
+  border-radius: 15px;
+
+  padding: 20px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+/* ホバー時 */
+.patient-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 名前 */
+.patient-card h3 {
+  margin-top: 0;
+
+  color: #2c3e50;
+}
+
+/* テキスト */
+.patient-card p {
+  color: #555;
+
+  margin: 8px 0;
+}
+
+/* モーダル背景 */
+.modal {
+  display: none;
+
+  position: fixed;
+
+  z-index: 1000;
+
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* モーダル本体 */
+.modal-content {
+  background-color: white;
+
+  width: 450px;
+
+  max-width: 90%;
+
+  margin: 80px auto;
+
+  padding: 30px;
+
+  border-radius: 15px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  animation: modalFade 0.2s ease;
+}
+
+/* モーダルアニメーション */
+@keyframes modalFade {
+  from {
+    opacity: 0;
+
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* 詳細タイトル */
+.modal-content h2 {
+  margin-top: 0;
+
+  color: #2c3e50;
+}
+
+/* 詳細テキスト */
+.modal-content p {
+  margin: 12px 0;
+
+  color: #444;
+
+  line-height: 1.5;
+}
+
+/* 閉じるボタン */
+#closeBtn {
+  background-color: #3498db;
+
+  color: white;
+
+  border: none;
+
+  padding: 10px 18px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  float: right;
+
+  transition: 0.2s;
+}
+
+/* ボタンホバー */
+#closeBtn:hover {
+  opacity: 0.85;
+}
+
+/* 読み込み表示 */
+#loading {
+  text-align: center;
+
+  font-size: 18px;
+
+  color: #666;
+
+  margin-top: 50px;
+}

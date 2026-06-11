@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン｜VisionAssist</title>
+
+    <!-- CSS読み込み -->
+    <link rel="stylesheet" href="./css/login.css">
+    <script type="module" src="./js/login.js" defer></script>
+    <script type="module" src="./js/style.js" defer></script>
+
+</head>
+
+<body>
+
+    <main>
+        <div class="login-container">
+
+            <h1>管理画面ログイン</h1>
+
+            <form method="POST" class="login-form">
+
+                <div class="form-group">
+                    <label for="login_id">ユーザーID</label>
+                    <input 
+                        type="text" 
+                        id="login_id" 
+                        name="login_id"
+                        required
+                    >
+
+                    <label for="password">パスワード</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required
+                    >
+                </div>
+
+                <!-- エラー表示エリア -->
+                <p id="error-message"></p>
+
+                <button type="submit" class="login-button">
+                    ログイン
+                </button>
+
+                <!-- <p class="forgot-password">パスワードを忘れたら</p> -->
+            </form>
+
+        </div>
+    </main>
+
+</body>
+</html>
