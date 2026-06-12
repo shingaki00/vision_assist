@@ -21,10 +21,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function loadTestData() {
+    try {
     const res = await fetch("../../testData.json");
+    if (!res.ok) throw new Error("fetch失敗");
     testData = await res.json();
-    console.log("取得完了:", testData);         // ← 追加
-    console.log("gpsData:", testData.gpsData); // ← 追加
+  } catch (e) {
+    console.error("テストデータの読み込みに失敗しました", e);
+    document.getElementById("logList").innerHTML =
+      `<div class="log-empty">データを読み込めませんでした</div>`;
+  }
 }
 
 // ─── URLパラメータからpatient_idを取得して初期化 ──
@@ -121,10 +126,6 @@ function selectLog(logId) {
     .filter(g => String(g.log_id) === String(logId))
     .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-  
-  console.log("logId:", logId, typeof logId);
-  console.log("log_idの型:", testData.gpsData[0].log_id, typeof testData.gpsData[0].log_id);
-  console.log("filter結果:", testData.gpsData.filter(g => String(g.log_id) === String(logId)));
 
   // 詳細エリアを表示
   document.getElementById("emptyState").style.display = "none";
@@ -138,15 +139,26 @@ function selectLog(logId) {
 function waitForMapsAndUpdate(gpsPoints) {
     if (window._googleMapsReady || (window.google && window.google.maps)) {
         updateMap(gpsPoints);
-    } else {
-        // APIがまだ読み込まれていない場合は少し待つ
-        const interval = setInterval(() => {
+        return;
+    }
+    
+    let elapsed = 0;
+    const interval = setInterval(() => {
+        elapsed += 100;
+
         if (window.google && window.google.maps) {
             clearInterval(interval);
             updateMap(gpsPoints);
+        } else if (elapsed > 10000) {
+            clearInterval(interval);
+            console.error("Google Maps APIの読み込みがタイムアウトしました");
+            document.getElementById("map").innerHTML =
+                `<div">
+                  地図を読み込めませんでした
+                </div>`;
         }
-        }, 100);
-    }
+    
+    }, 100);
 }
 
 
@@ -162,8 +174,8 @@ function updateUserStats(patientId) {
   // 総歩行距離（全ログの GPS 軌跡を合計）
   let totalDistM = 0;
   logs.forEach(log => {
-    const pts = testData.gpsData
-      .filter(g => g.log_id === log.id)
+    const pts = [...testData.gpsData
+      .filter(g => g.log_id === log.id)]
       .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
     for (let i = 1; i < pts.length; i++) {
       totalDistM += calcDistanceM(
@@ -308,39 +320,43 @@ function updateMap(gpsPoints) {
   });
   mapMarkers.push(endMarker);
 
-  // ── 最長滞在マーカー（黄） ──
-  const stay = calcLongestStay(gpsPoints);
-  const stayLatLng = new google.maps.LatLng(stay.latitude, stay.longitude);
+// ── 最長滞在マーカー（黄） ──
+const stay = calcLongestStay(gpsPoints);
 
-  const stayMarker = new google.maps.Marker({
-    position: stayLatLng,
-    map: googleMap,
-    title: `最長滞在：${stay.stayMinutes}分`,
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 11,
-      fillColor: "#fbbc04",
-      fillOpacity: 1,
-      strokeColor: "#fff",
-      strokeWeight: 2,
-    },
-  });
-  mapMarkers.push(stayMarker);
+if (stay) {
+    const stayLatLng = new google.maps.LatLng(stay.latitude, stay.longitude);
 
-  // ── 吹き出し（InfoWindow） ──
-  const infoWindow = new google.maps.InfoWindow({
-    content: `<div style="font-size:13px;line-height:1.6;">
-      <b>最長滞在地点</b><br>
-      ${stay.stayMinutes}分間滞在<br>
-      <span style="color:#888;font-size:11px;">
-        ${stay.latitude.toFixed(5)}, ${stay.longitude.toFixed(5)}
-      </span>
-    </div>`,
-  });
+    const stayMarker = new google.maps.Marker({
+        position: stayLatLng,
+        map: googleMap,
+        title: `最長滞在：${stay.stayMinutes}分`,
+        icon: { 
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 11,
+            fillColor: "#fbbc04",
+            fillOpacity: 1,
+            strokeColor: "#fff",
+            strokeWeight: 2,
+        },
+    });
+    mapMarkers.push(stayMarker);
 
-  stayMarker.addListener("click", () => {
-    infoWindow.open(googleMap, stayMarker);
-  });
+    // ── 吹き出し（InfoWindow） ──
+    const infoWindow = new google.maps.InfoWindow({
+        content: `<div style="font-size:13px;line-height:1.6;">
+        <b>最長滞在地点</b><br>
+        ${stay.stayMinutes}分間滞在<br>
+        <span style="color:#888;font-size:11px;">
+            ${stay.latitude.toFixed(5)}, ${stay.longitude.toFixed(5)}
+        </span>
+        </div>`,
+    });
+
+    stayMarker.addListener("click", () => {
+        infoWindow.open(googleMap, stayMarker);
+    });
+}
+
 
   // 開始・終了にもシンプルなInfoWindow
   [

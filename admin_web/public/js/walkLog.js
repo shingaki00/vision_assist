@@ -15,8 +15,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function loadTestData() {
   // testData.jsonはプロジェクトルート(admin_web直下)に置く想定
-  const res = await fetch("../../testData.json");
-  testData = await res.json();
+  try {
+    const res = await fetch("../../testData.json");
+    if (!res.ok) throw new Error("fetch失敗");
+    testData = await res.json();
+  } catch (e) {
+    console.error("テストデータの読み込みに失敗しました", e);
+    document.getElementById("userList").innerHTML =
+      `<div class="empty">データを読み込めませんでした</div>`;
+  }
 }
 
 
@@ -27,17 +34,17 @@ function buildUsers() {
   users = testData.patients.map(patient => {
 
     // この患者の歩行ログを全件取得
-    const logs = testData.walkingLogs.filter(
+    const logs = (testData.walkingLogs ?? []).filter(
       log => log.patient_id === patient.id
     );
-
+    
     // 今日のログ件数
     const todayLogs = logs.filter(
       log => log.start_time.startsWith(today)
     ).length;
 
     // 最終使用日（ログがあれば最新のstart_time、なければ「なし」）
-    const lastLog = logs.sort(
+    const lastLog = [...logs].sort(
       (a, b) => new Date(b.start_time) - new Date(a.start_time)
     )[0];
     const lastUsed = lastLog
@@ -168,11 +175,6 @@ function showLogs(patientId) {
   const logs = testData.walkingLogs.filter(
     log => log.patient_id === patientId
   );
-
-  if (logs.length === 0) {
-    alert(`${patient.name} の歩行ログはまだありません`);
-    return;
-  }
 
   // walkLogs-user.htmlへパラメータ付きで遷移
   window.location.href = `walkLogs-user.html?patient_id=${patientId}`;
