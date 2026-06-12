@@ -9,14 +9,14 @@ const bcrypt = require("bcrypt");
 app.use(express.static(path.join(__dirname, "..")));
 app.use(express.json());
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "mysql",
   database: "vission_assist",
 });
 
-connection.connect((err) => {
+pool.getConnection((err, connection) => {
   if (err) {
     console.log("接続失敗");
     console.log(err);
@@ -32,13 +32,13 @@ app.get("/users", (req, res) => {
             name,
             age,
             emergency_note,
-            login_id,
-            password_hash
+            login_id
         FROM Patients
     `;
-  connection.query(sql, (err, results) => {
+  pool.query(sql, (err, results) => {
     if (err) {
-      res.status(500).send(err);
+      console.error(err);
+      res.status(500).json({ message: "サーバーエラーが発生しました" });
       return;
     }
     res.json(results);
@@ -57,15 +57,13 @@ app.post("/addUser", async (req, res) => {
     const id = crypto.randomUUID();
 
     const sql = `INSERT INTO Patients(id,login_id,password_hash,name,age,emergency_note) VALUES (?,?, ?, ?, ?, ?)`;
-    connection.query(
+    pool.query(
       sql,
       [id, login_id, passwordHash, name, age, emergency_note],
       (err, results) => {
         if (err) {
-          console.error("SQLエラー");
           console.error(err);
-
-          res.status(500).send(err);
+          res.status(500).json({ message: "サーバーエラーが発生しました" });
           return;
         }
         res.send("登録成功");
@@ -73,7 +71,7 @@ app.post("/addUser", async (req, res) => {
     );
   } catch (error) {
     console.error(error);
-    res.status(500).json(error);
+    res.status(500).json({ message: "サーバーエラーが発生しました" });
   }
 });
 //ユーザ検索
@@ -81,10 +79,11 @@ app.get("/patients/search", (req, res) => {
   const keyword = req.query.keyword;
   const sql = `SELECT login_id,name,age,emergency_note FROM Patients WHERE name LIKE ? OR login_id LIKE ?`;
   const searchWord = `%${keyword}%`;
-  connection.query(sql, [searchWord, searchWord], (err, results) => {
+  pool.query(sql, [searchWord, searchWord], (err, results) => {
     if (err) {
       console.error(err);
-      return res.status(500).json(err);
+      res.status(500).json({ message: "サーバーエラーが発生しました" });
+      return;
     }
     res.json(results);
   });
