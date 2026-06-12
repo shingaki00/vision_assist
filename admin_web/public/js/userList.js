@@ -6,12 +6,14 @@ const detailArea = document.getElementById("detailArea");
 
 const closeBtn = document.getElementById("closeBtn");
 
-// JSON読み込み
-fetch("http://localhost:3000/users")
-  .then((response) => response.json())
+let allPatients = []; // allPatientsにJSON全件を保持しておく
 
+// JSON読み込み
+fetch("../../testData.json")
+  .then((response) => response.json())
   .then((data) => {
-    data.forEach((patient) => {
+    allPatients = data.patients; // 全件保存
+    data.patients.forEach((patient) => {
       createPatientCard(patient);
     });
   })
@@ -64,12 +66,13 @@ function openModal(patient) {
 document.getElementById("searchBtn").addEventListener("click", searchPatient);
 
 async function searchPatient() {
-  const keyword = document.getElementById("searchBox").value;
-  const response = await fetch(
-    `/patients/search?keyword=${encodeURIComponent(keyword)}`,
+  const keyword = document.getElementById("searchBox").value.toLowerCase();
+  const filtered = allPatients.filter(
+    (p) =>
+      p.name.toLowerCase().includes(keyword) ||
+      String(p.login_id).toLowerCase().includes(keyword)
   );
-  const patients = await response.json();
-  displayPatients(patients);
+  displayPatients(filtered);
 }
 
 function displayPatients(patients) {
