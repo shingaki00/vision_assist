@@ -14,6 +14,12 @@ function registerUser(event) {
 
   console.log(userData);
   let flg = true;
+
+  if (isNaN(userData.age) || userData.age < 0 || userData.age > 150) {
+    alert("年齢を正しく入力してください");
+    return;
+    }
+    
   if (
     userData.name.length === 0 ||
     userData.age.length === 0 ||
@@ -33,13 +39,18 @@ function registerUser(event) {
 
       body: JSON.stringify(userData),
     })
-      .then((response) => response.text())
-      .then((data) => {
-        alert(data);
-        window.location.href = "/index.html";
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+    .then((response) => {
+        if (!response.ok) throw new Error("登録失敗");
+        return response.text();
+    })
+    .then(() => {
+        alert("登録が完了しました");
+        window.location.href = "../pages/userList.html";
+    })
+    .catch((error) => {
+        console.error(error);
+        alert("登録に失敗しました。もう一度お試しください");
+    });
   }
 }
