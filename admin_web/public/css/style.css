@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*背景色*/
+body{
+    background-color: #f6f5f5;
+    margin: 0;
+}
+
+
+/* -------------*/
+/* ヘッダー */
+/* -------------*/
+h1{
+    color: #3A2C3D;
+    font-size: 26px;
+    margin-left: 20px;
+    margin-bottom: 0px;
+    margin-top: 14px;
+}
+
+h2{
+    color: #3A2C3D;
+    font-size: 22px;
+    margin-left: 10px;
+}
+
+h3{
+    color: #3A2C3D;
+}
+
+#header-inner {
+    width: 100%;
+    background-color: white;
+    border-bottom: 2px solid #ccc;
+    position: sticky;
+    top: 0;
+    z-index: 100;  
+}
+
+header {
+    max-width: 1080px;
+    height: 90px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 左側 */
+.header-left p {
+  font-size: 16px;
+  margin-left: 20px;
+  margin-top: 0px;
+  color: #aaa;
+}
+
+/* 右側 */
+.header-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+/* ログアウトボタン */
+.btn-logout {
+    font-size: 14px;
+    padding: 8px 14px;
+    color:dimgrey;
+    background-color: white;
+    border:white solid 1px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-logout:hover {
+    color: white;
+    background-color: #BA1A1A;
+    border: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+
+/* ------ シェブロン（＞矢印）-------*/
+.chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color 0.2s, transform 0.2s;
+}
+
+/* ※ 戻るアイコンを表示するときのコマンド　以下、右と左
+<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="9 18 15 12 9 6"/>
+</svg>
+
+<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="15 18 9 12 15 6"/>
+</svg> */
+
+
+/* ------- 戻るボタン（矢印で表示する） --------*/
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--secondary);
+  text-decoration: none;
+  padding-bottom: 30px;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: var(--focus);
+    text-decoration: underline;
+}
+
+/* ------ エラー文 -------*/
+#error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}

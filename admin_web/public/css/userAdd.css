@@ -16,54 +16,6 @@ body {
   padding: 40px 20px;
 }
 
-.backButton {
-  text-align: left;
-  width: 200px;
-  padding-bottom: 10px;
-}
-
-.backButton a {
-  background: #eee;
-  border-radius: 3px;
-  position: relative;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 0 auto;
-  max-width: 280px;
-  padding: 10px 25px;
-  color: #313131;
-  transition: 0.3s ease-in-out;
-  font-weight: 500;
-  left: 50px;
-  text-decoration: none;
-}
-
-.backButton a:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  bottom: 0;
-  left: 2rem;
-  font-size: 90%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: left 0.3s;
-  width: 6px;
-  height: 6px;
-  border-top: solid 2px currentColor;
-  border-right: solid 2px currentColor;
-  transform: translateY(-50%) rotate(225deg);
-}
-.backButton a:hover {
-  background: #313131;
-  color: #fff;
-}
-.backButton a:hover:after {
-  left: 1.3rem;
-}
-
 /* メインカード */
 .register-container {
   width: 700px;
@@ -218,96 +170,62 @@ body {
   text-decoration: underline;
 }
 
-/* =====================
-   ダークモード
-===================== */
+/* PC向けに少し広げる */
+/* @media (min-width: 1200px) {
+  .register-container {
+    max-width: 580px;
 
-body.dark-mode {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-}
+    padding: 56px;
+  }
 
-/* 戻るボタン */
+  .register-title {
+    font-size: 40px;
+  }
 
-body.dark-mode .backButton a {
-  background: #334155;
-  color: #f8fafc;
-}
+  .form-input {
+    font-size: 17px;
+  }
+} */
 
-body.dark-mode .backButton a:hover {
-  background: #2563eb;
-  color: #ffffff;
-}
+/* タブレット */
+/* @media (max-width: 768px) {
+  .register-container {
+    padding: 40px 32px;
+  }
 
-/* メインカード */
+  .register-title {
+    font-size: 32px;
+  }
+} */
 
-body.dark-mode .register-container {
-  background: #1e293b;
+/* スマホ */
+/* @media (max-width: 480px) {
+  body {
+    padding: 16px;
+  }
 
-  border: 1px solid #334155;
+  .register-container {
+    padding: 30px 22px;
 
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    0 8px 16px rgba(0, 0, 0, 0.25);
-}
+    border-radius: 20px;
+    width: 350px;
+  }
 
-/* タイトル */
+  .register-title {
+    font-size: 28px;
 
-body.dark-mode .register-title {
-  color: #f8fafc;
-}
+    margin-bottom: 30px;
+  }
 
-/* ラベル */
+  .form-input {
+    padding: 14px 15px;
 
-body.dark-mode .form-label {
-  color: #cbd5e1;
-}
+    font-size: 15px;
+  }
 
-/* 入力欄 */
+  .register-button {
+    padding: 15px;
 
-body.dark-mode .form-input {
-  background: #334155;
-
-  border: 1.5px solid #475569;
-
-  color: #f8fafc;
-}
-
-body.dark-mode .form-input::placeholder {
-  color: #94a3b8;
-}
-
-/* フォーカス */
-
-body.dark-mode .form-input:focus {
-  background: #475569;
-
-  border-color: #3b82f6;
-
-  box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.2);
-}
-
-/* 登録ボタン */
-
-body.dark-mode .register-button {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-}
-
-body.dark-mode .register-button:hover {
-  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.35);
-}
-
-/* フッター */
-
-body.dark-mode .register-footer {
-  color: #94a3b8;
-}
-
-/* リンク */
-
-body.dark-mode .register-footer a {
-  color: #60a5fa;
-}
-
-body.dark-mode .register-footer a:hover {
-  color: #93c5fd;
-}
+    font-size: 16px;
+  }
+} */

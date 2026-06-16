@@ -1,0 +1,145 @@
+{
+    "admins": [
+        {
+            "id": 1,
+            "facility_id": 1,
+            "login_id": "admin",
+            "password": "1234",
+            "name": "田中 太郎"
+        }
+    ],
+
+    "patients": [
+        {
+            "id": 1,
+            "facility_id": 1,
+            "name": "user1",
+            "age": "72",
+            "emergency_note": "山田 花子",
+            "login_id": "user1",
+            "password": "abcd",
+            "patient_id": 1
+        },
+        {
+            "id": 2,
+            "facility_id": 1,
+            "name": "user2",
+            "age": "65",
+            "emergency_note": "佐藤 次郎",
+            "login_id": "user2",
+            "password": "efgh",
+            "patient_id": 2
+        }
+    ],
+
+    "walkingLogs": [
+        {
+            "id": 1,
+            "patient_id": 1,
+            "start_time": "2026-04-01T08:00:00",
+            "end_time": "2026-04-01T08:30:00",
+            "log_id": 1
+        },
+        {
+            "id": 2,
+            "patient_id": 2,
+            "start_time": "2026-06-10T09:00:00",
+            "end_time": "2026-06-10T09:30:00",
+            "log_id": 2
+        },
+        {
+            "id": 3,
+            "patient_id": 1,
+            "start_time": "2026-04-02T10:00:00",
+            "end_time": "2026-04-02T10:45:00",
+            "log_id": 3
+        }
+    ],
+
+    "gpsData": [
+        {
+            "id": 1,
+            "log_id": 1,
+            "latitude": 35.6895,
+            "longitude": 139.6917,
+            "timestamp": "2026-04-01T08:15:00"
+        },
+        {
+            "id": 2,
+            "log_id": 2,
+            "latitude": 35.6896,
+            "longitude": 139.6918,
+            "timestamp": "2026-04-01T08:20:00"
+        },
+        {
+            "id": 3,
+            "log_id": 3,
+            "latitude": 35.6897,
+            "longitude": 139.6919,
+            "timestamp": "2026-06-10T09:15:00"
+        }
+    ],
+
+    "devices": [
+        {
+            "id": 1,
+            "patient_id": 1,
+            "device_mac_address": "00:11:22:33:44:55",
+            "battery_status": "40%",
+            "last_heartbeat": "2026-04-01T08:30:00"
+        },
+        {
+            "id": 2,
+            "patient_id": 2,
+            "device_mac_address": "00:11:22:33:44:56",
+            "battery_status": "30%",
+            "last_heartbeat": "2026-05-01T09:15:00"
+        }
+    ],
+
+
+    "activities": [
+        {
+            "id": 1,
+            "title": "新規ユーザー登録",
+            "description": "田中 太郎さんが登録されました",
+            "time": "2026-04-01T01:00:00",
+            "read": false
+        },
+        {
+            "id": 2,
+            "title": "歩行ログ記録",
+            "description": "山田 花子さんの歩行ログが追加されました",
+            "time": "2026-04-01T08:45:00",
+            "read": false
+        },
+        {
+            "id": 3,
+            "title": "通知送信",
+            "description": "緊急メンテナンス通知を送信しました",
+            "time": "2026-04-02T08:30:00",
+            "read": false
+        },
+        {
+            "id": 4,
+            "title": "設定変更",
+            "description": "システム設定が更新されました",
+            "time": "2026-04-01T09:00:00",
+            "read": false
+        },
+        {
+            "id": 5,
+            "title": "ログイン",
+            "description": "管理者がログインしました",
+            "time": "2026-06-01T10:02:00",
+            "read": false
+        },
+        {
+            "id": 6,
+            "title": "ユーザー削除",
+            "description": "不要ユーザーを削除しました",
+            "time": "2026-05-01T12:00:00",
+            "read": false
+        }
+    ]
+}
