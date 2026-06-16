@@ -17,6 +17,53 @@ h1 {
   margin-bottom: 30px;
 }
 
+.backButton {
+  text-align: left;
+  width: 200px;
+}
+
+.backButton a {
+  background: #eee;
+  border-radius: 3px;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 280px;
+  padding: 10px 25px;
+  color: #313131;
+  transition: 0.3s ease-in-out;
+  font-weight: 500;
+  left: 50px;
+  text-decoration: none;
+}
+
+.backButton a:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  left: 2rem;
+  font-size: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: left 0.3s;
+  width: 6px;
+  height: 6px;
+  border-top: solid 2px currentColor;
+  border-right: solid 2px currentColor;
+  transform: translateY(-50%) rotate(225deg);
+}
+.backButton a:hover {
+  background: #313131;
+  color: #fff;
+}
+.backButton a:hover:after {
+  left: 1.3rem;
+}
+
 /* 検索エリア */
 .search-area {
   display: flex;
@@ -232,4 +279,142 @@ h1 {
   color: #666;
 
   margin-top: 50px;
+}
+
+/* =====================
+   ダークモード
+===================== */
+
+body.dark-mode {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* タイトル */
+
+body.dark-mode h1 {
+  color: #f8fafc;
+}
+
+/* 戻るボタン */
+
+body.dark-mode .backButton a {
+  background: #334155;
+  color: #f8fafc;
+}
+
+body.dark-mode .backButton a:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* 検索ボックス */
+
+body.dark-mode #searchBox {
+  background: #334155;
+
+  border: 1.5px solid #475569;
+
+  color: #f8fafc;
+}
+
+body.dark-mode #searchBox::placeholder {
+  color: #94a3b8;
+}
+
+body.dark-mode #searchBox:focus {
+  background: #475569;
+
+  border-color: #3b82f6;
+
+  box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.2);
+}
+
+/* 検索ボタン */
+
+body.dark-mode .search-icon {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+body.dark-mode .search-icon:hover {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+}
+
+/* 患者カード */
+
+body.dark-mode .patient-card {
+  background: #1e293b;
+
+  border: 1px solid #334155;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.25),
+    0 8px 16px rgba(0, 0, 0, 0.15);
+
+  border-left: 4px solid #3b82f6;
+}
+
+body.dark-mode .patient-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 25px 45px rgba(0, 0, 0, 0.35),
+    0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 患者名 */
+
+body.dark-mode .patient-card h3 {
+  color: #f8fafc;
+}
+
+/* 患者情報 */
+
+body.dark-mode .patient-card p {
+  color: #cbd5e1;
+}
+
+/* モーダル背景 */
+
+body.dark-mode .modal {
+  background-color: rgba(15, 23, 42, 0.8);
+}
+
+/* モーダル本体 */
+
+body.dark-mode .modal-content {
+  background: #1e293b;
+
+  border: 1px solid #334155;
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* モーダルタイトル */
+
+body.dark-mode .modal-content h2 {
+  color: #f8fafc;
+}
+
+/* モーダル内容 */
+
+body.dark-mode .modal-content p {
+  color: #cbd5e1;
+}
+
+/* 閉じるボタン */
+
+body.dark-mode #closeBtn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+body.dark-mode #closeBtn:hover {
+  opacity: 0.9;
+}
+
+/* 読み込み表示 */
+
+body.dark-mode #loading {
+  color: #94a3b8;
 }

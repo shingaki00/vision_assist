@@ -1,134 +1,262 @@
 .home-container {
-    padding: 20px;
+  padding: 20px;
 }
 
 /* 横並びにする */
 .home-container {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 /* 左：クイックアクセス */
 .quick-access {
-    flex: 2; /* 広めに */
+  flex: 2; /* 広めに */
 }
 
 /* 右：アクティビティ */
 .activity-feed {
-    flex: 1; /* 少し狭く */
+  flex: 1; /* 少し狭く */
 }
 
 /* 共通のスタイル */
 .quick-access,
 .activity-feed {
-    background: white;
-    padding: 10px;
+  background: white;
+  padding: 10px;
 }
 
 .quick-access-list,
-.activity-list{
-    background: white;
-    padding: 20px;
-    list-style: none;
+.activity-list {
+  background: white;
+  padding: 20px;
+  list-style: none;
 }
-
 
 /* -------------------------------------- */
 /* クイックアクセスの配置 */
 /* -------------------------------------- */
 .quick-access-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
 /* クイックアクセスのカード */
 .quick-card {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
 
-    text-decoration: none;
-    transition: 0.2s;
+  text-decoration: none;
+  transition: 0.2s;
 }
 
 .quick-card:hover {
-    transform: translateY(-3px);
-    border-color: #10b981;
+  transform: translateY(-3px);
+  border-color: #10b981;
 }
 
 /* アイコンとテキストのスタイル */
 .icon {
-    font-size: 24px;
-    padding: 12px;
-    border-radius: 10px;
+  font-size: 24px;
+  padding: 12px;
+  border-radius: 10px;
 }
 
 .text h4 {
-    margin: 0;
-    font-size: 18px;
+  margin: 0;
+  font-size: 18px;
 }
 
 .text p {
-    margin: 5px 0 0;
-    font-size: 14px;
-    color: #9ca3af;
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #9ca3af;
 }
 
 /* 矢印アイコン */
 .arrow {
-    margin-left: auto;
-    font-size: 30px;
-    color: #9ca3af;
+  margin-left: auto;
+  font-size: 30px;
+  color: #9ca3af;
 }
-
 
 /* -------------------------------------- */
 /* アクティビティフィードのアイテム */
 /* -------------------------------------- */
 .activity-feed {
-    padding: 10px;
-    border-radius: 12px;
-    background-color: white;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: white;
 }
 
-.activity-list{
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    margin: 0;
+.activity-list {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin: 0;
 }
 
 /* 各アイテム */
 .activity-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 
-    padding: 12px 0;
+  padding: 12px 0;
 }
 
 /* 左側 */
 .activity-text {
-    max-width: 70%;
+  max-width: 70%;
 }
 
 .activity-title {
-    margin: 0;
-    font-weight: bold;
+  margin: 0;
+  font-weight: bold;
 }
 
 .activity-desc {
-    margin: 4px 0 0;
-    font-size: 12px;
-    color: #9ca3af;
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #9ca3af;
 }
 
 /* 右側（時間） */
 .activity-time {
-    font-size: 12px;
-    color: #9ca3af;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* =========================
+   ダークモード
+========================= */
+
+body.dark-mode {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+
+  color: #f8fafc;
+}
+
+/* --------------------------------------
+   コンテナ
+-------------------------------------- */
+
+body.dark-mode .quick-access,
+body.dark-mode .activity-feed {
+  background: #1e293b;
+
+  border: 1px solid #334155;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.25),
+    0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* --------------------------------------
+   リスト
+-------------------------------------- */
+
+body.dark-mode .quick-access-list,
+body.dark-mode .activity-list {
+  background: transparent;
+}
+
+/* --------------------------------------
+   クイックアクセスカード
+-------------------------------------- */
+
+body.dark-mode .quick-card {
+  background: #334155;
+
+  border: 1px solid #475569;
+
+  color: #f8fafc;
+}
+
+body.dark-mode .quick-card:hover {
+  transform: translateY(-3px);
+
+  border-color: #3b82f6;
+
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+}
+
+/* --------------------------------------
+   アイコン
+-------------------------------------- */
+
+body.dark-mode .icon {
+  background: rgba(59, 130, 246, 0.15);
+
+  color: #60a5fa;
+}
+
+/* --------------------------------------
+   タイトル
+-------------------------------------- */
+
+body.dark-mode .text h4 {
+  color: #f8fafc;
+}
+
+/* 説明文 */
+
+body.dark-mode .text p {
+  color: #94a3b8;
+}
+
+/* 矢印 */
+
+body.dark-mode .arrow {
+  color: #94a3b8;
+}
+
+body.dark-mode .quick-card:hover .arrow {
+  color: #60a5fa;
+}
+
+/* --------------------------------------
+   アクティビティフィード
+-------------------------------------- */
+
+body.dark-mode .activity-list {
+  background: #334155;
+
+  border-radius: 12px;
+
+  box-shadow: none;
+}
+
+/* 各アクティビティ */
+
+body.dark-mode .activity-item {
+  border-bottom: 1px solid #475569;
+}
+
+body.dark-mode .activity-item:last-child {
+  border-bottom: none;
+}
+
+/* タイトル */
+
+body.dark-mode .activity-title {
+  color: #f8fafc;
+}
+
+/* 説明 */
+
+body.dark-mode .activity-desc {
+  color: #94a3b8;
+}
+
+/* 時間 */
+
+body.dark-mode .activity-time {
+  color: #94a3b8;
 }

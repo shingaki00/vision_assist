@@ -1,0 +1,388 @@
+/* ===== 全体 ===== */
+
+body {
+  margin: 0;
+
+  font-family: "Segoe UI", sans-serif;
+
+  background-color: #f4f6f9;
+}
+
+/* ===== レイアウト ===== */
+
+.container {
+  display: flex;
+
+  height: 100vh;
+}
+
+/* ===== サイドバー ===== */
+
+.sidebar {
+  width: 260px;
+
+  background-color: #2c3e50;
+
+  color: white;
+
+  padding: 25px 0;
+
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  text-align: center;
+
+  margin-bottom: 30px;
+}
+
+.backButton a {
+  background: #2c3e50;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 280px;
+  padding: 10px 25px;
+  color: white;
+  transition: 0.3s ease-in-out;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.backButton a:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  left: 2rem;
+  font-size: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: left 0.3s;
+  width: 6px;
+  height: 6px;
+  border-top: solid 2px currentColor;
+  border-right: solid 2px currentColor;
+  transform: translateY(-50%) rotate(225deg);
+}
+.backButton a:hover {
+  background: #3498db;
+  color: #fff;
+}
+.backButton a:hover:after {
+  left: 1.3rem;
+}
+
+/* ===== メニュー ===== */
+
+.menu {
+  list-style: none;
+
+  padding: 0;
+
+  margin: 0;
+}
+
+.menu li {
+  padding: 15px 25px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.menu li:hover {
+  background-color: #34495e;
+}
+
+/* 選択中 */
+
+.menu li.active {
+  background-color: #3498db;
+
+  font-weight: bold;
+}
+
+/* ===== メインエリア ===== */
+
+.content {
+  flex: 1;
+
+  padding: 40px;
+
+  overflow-y: auto;
+}
+
+.content h1 {
+  color: #2c3e50;
+
+  margin-bottom: 30px;
+}
+
+/* ===== カード ===== */
+
+.card {
+  background-color: white;
+
+  padding: 30px;
+
+  border-radius: 15px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  max-width: 600px;
+}
+
+.buttonBlock {
+  display: flex;
+}
+
+.modeToggle {
+  display: inline-block;
+  position: relative;
+  width: 100px;
+  height: 50px;
+  border-radius: 50px;
+  border: 3px solid #2980b9;
+  box-sizing: content-box;
+  cursor: pointer;
+  transition: border-color 0.4s;
+}
+
+.modeToggle:has(:checked) {
+  border-color: #dddddd;
+}
+
+.modeToggle::after {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #2980b9;
+  content: "";
+  transition: left 0.4s;
+}
+
+.modeToggle:has(:checked)::after {
+  left: 50px;
+  background-color: #dddddd;
+}
+
+.modeToggle input {
+  display: none;
+}
+
+/* ===== フォーム ===== */
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-weight: bold;
+
+  color: #444;
+}
+
+.form-group input {
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 8px;
+
+  box-sizing: border-box;
+}
+
+/* ===== 保存ボタン ===== */
+
+.save-btn {
+  background-color: #3498db;
+
+  color: white;
+
+  border: none;
+
+  padding: 12px 25px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 15px;
+
+  transition: 0.2s;
+}
+
+.save-btn:hover {
+  background-color: #2980b9;
+}
+
+/* 非表示 */
+
+.tab-content {
+  display: none;
+}
+
+/* 表示中 */
+
+.tab-content.active {
+  display: block;
+}
+
+/* 選択中メニュー */
+
+.menu li.active {
+  background-color: #3498db;
+
+  font-weight: bold;
+}
+
+/* ===== スマホ対応 ===== */
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+}
+
+/* =========================
+   ダークモード
+========================= */
+
+body.dark-mode {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+
+  color: #f8fafc;
+}
+
+/* サイドバー */
+
+body.dark-mode .sidebar {
+  background: #0f172a;
+
+  border-right: 1px solid #334155;
+
+  color: #f8fafc;
+}
+
+/* メニュー */
+
+body.dark-mode .menu li {
+  color: #cbd5e1;
+
+  transition: 0.2s;
+}
+
+body.dark-mode .menu li:hover {
+  background: #334155;
+
+  color: #ffffff;
+}
+
+body.dark-mode .menu li.active {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+
+  color: #ffffff;
+}
+
+/* メインエリア */
+
+body.dark-mode .content {
+  background: transparent;
+}
+
+/* カード */
+
+body.dark-mode .card {
+  background: #1e293b;
+
+  border: 1px solid #334155;
+
+  border-radius: 16px;
+
+  color: #f8fafc;
+
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.25),
+    0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* タイトル */
+
+body.dark-mode h1,
+body.dark-mode h2 {
+  color: #f8fafc;
+}
+
+/* ラベル */
+
+body.dark-mode label {
+  color: #cbd5e1;
+}
+
+/* 入力欄 */
+
+body.dark-mode input,
+body.dark-mode select {
+  background: #334155;
+
+  border: 1.5px solid #475569;
+
+  color: #f8fafc;
+}
+
+/* プレースホルダー */
+
+body.dark-mode input::placeholder {
+  color: #94a3b8;
+}
+
+/* フォーカス */
+
+body.dark-mode input:focus,
+body.dark-mode select:focus {
+  outline: none;
+
+  border-color: #3b82f6;
+
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* 保存ボタン */
+
+body.dark-mode .save-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+
+  color: white;
+
+  border: none;
+}
+
+body.dark-mode .save-btn:hover {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+
+  transform: translateY(-2px);
+}
+
+/* 区切り線 */
+
+body.dark-mode hr {
+  border-color: #334155;
+}
