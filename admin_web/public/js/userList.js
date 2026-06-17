@@ -9,11 +9,12 @@ const closeBtn = document.getElementById("closeBtn");
 let allPatients = []; // allPatientsにJSON全件を保持しておく
 
 // JSON読み込み
-fetch("../../testData.json")
-  .then((response) => response.json())
-  .then((data) => {
-    allPatients = data.patients; // 全件保存
-    data.patients.forEach((patient) => {
+
+fetch("http://localhost:3000/users")
+   .then((response) => response.json())
+   .then((data) => {
+    allPatients = data;
+    data.forEach((patient) => {
       createPatientCard(patient);
     });
   })

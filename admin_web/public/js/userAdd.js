@@ -30,7 +30,7 @@ function registerUser(event) {
     alert("必須項目が未記入の箇所があります");
     return;
   } else {
-    fetch("/addUser", {
+    fetch("http://localhost:3000/addUser", {
       method: "POST",
 
       headers: {

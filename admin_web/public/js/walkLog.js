@@ -14,11 +14,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function loadTestData() {
-  // testData.jsonはプロジェクトルート(admin_web直下)に置く想定
+  // testData.jsonはadmin_web直下
   try {
-    const res = await fetch("../../testData.json");
-    if (!res.ok) throw new Error("fetch失敗");
-    testData = await res.json();
+    const [patients, walkingLogs] = await Promise.all([
+      fetch("http://localhost:3000/users").then(r => r.json()),
+      fetch("http://localhost:3000/walkingLogs").then(r => r.json()),
+    ]);
+    testData = { patients, walkingLogs };
+
   } catch (e) {
     console.error("テストデータの読み込みに失敗しました", e);
     document.getElementById("userList").innerHTML =

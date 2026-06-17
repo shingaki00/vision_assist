@@ -30,6 +30,7 @@ pool.getConnection((err, connection) => {
   }
   console.log("MySQL接続成功");
 });
+
 //ユーザ一覧表示
 app.get("/users", (req, res) => {
     if (USE_TEST_DATA) {
@@ -126,6 +127,42 @@ app.post("/login", (req, res) => {
     return;
   }
   // 本番用MySQLコードは後で追加
+});
+
+// 歩行ログ
+app.get("/walkingLogs", (req, res) => {
+  if (USE_TEST_DATA) {
+    res.json(testData.walkingLogs);
+    return;
+  }
+  // MySQLコード...
+});
+
+// アクティビティ
+app.get("/activities", (req, res) => {
+  if (USE_TEST_DATA) {
+    res.json(testData.activities);
+    return;
+  }
+  // MySQLコード...
+});
+
+// デバイス
+app.get("/devices", (req, res) => {
+  if (USE_TEST_DATA) {
+    res.json(testData.devices);
+    return;
+  }
+  // MySQLコード...
+});
+
+// GPSデータ
+app.get("/gpsData", (req, res) => {
+  if (USE_TEST_DATA) {
+    res.json(testData.gpsData);
+    return;
+  }
+  // MySQLコード...
 });
 
 app.listen(3000, () => {
