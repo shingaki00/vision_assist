@@ -1,12 +1,18 @@
 const express = require("express");
 const mysql = require("mysql2");
-
-const app = express();
 const path = require("path");
+const fs = require("fs");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const cors = require("cors");
+
+const app = express();
+
+const testData = JSON.parse(fs.readFileSync(path.join(__dirname, "testData.json"), "utf-8"));
+const USE_TEST_DATA = true; // 本番に切り替えるときは false にする
 
 app.use(express.static(path.join(__dirname, "..")));
+app.use(cors());
 app.use(express.json());
 
 const pool = mysql.createPool({
@@ -26,7 +32,12 @@ pool.getConnection((err, connection) => {
 });
 //ユーザ一覧表示
 app.get("/users", (req, res) => {
-  const sql = `
+    if (USE_TEST_DATA) {
+        res.json(testData.patients);
+        return;
+    }
+
+    const sql = `
         SELECT
             id,
             name,
@@ -35,15 +46,16 @@ app.get("/users", (req, res) => {
             login_id
         FROM Patients
     `;
-  pool.query(sql, (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ message: "サーバーエラーが発生しました" });
-      return;
-    }
+    pool.query(sql, (err, results) => {
+        if (err) {
+        console.error(err);
+        res.status(500).json({ message: "サーバーエラーが発生しました" });
+        return;
+        }
     res.json(results);
   });
 });
+
 //ユーザ登録
 app.post("/addUser", async (req, res) => {
   try {
@@ -74,21 +86,48 @@ app.post("/addUser", async (req, res) => {
     res.status(500).json({ message: "サーバーエラーが発生しました" });
   }
 });
+
 //ユーザ検索
 app.get("/patients/search", (req, res) => {
-  const keyword = req.query.keyword;
-  const sql = `SELECT login_id,name,age,emergency_note FROM Patients WHERE name LIKE ? OR login_id LIKE ?`;
-  const searchWord = `%${keyword}%`;
-  pool.query(sql, [searchWord, searchWord], (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ message: "サーバーエラーが発生しました" });
-      return;
+    if (USE_TEST_DATA) {
+        const keyword = req.query.keyword?.toLowerCase() || "";
+        const results = testData.patients.filter(
+        (p) => p.name.toLowerCase().includes(keyword) || p.login_id.toLowerCase().includes(keyword)
+        );
+        res.json(results);
+        return;
     }
-    res.json(results);
-  });
+
+    const keyword = req.query.keyword;
+    const sql = `SELECT login_id,name,age,emergency_note FROM Patients WHERE name LIKE ? OR login_id LIKE ?`;
+    const searchWord = `%${keyword}%`;
+    pool.query(sql, [searchWord, searchWord], (err, results) => {
+        if (err) {
+        console.error(err);
+        res.status(500).json({ message: "サーバーエラーが発生しました" });
+        return;
+        }
+        res.json(results);
+    });
+});
+
+//ログイン処理
+app.post("/login", (req, res) => {
+  if (USE_TEST_DATA) {
+    const { login_id, password } = req.body;
+    const admin = testData.admins.find(
+      (a) => a.login_id === login_id && a.password === password
+    );
+    if (admin) {
+      res.json({ success: true, name: admin.name });
+    } else {
+      res.status(401).json({ message: "ログインIDまたはパスワードが違います" });
+    }
+    return;
+  }
+  // 本番用MySQLコードは後で追加
 });
 
 app.listen(3000, () => {
-  console.log("サーバー起動");
+    console.log("サーバー起動");
 });

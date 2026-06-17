@@ -13,5 +13,8 @@
   "type": "commonjs",
   "devDependencies": {
     "vite": "^8.0.16"
+  },
+  "dependencies": {
+    "cors": "^2.8.6"
   }
 }

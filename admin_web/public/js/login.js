@@ -29,14 +29,14 @@ document.addEventListener("DOMContentLoaded", function () {
 async function authenticate(login_id, password) {
 
     // --- Firebase移行時はここをごっそり差し替える ---
-    const response = await fetch("../testData.json");
+    const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ login_id, password })
+    });
     if (!response.ok) throw new Error(`読み込みエラー: ${response.status}`);
 
     const data = await response.json();
-    const admin = data.admins.find(a => a.login_id === login_id);
-
-    if (!admin || admin.password !== password) throw new Error("認証失敗");
-
-    return { uid: admin.login_id, name: admin.name };
+    return { uid: data.login_id, name: data.name };
     // ------------------------------------------------
 }
