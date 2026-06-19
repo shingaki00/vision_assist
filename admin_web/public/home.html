@@ -1,157 +1,174 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ホーム｜VisionAssist</title>
 
     <!-- 読み込み -->
-    <link rel="stylesheet" href="./css/home.css">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/home.css" />
+    <link rel="stylesheet" href="./css/style.css" />
     <script type="module" src="./js/home.js" defer></script>
     <script type="module" src="./js/style.js" defer></script>
-    
-    <script>
-        (function () {
-            if (sessionStorage.getItem('uid') === null) {
-                window.location.replace('index.html');
-            }
-        })();
-    </script>
-</head>
 
-<body>
+    <script>
+      (function () {
+        if (sessionStorage.getItem("uid") === null) {
+          window.location.replace("index.html");
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
     <div id="header-inner"></div>
 
     <main class="home-container">
-        <div class="left-col">
-
+      <div class="left-col">
         <h2>ダッシュボード</h2>
 
-            <!-- サマリーカード（全幅） -->
-            <div class="summary-list">
-                <div class="summary-card">
-                    <div class="icon" style="background: #EEEDFE;">👥</div>
-                    <div>
-                        <p class="summary-label">総ユーザー数</p>
-                        <p class="summary-value">-</p>
-                        <!-- <p class="summary-change up">+12% 先月比</p> -->
-                    </div>
-                </div>
-                <div class="summary-card">
-                    <div class="icon" style="background: #EEEDFE;">📈</div>
-                    <div>
-                        <p class="summary-label">本日のアクティブユーザー</p>
-                        <p class="summary-value">-</p>
-                        <!-- <p class="summary-change up">+5% 昨日比</p> -->
-                    </div>
-                </div>
-                <div class="summary-card">
-                    <div class="icon" style="background: #EEEDFE;">👁</div>
-                    <div>
-                        <p class="summary-label">本日の歩行ログ</p>
-                        <p class="summary-value">-</p>
-                        <!-- <p class="summary-change up">+8% 昨日比</p> -->
-                    </div>
-                </div>
-                <div class="summary-card">
-                    <div class="icon" style="background: #EEEDFE;">📊</div>
-                    <div>
-                        <p class="summary-label">週間利用率</p>
-                        <p class="summary-value">-</p>
-                        <!-- <p class="summary-change down">-2% 先週比</p> -->
-                    </div>
-                </div>
+        <!-- サマリーカード（全幅） -->
+        <div class="summary-list">
+          <div class="summary-card">
+            <div class="icon" style="background: #eeedfe">👥</div>
+            <div>
+              <p class="summary-label">総ユーザー数</p>
+              <p class="summary-value">-</p>
+              <!-- <p class="summary-change up">+12% 先月比</p> -->
             </div>
-
-
-            <!-- クイックアクセスのボタン集 -->
-            <div class="quick-access">
-                <h3>クイックアクセス</h3>
-
-                <div class="quick-access-list">
-                    <a href="#" class="quick-card">
-                        <div class="icon">👤</div>
-                        <div class="text">
-                            <h4>ユーザー登録</h4>
-                            <p>新規ユーザーの登録・アカウント作成</p>
-                        </div>
-                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="9 18 15 12 9 6"/>
-                            </svg>
-                    </a>
-                
-                    <a href="./pages/walkLogs.html" class="quick-card">
-                        <div class="icon">📍</div>
-                        <div class="text">
-                            <h4>歩行ログ確認</h4>
-                            <p>利用者の歩行履歴・経路データの確認</p>
-                        </div>
-                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"/>
-                        </svg>
-                    </a>
-
-                    <a href="#" class="quick-card">
-                        <div class="icon">👥</div>
-                        <div class="text">
-                            <h4>ユーザー一覧</h4>
-                            <p>登録済みユーザーの管理・検索</p>
-                        </div>
-                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"/>
-                        </svg>
-                    </a>
-
-                    <a href="#" class="quick-card">
-                        <div class="icon">⚙</div>
-                        <div class="text">
-                            <h4>設定</h4>
-                            <p>システム設定・環境設定</p>
-                        </div>
-                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"/>
-                        </svg>
-                    </a>
-                    
-                </div>
-                
+          </div>
+          <div class="summary-card">
+            <div class="icon" style="background: #eeedfe">📈</div>
+            <div>
+              <p class="summary-label">本日のアクティブユーザー</p>
+              <p class="summary-value">-</p>
+              <!-- <p class="summary-change up">+5% 昨日比</p> -->
             </div>
+          </div>
+          <div class="summary-card">
+            <div class="icon" style="background: #eeedfe">👁</div>
+            <div>
+              <p class="summary-label">本日の歩行ログ</p>
+              <p class="summary-value">-</p>
+              <!-- <p class="summary-change up">+8% 昨日比</p> -->
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="icon" style="background: #eeedfe">📊</div>
+            <div>
+              <p class="summary-label">週間利用率</p>
+              <p class="summary-value">-</p>
+              <!-- <p class="summary-change down">-2% 先週比</p> -->
+            </div>
+          </div>
         </div>
 
+        <!-- クイックアクセスのボタン集 -->
+        <div class="quick-access">
+          <h3>クイックアクセス</h3>
 
-        <!-- 最新の通知を表示する -->
-        <div class="activity-feed">
-            <div class="activity-feed-header">
-                <h3>
-                    最近のアクティビティ
-                    <span id="unread-badge" hidden>0</span>
-                </h3>
-                <div class="activity-header-actions">
-                    <button id="btn-mark-all">すべて既読</button>
-                </div>
-            </div>
-            <ul class="activity-list" id="activity-list"></ul>
-            <div class="activity-footer">
-                <button id="btn-show-all">もっと見る</button>
-            </div>
+          <div class="quick-access-list">
+            <a href="./pages/userAdd.html" class="quick-card">
+              <div class="icon">👤</div>
+              <div class="text">
+                <h4>ユーザー登録</h4>
+                <p>新規ユーザーの登録・アカウント作成</p>
+              </div>
+              <svg
+                class="chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </a>
+
+            <a href="./pages/walkLogs.html" class="quick-card">
+              <div class="icon">📍</div>
+              <div class="text">
+                <h4>歩行ログ確認</h4>
+                <p>利用者の歩行履歴・経路データの確認</p>
+              </div>
+              <svg
+                class="chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </a>
+
+            <a href="./pages/userList.html" class="quick-card">
+              <div class="icon">👥</div>
+              <div class="text">
+                <h4>ユーザー一覧</h4>
+                <p>登録済みユーザーの管理・検索</p>
+              </div>
+              <svg
+                class="chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </a>
+
+            <a href="./pages/settings.html" class="quick-card">
+              <div class="icon">⚙</div>
+              <div class="text">
+                <h4>設定</h4>
+                <p>システム設定・環境設定</p>
+              </div>
+              <svg
+                class="chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </a>
+          </div>
         </div>
+      </div>
 
-        <!-- モーダル -->
-        <div id="activity-modal-overlay">
-            <div class="activity-modal" role="dialog" aria-modal="true">
-                <div class="modal-header">
-                    <h4 id="modal-title"></h4>
-                    <button class="modal-close" aria-label="閉じる">✕</button>
-                </div>
-                <div class="modal-body">
-                    <p id="modal-desc"></p>
-                    <p class="modal-time" id="modal-time"></p>
-                </div>
-            </div>
+      <!-- 最新の通知を表示する -->
+      <div class="activity-feed">
+        <div class="activity-feed-header">
+          <h3>
+            最近のアクティビティ
+            <span id="unread-badge" hidden>0</span>
+          </h3>
+          <div class="activity-header-actions">
+            <button id="btn-mark-all">すべて既読</button>
+          </div>
         </div>
+        <ul class="activity-list" id="activity-list"></ul>
+        <div class="activity-footer">
+          <button id="btn-show-all">もっと見る</button>
+        </div>
+      </div>
 
+      <!-- モーダル -->
+      <div id="activity-modal-overlay">
+        <div class="activity-modal" role="dialog" aria-modal="true">
+          <div class="modal-header">
+            <h4 id="modal-title"></h4>
+            <button class="modal-close" aria-label="閉じる">✕</button>
+          </div>
+          <div class="modal-body">
+            <p id="modal-desc"></p>
+            <p class="modal-time" id="modal-time"></p>
+          </div>
+        </div>
+      </div>
     </main>
-
-</body>
+  </body>
 </html>
