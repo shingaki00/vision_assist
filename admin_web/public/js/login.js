@@ -14,6 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        if (!isValidEmail(login_id)) {
+            showError("メールアドレスの形式が正しくありません");
+            return;
+        }
+
         try {
             const user = await authenticate(login_id, password); // ← ここだけ意識する
             sessionStorage.setItem("uid", user.uid);
@@ -24,6 +29,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
 // 移行時はこの関数の中身だけ書き換える
 async function authenticate(login_id, password) {
