@@ -13,7 +13,7 @@ CREATE TABLE Facilities (
 CREATE TABLE Admins (
     id VARCHAR(36) PRIMARY KEY,
     facility_id VARCHAR(36),
-    login_id VARCHAR(10)NOT NULL,
+    mail_address VARCHAR(30)NOT NULL,
     password_hash VARCHAR(255),
     `name` VARCHAR(10) NOT NULL,
     FOREIGN KEY (facility_id)
@@ -26,7 +26,7 @@ CREATE TABLE Patients (
     `name` VARCHAR(10) NOT NULL,
     age INT,
     emergency_note VARCHAR(100),
-    login_id VARCHAR(10)NOT NULL,
+    mail_address VARCHAR(30)NOT NULL,
     password_hash VARCHAR(255),
     FOREIGN KEY (facility_id)
     REFERENCES Facilities(id)

@@ -5,9 +5,12 @@ const app = express();
 const path = require("path");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const cors = require("cors");
 
 app.use(express.static(path.join(__dirname, "..")));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -32,7 +35,7 @@ app.get("/users", (req, res) => {
             name,
             age,
             emergency_note,
-            login_id,
+            mail_address,
             password_hash
         FROM Patients
     `;
@@ -46,8 +49,10 @@ app.get("/users", (req, res) => {
 });
 //ユーザ登録
 app.post("/addUser", async (req, res) => {
+  console.log(req.body);
+
   try {
-    const login_id = req.body.login_id;
+    const mail_address = req.body.mail_address;
     const name = req.body.name;
     const age = req.body.age;
     const emergency_note = req.body.emergency_note;
@@ -56,10 +61,10 @@ app.post("/addUser", async (req, res) => {
 
     const id = crypto.randomUUID();
 
-    const sql = `INSERT INTO Patients(id,login_id,password_hash,name,age,emergency_note) VALUES (?,?, ?, ?, ?, ?)`;
+    const sql = `INSERT INTO Patients(id,mail_address,password_hash,name,age,emergency_note) VALUES (?,?, ?, ?, ?, ?)`;
     connection.query(
       sql,
-      [id, login_id, passwordHash, name, age, emergency_note],
+      [id, mail_address, passwordHash, name, age, emergency_note],
       (err, results) => {
         if (err) {
           console.error("SQLエラー");
@@ -79,7 +84,7 @@ app.post("/addUser", async (req, res) => {
 //ユーザ検索
 app.get("/patients/search", (req, res) => {
   const keyword = req.query.keyword;
-  const sql = `SELECT login_id,name,age,emergency_note FROM Patients WHERE name LIKE ? OR login_id LIKE ?`;
+  const sql = `SELECT mail_address,name,age,emergency_note FROM Patients WHERE name LIKE ? OR login_id LIKE ?`;
   const searchWord = `%${keyword}%`;
   connection.query(sql, [searchWord, searchWord], (err, results) => {
     if (err) {
