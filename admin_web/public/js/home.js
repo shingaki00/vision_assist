@@ -5,8 +5,10 @@ import { formatTimeAgo } from "./style.js";
 // ─────────────────────────────────────────────
 
 async function fetchSummary() {
-    const res = await fetch("../testData.json");
-    const { patients, walkingLogs } = await res.json();
+    const [patients, walkingLogs] = await Promise.all([
+        fetch("http://localhost:3000/users").then(r => r.json()),
+        fetch("http://localhost:3000/walkingLogs").then(r => r.json()),
+    ]);
 
     const today = new Date().toISOString().slice(0, 10); // "2026-06-10"
 
@@ -70,9 +72,7 @@ async function fetchActivities() {
         // localStorage にデータがあればそちらを優先
         return JSON.parse(raw);
     }
-    // なければ testData.json から取得してキャッシュ
-    const res = await fetch("../testData.json");
-    const { activities } = await res.json();
+    const activities = await fetch("http://localhost:3000/activities").then(r => r.json());
  
     // id・read が未付与の場合は自動付与
     const normalized = activities.map((item, i) => ({

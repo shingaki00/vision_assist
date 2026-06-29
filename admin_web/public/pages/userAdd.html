@@ -3,15 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>会員登録</title>
+    <title>会員登録｜VisionAssist</title>
 
     <link rel="stylesheet" href="../css/userAdd.css" />
     <link rel="stylesheet" href="../css/style.css" />
+    <script type="module" src="../js/style.js" defer></script>
+
+    <script>
+        (function () {
+            if (sessionStorage.getItem('uid') === null) {
+                window.location.replace('../index.html');
+            }
+        })();
+    </script>
   </head>
 
   <body>
     <main>
       <div class="register-container">
+
+        <a href="../home.html" class="back-link">← ダッシュボードに戻る</a>
+
         <h1 class="register-title">会員登録</h1>
 
         <form method="post" class="form-group">
@@ -28,7 +40,7 @@
           <p class="form-label">氏名</p>
           <input type="text" maxlength="10" class="form-input" id="name" />
           <p class="form-label">年齢</p>
-          <input type="text" maxlength="3" class="form-input" id="age" />
+          <input type="number" maxlength="3" class="form-input" id="age" />
           <p class="form-label">持病などについて</p>
           <textarea
             name="emergency_note"

@@ -3,15 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ユーザ一覧</title>
+    <title>ユーザ一覧｜VisionAssist</title>
 
     <link rel="stylesheet" href="../css/userList.css" />
     <link rel="stylesheet" href="../css/style.css" />
+    <script type="module" src="../js/style.js" defer></script>
+
+    <script>
+        (function () {
+            if (sessionStorage.getItem('uid') === null) {
+                window.location.replace('../index.html');
+            }
+        })();
+    </script>
   </head>
   <body>
     <main>
+
+      <div id="header-inner"></div>
+
       <div>
-        <a href="/admin_web/index.html">< 戻る</a>
+        <a href="../home.html" class="back-link">← ダッシュボードに戻る</a>
+
         <h1>ユーザ一覧</h1>
         <div class="search-area">
           <button class="search-icon" id="searchBtn">🔍</button>
