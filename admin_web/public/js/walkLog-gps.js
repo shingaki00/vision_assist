@@ -10,6 +10,12 @@ let googleMap = null;
 let routePolyline = null;
 let mapMarkers = [];
 
+const script = document.createElement("script");
+script.src = `https://maps.googleapis.com/maps/api/js?key=${__MAPS_KEY__}&callback=initGoogleMaps`;
+script.async = true;
+script.defer = true;
+document.head.appendChild(script);
+
 // Google Maps APIの読み込み完了判定
 window.initGoogleMaps = function () {
     window._googleMapsReady = true;
