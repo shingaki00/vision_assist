@@ -1,4 +1,4 @@
-import { getToday } from "./style.js";
+import { getToday } from "../style.js";
 
 // ─── testData.json 読み込み ───────────────────────
 let testData = null;
@@ -11,7 +11,7 @@ let routePolyline = null;
 let mapMarkers = [];
 
 const script = document.createElement("script");
-script.src = `https://maps.googleapis.com/maps/api/js?key=${__MAPS_KEY__}&callback=initGoogleMaps`;
+script.src = `https://maps.googleapis.com/maps/api/js?key=${__MAPS_KEY__}&callback=initGoogleMaps&loading=async`;
 script.async = true;
 script.defer = true;
 document.head.appendChild(script);
@@ -212,46 +212,6 @@ function updateUserStats(patientId) {
   document.getElementById("statAvgDuration").textContent = `${avgMin}分`;
 }
 
-// 最長滞在地点を計算（案A：誤差15m以内を同一地点と判定）
-function calcLongestStay(gpsPoints) {
-  const THRESHOLD_M = 15; // 同一地点とみなす距離（メートル）
-  let best = null;
-
-  for (let i = 0; i < gpsPoints.length; i++) {
-    let stayEnd = i;
-
-    for (let j = i + 1; j < gpsPoints.length; j++) {
-      const d = calcDistanceM(
-        gpsPoints[i].latitude, gpsPoints[i].longitude,
-        gpsPoints[j].latitude, gpsPoints[j].longitude
-      );
-      if (d <= THRESHOLD_M) {
-        stayEnd = j;
-      } else {
-        break;
-      }
-    }
-
-    const stayMs =
-      new Date(gpsPoints[stayEnd].timestamp) -
-      new Date(gpsPoints[i].timestamp);
-    const stayMinutes = Math.round(stayMs / 60000);
-
-    if (!best || stayMs > best.stayMs) {
-      best = {
-        latitude:  gpsPoints[i].latitude,
-        longitude: gpsPoints[i].longitude,
-        stayMs,
-        stayMinutes,
-        arrivedAt: gpsPoints[i].timestamp,
-        pointIndex: i,
-      };
-    }
-  }
-
-  return best;
-}
-
 // ────────────────────────────────────────────────
 //  Google Maps で地図・ルートを表示 
 // ────────────────────────────────────────────────
@@ -383,29 +343,6 @@ function updateMap(gpsPoints) {
         new google.maps.InfoWindow({ content: `<b>${label}</b>` }).open(googleMap, marker);
         });
     });
-}
-
-// ─── ユーティリティ：歩行時間を計算 ──────────────
-function calcDuration(start, end) {
-  const ms  = new Date(end) - new Date(start);
-  const min = Math.round(ms / 60000);
-  if (min < 60) return `${min} 分`;
-  const h = Math.floor(min / 60);
-  const m = min % 60;
-  return `${h} 時間 ${m} 分`;
-}
-
-// ─── ユーティリティ：2点間の距離（メートル・Haversine） ──
-function calcDistanceM(lat1, lng1, lat2, lng2) {
-  const R    = 6371000;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * Math.PI / 180) *
-    Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 // グローバルに公開
