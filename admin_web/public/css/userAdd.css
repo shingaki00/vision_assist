@@ -113,7 +113,7 @@ body {
 
   border-radius: 14px;
 
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #8c50a0);
 
   color: #ffffff;
 
@@ -171,7 +171,7 @@ body {
 }
 
 /* PC向けに少し広げる */
-/* @media (min-width: 1200px) {
+@media (min-width: 1200px) {
   .register-container {
     max-width: 580px;
 
@@ -185,10 +185,10 @@ body {
   .form-input {
     font-size: 17px;
   }
-} */
+}
 
 /* タブレット */
-/* @media (max-width: 768px) {
+@media (max-width: 768px) {
   .register-container {
     padding: 40px 32px;
   }
@@ -196,10 +196,10 @@ body {
   .register-title {
     font-size: 32px;
   }
-} */
+}
 
 /* スマホ */
-/* @media (max-width: 480px) {
+@media (max-width: 480px) {
   body {
     padding: 16px;
   }
@@ -228,4 +228,4 @@ body {
 
     font-size: 16px;
   }
-} */
+}

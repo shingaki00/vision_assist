@@ -49,7 +49,7 @@ function createPatientCard(patient) {
 function openModal(patient) {
   detailArea.innerHTML = `
 
-        <p>ID: ${patient.login_id}</p>
+        <p>メールアドレス: ${patient.mail_address}</p>
 
         <p>パスワード: ********</p>
 
