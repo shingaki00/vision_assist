@@ -1,4 +1,4 @@
-import { getToday } from "./style.js";
+import { getToday } from "../style.js";
 
 // ─── testData.json 読み込み ───────────────────────
 let testData = null;

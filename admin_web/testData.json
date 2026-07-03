@@ -57,27 +57,28 @@
     ],
 
     "gpsData": [
-        {
-            "id": 1,
-            "log_id": 1,
-            "latitude": 35.6895,
-            "longitude": 139.6917,
-            "timestamp": "2026-04-01T08:15:00"
-        },
-        {
-            "id": 2,
-            "log_id": 2,
-            "latitude": 35.6896,
-            "longitude": 139.6918,
-            "timestamp": "2026-04-01T08:20:00"
-        },
-        {
-            "id": 3,
-            "log_id": 3,
-            "latitude": 35.6897,
-            "longitude": 139.6919,
-            "timestamp": "2026-06-10T09:15:00"
-        }
+        { "id": 1,  "log_id": 1, "latitude": 35.6890, "longitude": 139.6910, "timestamp": "2026-04-01T08:00:00" },
+        { "id": 2,  "log_id": 1, "latitude": 35.6893, "longitude": 139.6914, "timestamp": "2026-04-01T08:05:00" },
+        { "id": 3,  "log_id": 1, "latitude": 35.6895, "longitude": 139.6917, "timestamp": "2026-04-01T08:15:00" },
+        { "id": 4,  "log_id": 1, "latitude": 35.6900, "longitude": 139.6922, "timestamp": "2026-04-01T08:18:00" },
+        { "id": 5,  "log_id": 1, "latitude": 35.6901, "longitude": 139.6923, "timestamp": "2026-04-01T08:20:00" },
+        { "id": 6,  "log_id": 1, "latitude": 35.6901, "longitude": 139.6924, "timestamp": "2026-04-01T08:23:00" },
+        { "id": 7,  "log_id": 1, "latitude": 35.6905, "longitude": 139.6930, "timestamp": "2026-04-01T08:27:00" },
+        { "id": 8,  "log_id": 1, "latitude": 35.6908, "longitude": 139.6935, "timestamp": "2026-04-01T08:30:00" },
+
+        { "id": 9,  "log_id": 2, "latitude": 35.6896, "longitude": 139.6918, "timestamp": "2026-06-10T09:00:00" },
+        { "id": 10, "log_id": 2, "latitude": 35.6899, "longitude": 139.6921, "timestamp": "2026-06-10T09:08:00" },
+        { "id": 11, "log_id": 2, "latitude": 35.6903, "longitude": 139.6926, "timestamp": "2026-06-10T09:16:00" },
+        { "id": 12, "log_id": 2, "latitude": 35.6907, "longitude": 139.6930, "timestamp": "2026-06-10T09:24:00" },
+        { "id": 13, "log_id": 2, "latitude": 35.6910, "longitude": 139.6934, "timestamp": "2026-06-10T09:30:00" },
+
+        { "id": 14, "log_id": 3, "latitude": 35.6897, "longitude": 139.6919, "timestamp": "2026-04-02T10:00:00" },
+        { "id": 15, "log_id": 3, "latitude": 35.6901, "longitude": 139.6923, "timestamp": "2026-04-02T10:10:00" },
+        { "id": 16, "log_id": 3, "latitude": 35.6905, "longitude": 139.6927, "timestamp": "2026-04-02T10:20:00" },
+        { "id": 17, "log_id": 3, "latitude": 35.6905, "longitude": 139.6928, "timestamp": "2026-04-02T10:25:00" },
+        { "id": 18, "log_id": 3, "latitude": 35.6906, "longitude": 139.6928, "timestamp": "2026-04-02T10:30:00" },
+        { "id": 19, "log_id": 3, "latitude": 35.6910, "longitude": 139.6933, "timestamp": "2026-04-02T10:40:00" },
+        { "id": 20, "log_id": 3, "latitude": 35.6913, "longitude": 139.6937, "timestamp": "2026-04-02T10:45:00" }
     ],
 
     "devices": [

@@ -1,4 +1,4 @@
-import { getToday } from "./style.js";
+import { getToday } from "../style.js";
 
 // ─── testData.json 読み込み ───────────────────────
 let testData = null;
@@ -9,6 +9,12 @@ let selectedLogId = null;
 let googleMap = null;
 let routePolyline = null;
 let mapMarkers = [];
+
+const script = document.createElement("script");
+script.src = `https://maps.googleapis.com/maps/api/js?key=${__MAPS_KEY__}&callback=initGoogleMaps&loading=async`;
+script.async = true;
+script.defer = true;
+document.head.appendChild(script);
 
 // Google Maps APIの読み込み完了判定
 window.initGoogleMaps = function () {
@@ -206,46 +212,6 @@ function updateUserStats(patientId) {
   document.getElementById("statAvgDuration").textContent = `${avgMin}分`;
 }
 
-// 最長滞在地点を計算（案A：誤差15m以内を同一地点と判定）
-function calcLongestStay(gpsPoints) {
-  const THRESHOLD_M = 15; // 同一地点とみなす距離（メートル）
-  let best = null;
-
-  for (let i = 0; i < gpsPoints.length; i++) {
-    let stayEnd = i;
-
-    for (let j = i + 1; j < gpsPoints.length; j++) {
-      const d = calcDistanceM(
-        gpsPoints[i].latitude, gpsPoints[i].longitude,
-        gpsPoints[j].latitude, gpsPoints[j].longitude
-      );
-      if (d <= THRESHOLD_M) {
-        stayEnd = j;
-      } else {
-        break;
-      }
-    }
-
-    const stayMs =
-      new Date(gpsPoints[stayEnd].timestamp) -
-      new Date(gpsPoints[i].timestamp);
-    const stayMinutes = Math.round(stayMs / 60000);
-
-    if (!best || stayMs > best.stayMs) {
-      best = {
-        latitude:  gpsPoints[i].latitude,
-        longitude: gpsPoints[i].longitude,
-        stayMs,
-        stayMinutes,
-        arrivedAt: gpsPoints[i].timestamp,
-        pointIndex: i,
-      };
-    }
-  }
-
-  return best;
-}
-
 // ────────────────────────────────────────────────
 //  Google Maps で地図・ルートを表示 
 // ────────────────────────────────────────────────
@@ -288,9 +254,15 @@ function updateMap(gpsPoints) {
   });
 
   // ── 地図の表示範囲を自動フィット ──
-  const bounds = new google.maps.LatLngBounds();
-  latLngs.forEach(ll => bounds.extend(ll));
-  googleMap.fitBounds(bounds, { top: 40, bottom: 40, left: 40, right: 40 });
+  if (latLngs.length === 1) {
+    // 1点のみの場合は fitBounds を使うと過剰にズームされるため、直接センター＋ズーム指定
+    googleMap.setCenter(latLngs[0]);
+    googleMap.setZoom(17);
+  } else {
+    const bounds = new google.maps.LatLngBounds();
+    latLngs.forEach(ll => bounds.extend(ll));
+    googleMap.fitBounds(bounds, { top: 40, bottom: 40, left: 40, right: 40 });
+  }
 
   // ── 開始マーカー（緑） ──
   const startMarker = new google.maps.Marker({
@@ -324,76 +296,53 @@ function updateMap(gpsPoints) {
   });
   mapMarkers.push(endMarker);
 
-// ── 最長滞在マーカー（黄） ──
-const stay = calcLongestStay(gpsPoints);
+    // ── 最長滞在マーカー（黄） ──
+    const stay = calcLongestStay(gpsPoints);
 
-if (stay) {
-    const stayLatLng = new google.maps.LatLng(stay.latitude, stay.longitude);
+    if (stay) {
+        const stayLatLng = new google.maps.LatLng(stay.latitude, stay.longitude);
 
-    const stayMarker = new google.maps.Marker({
-        position: stayLatLng,
-        map: googleMap,
-        title: `最長滞在：${stay.stayMinutes}分`,
-        icon: { 
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 11,
-            fillColor: "#fbbc04",
-            fillOpacity: 1,
-            strokeColor: "#fff",
-            strokeWeight: 2,
-        },
+        const stayMarker = new google.maps.Marker({
+            position: stayLatLng,
+            map: googleMap,
+            title: `最長滞在：${stay.stayMinutes}分`,
+            icon: { 
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 11,
+                fillColor: "#fbbc04",
+                fillOpacity: 1,
+                strokeColor: "#fff",
+                strokeWeight: 2,
+            },
+        });
+        mapMarkers.push(stayMarker);
+
+        // ── 吹き出し（InfoWindow） ──
+        const infoWindow = new google.maps.InfoWindow({
+            content: `<div style="font-size:13px;line-height:1.6;">
+            <b>最長滞在地点</b><br>
+            ${stay.stayMinutes}分間滞在<br>
+            <span style="color:#888;font-size:11px;">
+                ${stay.latitude.toFixed(5)}, ${stay.longitude.toFixed(5)}
+            </span>
+            </div>`,
+        });
+
+        stayMarker.addListener("click", () => {
+            infoWindow.open(googleMap, stayMarker);
+        });
+    }
+
+
+    // 開始・終了にもシンプルなInfoWindow
+    [
+        { marker: startMarker, label: "出発地点" },
+        { marker: endMarker,   label: "到着地点" },
+    ].forEach(({ marker, label }) => {
+        marker.addListener("click", () => {
+        new google.maps.InfoWindow({ content: `<b>${label}</b>` }).open(googleMap, marker);
+        });
     });
-    mapMarkers.push(stayMarker);
-
-    // ── 吹き出し（InfoWindow） ──
-    const infoWindow = new google.maps.InfoWindow({
-        content: `<div style="font-size:13px;line-height:1.6;">
-        <b>最長滞在地点</b><br>
-        ${stay.stayMinutes}分間滞在<br>
-        <span style="color:#888;font-size:11px;">
-            ${stay.latitude.toFixed(5)}, ${stay.longitude.toFixed(5)}
-        </span>
-        </div>`,
-    });
-
-    stayMarker.addListener("click", () => {
-        infoWindow.open(googleMap, stayMarker);
-    });
-}
-
-
-  // 開始・終了にもシンプルなInfoWindow
-  [
-    { marker: startMarker, label: "出発地点" },
-    { marker: endMarker,   label: "到着地点" },
-  ].forEach(({ marker, label }) => {
-    marker.addListener("click", () => {
-      new google.maps.InfoWindow({ content: `<b>${label}</b>` }).open(googleMap, marker);
-    });
-  });
-}
-
-// ─── ユーティリティ：歩行時間を計算 ──────────────
-function calcDuration(start, end) {
-  const ms  = new Date(end) - new Date(start);
-  const min = Math.round(ms / 60000);
-  if (min < 60) return `${min} 分`;
-  const h = Math.floor(min / 60);
-  const m = min % 60;
-  return `${h} 時間 ${m} 分`;
-}
-
-// ─── ユーティリティ：2点間の距離（メートル・Haversine） ──
-function calcDistanceM(lat1, lng1, lat2, lng2) {
-  const R    = 6371000;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * Math.PI / 180) *
-    Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 // グローバルに公開
