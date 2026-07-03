@@ -5,7 +5,7 @@ function registerUser(event) {
   event.preventDefault();
 
   const userData = {
-    login_id: document.getElementById("id").value,
+    mail_address: document.getElementById("mail_address").value,
     password: document.getElementById("password").value,
     name: document.getElementById("name").value,
     age: document.getElementById("age").value,
@@ -24,7 +24,7 @@ function registerUser(event) {
     userData.name.length === 0 ||
     userData.age.length === 0 ||
     userData.emergency_note.length === 0 ||
-    userData.login_id.length === 0 ||
+    userData.mail_address.length === 0 ||
     userData.password.length === 0
   ) {
     alert("必須項目が未記入の箇所があります");
