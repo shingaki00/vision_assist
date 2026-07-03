@@ -1,21 +1,3 @@
-body {
-  font-family: "Segoe UI", sans-serif;
-
-  background-color: #f4f6f9;
-
-  margin: 0;
-
-  padding: 30px;
-}
-
-/* タイトル */
-h1 {
-  text-align: center;
-
-  color: #333;
-
-  margin-bottom: 30px;
-}
 
 /* 検索エリア */
 .search-area {
