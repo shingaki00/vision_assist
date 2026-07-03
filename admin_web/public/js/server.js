@@ -95,6 +95,57 @@ app.get("/patients/search", (req, res) => {
   });
 });
 
+app.post("/login", (req, res) => {
+  const { mail_address, password } = req.body;
+  const sql = "SELECT * FROM Patients WHERE mail_address = ?";
+
+  connection.query(sql, [mail_address], async (err, results) => {
+    try {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({
+          success: false,
+        });
+      }
+      console.error(results);
+      if (results.length === 0) {
+        return res.status(401).json({
+          success: false,
+        });
+      }
+      const user = results[0];
+
+      console.log(user);
+      console.log(user.password_hash);
+
+      const match = await bcrypt.compare(password, user.password_hash);
+      if (!match) {
+        return res.status(401).json({
+          success: false,
+          message: "メールアドレスまたはパスワードが違います",
+        });
+      }
+      return res.json({
+        success: true,
+        user: {
+          id: user.id,
+          name: user.name,
+          mail_address: user.mail_address,
+        },
+      });
+    } catch (e) {
+      console.error("bcryptエラー:", e);
+
+      return res.status(500).json({
+        success: false,
+        message: e.message,
+      });
+    }
+  });
+});
+
+//コンソールのエラー修正する
+
 app.listen(3000, () => {
   console.log("サーバー起動");
 });
