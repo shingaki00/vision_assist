@@ -8,14 +8,12 @@ const admin = require("firebase-admin");
 
 const app = express();
 
-const testData = JSON.parse(fs.readFileSync(path.join(__dirname, "testData.json"), "utf-8"));
-const USE_TEST_DATA = true; // 本番に切り替えるときは false にする
-
 // testData.json を読み込む
 function loadTestData() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, "testData.json"), "utf-8"));
 }
 let testData = loadTestData();
+const USE_TEST_DATA = true; // 本番に切り替えるときは false にする
 
 app.use(express.static(path.join(__dirname, "..")));
 app.use(cors());
@@ -140,6 +138,8 @@ app.post("/login", async (req, res) => {
     
         // ── 本番仕様：ハッシュ比較 ──
         // Firestore側の admins ドキュメントは password_hash（bcrypt.hash 済みの文字列）
+        const adminDoc = snapshot.docs[0];
+        const adminData = adminDoc.data();
         const isMatch = await bcrypt.compare(password, adminData.password_hash);
         if (isMatch) {
             // uid は将来 Firebase Authentication に切り替えた際の user.uid と同じ役割
@@ -170,7 +170,9 @@ function isValidEmail(email) {
  
 // 歩行ログ
 app.get("/walkingLogs", async (req, res) => {
-    testData = loadTestData();
+    if (USE_TEST_DATA) {
+        testData = loadTestData();
+    }
     const walkingLogs = await fetchCollection("walkingLogs", testData.walkingLogs);
     res.json(walkingLogs);
 });
