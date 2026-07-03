@@ -1,4 +1,241 @@
-//　歩行ログファイルの共通の関数やスタイルをまとめる場所です
+import { getToday } from "./style.js";
+import { renderHistory, clearHistory } from "./historyView.js";
+import { startLiveTracking, stopLiveTracking } from "./liveTracking.js";
+
+const API_BASE = "http://localhost:5173"; // server.js のURL
+
+// ─── データ ────────────────────────────────────
+let testData = null;
+let currentPatient = null;
+let selectedLogId = null;
+ 
+// Google Mapsインスタンス（履歴表示・見守りの両方で共有）
+let googleMap = null;
+ 
+const mapsScript = document.createElement("script");
+mapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${__MAPS_KEY__}&callback=initGoogleMaps&loading=async`;
+mapsScript.async = true;
+mapsScript.defer = true;
+document.head.appendChild(mapsScript);
+ 
+// Google Maps APIの読み込み完了判定
+window.initGoogleMaps = function () {
+    window._googleMapsReady = true;
+};
+ 
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadTestData();
+    initPage();
+});
+ 
+async function loadTestData() {
+    try {
+        const [patients, walkingLogs, gpsData] = await Promise.all([
+            fetch(`${API_BASE}/users`).then(r => r.json()),
+            fetch(`${API_BASE}/walkingLogs`).then(r => r.json()),
+            fetch(`${API_BASE}/gpsData`).then(r => r.json()),
+        ]);
+        testData = { patients, walkingLogs, gpsData };
+    } catch (e) {
+        console.error("データの読み込みに失敗しました", e);
+        document.getElementById("logList").innerHTML =
+            `<div class="log-empty">データを読み込めませんでした</div>`;
+    }
+}
+ 
+// ─── URLパラメータからpatient_idを取得して初期化 ──────
+function initPage() {
+    const params = new URLSearchParams(window.location.search);
+    const patientId = parseInt(params.get("patient_id"));
+ 
+    currentPatient = testData.patients.find(p => p.id === patientId);
+    if (!currentPatient) {
+        document.getElementById("patientName").textContent = "利用者が見つかりません";
+        return;
+    }
+ 
+    document.getElementById("patientName").textContent =
+        `${currentPatient.name} さんの歩行ログ`;
+ 
+    updateUserStats(patientId);
+    renderList(patientId);
+}
+ 
+// ─────────────────────────────────────
+//   左パネル：歩行ログ一覧を描画
+// ─────────────────────────────────────
+function renderList(patientId) {
+    const container = document.getElementById("logList");
+    const logs = testData.walkingLogs
+        .filter(log => log.patient_id === patientId)
+        .sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
+ 
+    if (logs.length === 0) {
+        container.innerHTML = `<div class="log-empty">ログがありません</div>`;
+        return;
+    }
+ 
+    container.innerHTML = logs.map((log, i) => {
+        const isLive = !log.end_time;
+        const duration = isLive ? "進行中" : calcDuration(log.start_time, log.end_time);
+        const date = log.start_time.slice(0, 10);
+        const startT = log.start_time.slice(11, 16);
+        const endT = isLive ? "―" : log.end_time.slice(11, 16);
+        const pts = testData.gpsData
+            .filter(g => g.log_id === log.id)
+            .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+        );
+ 
+        const distStr = pts.length >= 2 ? formatDistance(calcTotalDistance(pts)) : "—";
+ 
+        return `
+            <div class="user-row"
+                style="animation-delay:${i * 0.04}s"
+                data-id="${log.id}">
+                <div class="log-row-top">
+                    <span class="log-date">${date}</span>
+                    <span class="log-time">${startT} 〜 ${endT}</span>
+                    <span class="log-duration">${isLive ? `🟢 ${duration}` : duration}</span>
+                </div>
+                <div class="log-meta">
+                    <span>📍 ${distStr}</span>
+                </div>
+            </div>
+        `;
+    }).join("");
+ 
+    container.querySelectorAll(".user-row").forEach(row => {
+        row.addEventListener("click", () => {
+            container.querySelectorAll(".user-row").forEach(r => r.classList.remove("active"));
+            row.classList.add("active");
+            selectLog(parseInt(row.dataset.id));
+        });
+    });
+}
+ 
+// ─────────────────────────────────────
+//   ログ選択時の処理 
+// ─────────────────────────────────────
+function selectLog(logId) {
+    // 前の描画（履歴・見守り）を必ずクリアしてから切り替える
+    clearHistory();
+    stopLiveTracking();
+ 
+    selectedLogId = logId;
+ 
+    const log = testData.walkingLogs.find(l => l.id === logId);
+    const gpsPoints = testData.gpsData
+        .filter(g => String(g.log_id) === String(logId))
+        .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+ 
+    document.getElementById("emptyState").style.display = "none";
+    document.getElementById("detailContent").style.display = "block";
+ 
+    const isLive = !log.end_time;
+ 
+    waitForMapsAndUpdate(() => {
+        if (isLive) {
+            startLiveTracking(googleMap, logId, gpsPoints, {
+                onNewPoints: () => {
+                    if (currentPatient) updateUserStats(currentPatient.id);
+                },
+                onFinished: (updatedLog) => {
+                    const idx = testData.walkingLogs.findIndex(l => l.id === logId);
+                    if (idx !== -1) testData.walkingLogs[idx] = updatedLog;
+                    if (currentPatient) {
+                        updateUserStats(currentPatient.id);
+                        renderList(currentPatient.id);
+                    }
+                    // ログが完了したので、そのまま履歴表示に切り替える
+                    const finishedPoints = testData.gpsData
+                        .filter(g => String(g.log_id) === String(logId))
+                        .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                    renderHistory(googleMap, finishedPoints);
+                },
+            });
+        } else {
+            renderHistory(googleMap, gpsPoints);
+        }
+    });
+}
+ 
+// ─── Google Maps APIの準備を待ち、地図インスタンスを用意する ──
+function waitForMapsAndUpdate(onReady) {
+    const run = () => {
+        ensureMap();
+        onReady();
+    };
+ 
+    if (window._googleMapsReady || (window.google && window.google.maps)) {
+        run();
+        return;
+    }
+ 
+    let elapsed = 0;
+    const interval = setInterval(() => {
+        elapsed += 100;
+ 
+        if (window.google && window.google.maps) {
+            clearInterval(interval);
+            run();
+        } else if (elapsed > 10000) {
+            clearInterval(interval);
+            console.error("Google Maps APIの読み込みがタイムアウトしました");
+            document.getElementById("map").innerHTML =
+                `<div>地図を読み込めませんでした</div>`;
+        }
+    }, 100);
+}
+ 
+// 地図インスタンスをまだ作っていなければ作る（履歴・見守りで共有）
+function ensureMap() {
+    if (googleMap) return googleMap;
+ 
+    googleMap = new google.maps.Map(document.getElementById("map"), {
+        zoom: 15,
+        mapTypeId: "roadmap",
+        styles: [
+            { featureType: "poi", stylers: [{ visibility: "off" }] },
+            { featureType: "transit", stylers: [{ visibility: "off" }] },
+        ],
+    });
+    return googleMap;
+}
+ 
+// ─────────────────────────────────────
+//   統計カードを更新 
+// ─────────────────────────────────────
+function updateUserStats(patientId) {
+    const logs = testData.walkingLogs.filter(l => l.patient_id === patientId);
+ 
+    document.getElementById("statLogCount").textContent = `${logs.length}件`;
+ 
+    let totalDistM = 0;
+    logs.forEach(log => {
+    const pts = [...testData.gpsData.filter(g => g.log_id === log.id)]
+        .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        totalDistM += calcTotalDistance(pts);}
+    );
+    document.getElementById("statTotalDistance").textContent = formatDistance(totalDistM);
+ 
+    // 平均歩行時間（完了済みログのみで算出）
+    const finishedLogs = logs.filter(l => l.end_time);
+    if (finishedLogs.length === 0) {
+        document.getElementById("statAvgDuration").textContent = "—";
+        return;
+    }
+    const totalMs = finishedLogs.reduce((sum, log) => {
+        const ms = new Date(log.end_time) - new Date(log.start_time);
+        return sum + (ms > 0 ? ms : 0);
+    }, 0);
+    const avgMin = Math.round(totalMs / finishedLogs.length / 60000);
+    document.getElementById("statAvgDuration").textContent = `${avgMin}分`;
+}
+// グローバルに公開
+window.selectLog = selectLog;
+
+
+//　───── 以下、歩行ログファイルの共通の関数やスタイルまとめ ─────
 
 // ──────────────────────────
 //  地図の共通スタイル設定
