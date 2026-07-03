@@ -1,4 +1,4 @@
-import { getToday } from "./style.js";
+import { getToday } from "../style.js";
 import { renderHistory, clearHistory } from "./historyView.js";
 import { startLiveTracking, stopLiveTracking } from "./liveTracking.js";
 
@@ -258,12 +258,14 @@ function markerIcon(color, scale = 9) {
   };
 }
 
-export const MARKER_ICONS = {
-  start: markerIcon("#34a853"),        // 緑：出発地点
-  end: markerIcon("#ea4335"),          // 赤：到着地点
-  stay: markerIcon("#fbbc04", 11),     // 黄：最長滞在
-  current: markerIcon("#4285f4"),      // 青：現在地（見守り中）
-};
+export function markerColors() {
+  return {
+    start: markerIcon("#34a853"),        // 緑：出発地点
+    end: markerIcon("#ea4335"),          // 赤：到着地点
+    stay: markerIcon("#fbbc04", 11),     // 黄：最長滞在
+    current: markerIcon("#4285f4"),      // 青：現在地（見守り中）
+  };
+}
 
 // ──────────────────────────
 //  共通ユーティリティ関数 
@@ -292,9 +294,9 @@ function calcDistanceM(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// 最長滞在地点を計算（案A：誤差15m以内を同一地点と判定）
-function calcLongestStay(gpsPoints) {
-  const THRESHOLD_M = 15; // 同一地点とみなす距離（メートル）
+// 最長滞在地点を計算（誤差15m以内を同一地点と判定）
+export function calcLongestStay(gpsPoints) {
+  const THRESHOLD_M = 15;
   let best = null;
 
   for (let i = 0; i < gpsPoints.length; i++) {

@@ -11,6 +11,12 @@ const app = express();
 const testData = JSON.parse(fs.readFileSync(path.join(__dirname, "testData.json"), "utf-8"));
 const USE_TEST_DATA = true; // 本番に切り替えるときは false にする
 
+// testData.json を読み込む
+function loadTestData() {
+  return JSON.parse(fs.readFileSync(path.join(__dirname, "testData.json"), "utf-8"));
+}
+let testData = loadTestData();
+
 app.use(express.static(path.join(__dirname, "..")));
 app.use(cors());
 app.use(express.json());
@@ -22,36 +28,35 @@ app.use(express.json());
 let db = null;
  
 try {
-  const serviceAccount = require("./serviceAccountKey.json");
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-  db = admin.firestore();
-  console.log("Firebase(Firestore)接続成功");
+    const serviceAccount = require("./serviceAccountKey.json");
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+    });
+    db = admin.firestore();
+    console.log("Firebase(Firestore)接続成功");
 } catch (e) {
-  console.warn(
-    "Firebaseに接続できませんでした。テストデータを使用します。\n理由:",
-    e.message
-  );
+    console.warn(
+        "Firebaseに接続できませんでした。テストデータを使用します。\n理由:",
+        e.message
+    );
 }
 
 // Firestoreからコレクションを取得し、失敗したらフォールバックデータを返す共通関数
 async function fetchCollection(collectionName, fallbackData) {
-  if (!db) return fallbackData;
- 
-  try {
-    const snapshot = await db.collection(collectionName).get();
-    if (snapshot.empty) return fallbackData;
-    return snapshot.docs.map(doc => ({ ...doc.data() }));
-  } catch (e) {
-    console.error(
-      `Firestore(${collectionName})の読み込みに失敗しました。testData.json を使用します。`,
-      e.message
-    );
-    return fallbackData;
-  }
+    if (!db) return fallbackData;
+    
+    try {
+        const snapshot = await db.collection(collectionName).get();
+        if (snapshot.empty) return fallbackData;
+        return snapshot.docs.map(doc => ({ ...doc.data() }));
+    } catch (e) {
+        console.error(
+        `Firestore(${collectionName})の読み込みに失敗しました。testData.json を使用します。`,
+        e.message
+        );
+        return fallbackData;
+    }
 }
-
 
 // ユーザ一覧表示
 app.get("/users", async (req, res) => {
@@ -134,8 +139,7 @@ app.post("/login", async (req, res) => {
         }
     
         // ── 本番仕様：ハッシュ比較 ──
-        // Firestore側の admins ドキュメントは password ではなく password_hash
-        // （bcrypt.hash 済みの文字列）を保存しておく必要がある
+        // Firestore側の admins ドキュメントは password_hash（bcrypt.hash 済みの文字列）
         const isMatch = await bcrypt.compare(password, adminData.password_hash);
         if (isMatch) {
             // uid は将来 Firebase Authentication に切り替えた際の user.uid と同じ役割
@@ -156,7 +160,6 @@ app.post("/login", async (req, res) => {
             return res.json({ success: true, uid: String(foundAdmin.id), name: foundAdmin.name });
         }
         */
-    
         return res.status(500).json({ message: "サーバーエラーが発生しました" });
     }
 });
@@ -167,28 +170,29 @@ function isValidEmail(email) {
  
 // 歩行ログ
 app.get("/walkingLogs", async (req, res) => {
-  const walkingLogs = await fetchCollection("walkingLogs", testData.walkingLogs);
-  res.json(walkingLogs);
+    testData = loadTestData();
+    const walkingLogs = await fetchCollection("walkingLogs", testData.walkingLogs);
+    res.json(walkingLogs);
 });
  
 // アクティビティ
 app.get("/activities", async (req, res) => {
-  const activities = await fetchCollection("activities", testData.activities);
-  res.json(activities);
+    const activities = await fetchCollection("activities", testData.activities);
+    res.json(activities);
 });
  
 // デバイス
 app.get("/devices", async (req, res) => {
-  const devices = await fetchCollection("devices", testData.devices);
-  res.json(devices);
+    const devices = await fetchCollection("devices", testData.devices);
+    res.json(devices);
 });
  
 // GPSデータ
 app.get("/gpsData", async (req, res) => {
-  const gpsData = await fetchCollection("gpsData", testData.gpsData);
-  res.json(gpsData);
+    const gpsData = await fetchCollection("gpsData", testData.gpsData);
+    res.json(gpsData);
 });
  
 app.listen(3000, () => {
-  console.log("サーバー起動");
+    console.log("サーバー起動");
 });
