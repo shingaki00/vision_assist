@@ -13,7 +13,7 @@ body {
 .container {
   display: flex;
 
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /* ===== サイドバー ===== */
@@ -116,7 +116,7 @@ body {
   overflow-y: auto;
 }
 
-.content h1 {
+.content h3 {
   color: #2c3e50;
 
   margin-bottom: 30px;
@@ -242,13 +242,6 @@ body {
   display: block;
 }
 
-/* 選択中メニュー */
-
-.menu li.active {
-  background-color: #3498db;
-
-  font-weight: bold;
-}
 
 /* ===== スマホ対応 ===== */
 
@@ -259,6 +252,10 @@ body {
 
   .sidebar {
     width: 100%;
+  }
+
+  .content {
+    padding: 20px;
   }
 }
 
@@ -326,7 +323,7 @@ body.dark-mode .card {
 
 /* タイトル */
 
-body.dark-mode h1,
+body.dark-mode h3,
 body.dark-mode h2 {
   color: #f8fafc;
 }

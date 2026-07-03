@@ -8,7 +8,6 @@
     <!-- CSS読み込み -->
     <link rel="stylesheet" href="./css/login.css">
     <script type="module" src="./js/login.js" defer></script>
-    <script type="module" src="./js/style.js" defer></script>
 
 </head>
 
@@ -22,11 +21,12 @@
             <form method="POST" class="login-form">
 
                 <div class="form-group">
-                    <label for="login_id">ユーザーID</label>
+                    <label for="login_id">ユーザーID（登録メールアドレス）</label>
                     <input 
-                        type="text" a
+                        type="email" 
                         id="login_id" 
                         name="login_id"
+                        placeholder="example@mail.com"
                         required
                     >
 
