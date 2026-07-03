@@ -2,7 +2,7 @@ import { getToday } from "./style.js";
 import { renderHistory, clearHistory } from "./historyView.js";
 import { startLiveTracking, stopLiveTracking } from "./liveTracking.js";
 
-const API_BASE = "http://localhost:5173"; // server.js のURL
+const API_BASE = "http://localhost:3000"; // server.js のURL
 
 // ─── データ ────────────────────────────────────
 let testData = null;

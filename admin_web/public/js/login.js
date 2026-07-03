@@ -34,18 +34,27 @@ function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-// 移行時はこの関数の中身だけ書き換える
+// ────────────────────────────────────────────────
+//   認証処理（ここだけ差し替えれば認証方式を切替可能）
+// ────────────────────────────────────────────────
+// 現在: server.js の /login（Firestore + bcryptハッシュ比較）を呼んでいる
+// 将来: Firebase Authentication に切り替える場合は、この関数の中身だけを
+//       signInWithEmailAndPassword(auth, login_id, password) を使う実装に
+//       差し替える。呼び出し側（上のsubmitハンドラ）は変更不要。
+// ────────────────────────────────────────────────
 async function authenticate(login_id, password) {
-
-    // --- Firebase移行時はここをごっそり差し替える ---
-    const response = await fetch("http://localhost:3000/login", {
+    const res = await fetch("http://localhost:3000/login", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ login_id, password })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ login_id, password }),
     });
-    if (!response.ok) throw new Error(`読み込みエラー: ${response.status}`);
-
-    const data = await response.json();
-    return { uid: data.login_id, name: data.name };
-    // ------------------------------------------------
+ 
+    if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.message || "ログインに失敗しました");
+    }
+ 
+    const data = await res.json();
+    // { success: true, uid, name } を想定
+    return { uid: data.uid, name: data.name };
 }
