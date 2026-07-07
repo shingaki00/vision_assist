@@ -18,7 +18,8 @@ class AuthService {
     // if (id == 'admin' && password == 'pass') {
     //   return true;
     // }
-
+    print("mail = $mailAddress");
+    print("pass = $password");
     final response = await http.post(Uri.parse("http://localhost:3000/login"),
         headers: {
           "Content-Type": "application/json",
