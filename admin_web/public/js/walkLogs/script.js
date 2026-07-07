@@ -86,7 +86,7 @@ function renderList(patientId) {
             .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)
         );
  
-        const distStr = pts.length >= 2 ? formatDistance(calcTotalDistance(pts)) : "—";
+        const distStr = pts.length >= 2 ? formatDistance(calcTotalDistance(pts)) : " —";
  
         return `
             <div class="user-row"
