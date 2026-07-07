@@ -104,12 +104,12 @@ app.get("/patients/search", async (req, res) => {
  
 // ログイン処理
 app.post("/login", async (req, res) => {
-  const { login_id, password } = req.body;
+  const { mail_address, password_hash } = req.body;
 
-  if (!login_id || !password) {
-    return res.status(400).json({ message: "IDとパスワードを入力してください" });
+  if (!mail_address || !password_hash) {
+    return res.status(400).json({ message: "メールアドレスとパスワードを入力してください" });
   }
-  if (!isValidEmail(login_id)) {
+  if (!isValidEmail(mail_address)) {
     return res.status(400).json({ message: "ログインIDはメールアドレス形式で入力してください" });
   }
  
@@ -117,7 +117,7 @@ app.post("/login", async (req, res) => {
    // ⚠️ 一時的に有効化中。Firebase接続後は再度コメントアウトすること
     if (!db) {
         const foundAdmin = testData.admins.find(
-        a => a.login_id === login_id && a.password === password
+        a => a.mail_address === mail_address && a.password_hash === password_hash
         );
         if (foundAdmin) {
         return res.json({ success: true, uid: String(foundAdmin.id), name: foundAdmin.name });
@@ -128,7 +128,7 @@ app.post("/login", async (req, res) => {
     try {
         const snapshot = await db
         .collection("admins")
-        .where("login_id", "==", login_id)
+        .where("mail_address", "==", mail_address)
         .limit(1)
         .get();
     
@@ -140,7 +140,7 @@ app.post("/login", async (req, res) => {
         // Firestore側の admins ドキュメントは password_hash（bcrypt.hash 済みの文字列）
         const adminDoc = snapshot.docs[0];
         const adminData = adminDoc.data();
-        const isMatch = await bcrypt.compare(password, adminData.password_hash);
+        const isMatch = await bcrypt.compare(password_hash, adminData.password_hash);
         if (isMatch) {
             // uid は将来 Firebase Authentication に切り替えた際の user.uid と同じ役割
             // （今はFirestoreのドキュメントIDを代用）
@@ -154,7 +154,7 @@ app.post("/login", async (req, res) => {
         // 本番では使わないためコメントアウト
         /*
         const foundAdmin = testData.admins.find(
-        a => a.login_id === login_id && a.password === password
+        a => a.mail_address === mail_address && a.password_hash === password_hash
         );
         if (foundAdmin) {
             return res.json({ success: true, uid: String(foundAdmin.id), name: foundAdmin.name });
