@@ -10,21 +10,19 @@
     <script type="module" src="../js/style.js" defer></script>
 
     <script>
-        (function () {
-            if (sessionStorage.getItem('uid') === null) {
-                window.location.replace('../index.html');
-            }
-        })();
+      (function () {
+        if (sessionStorage.getItem("uid") === null) {
+          window.location.replace("../index.html");
+        }
+      })();
     </script>
   </head>
   <body>
     <main>
-
       <div id="header-inner"></div>
 
       <div>
         <a href="../home.html" class="back-link">← ダッシュボードに戻る</a>
-        
         <h1>ユーザ一覧</h1>
         <div class="search-area">
           <button class="search-icon" id="searchBtn">🔍</button>

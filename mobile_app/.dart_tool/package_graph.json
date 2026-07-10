@@ -11,7 +11,8 @@
         "cupertino_icons",
         "flutter",
         "flutter_tts",
-        "geolocator"
+        "geolocator",
+        "http"
       ],
       "devDependencies": [
         "flutter_lints",
@@ -403,6 +404,26 @@
       "dependencies": [
         "collection",
         "meta"
+      ]
+    },
+    {
+      "name": "http",
+      "version": "1.6.0",
+      "dependencies": [
+        "async",
+        "http_parser",
+        "meta",
+        "web"
+      ]
+    },
+    {
+      "name": "http_parser",
+      "version": "4.1.2",
+      "dependencies": [
+        "collection",
+        "source_span",
+        "string_scanner",
+        "typed_data"
       ]
     }
   ],

@@ -1,4 +1,4 @@
-CREATE DATABASE vission_assist;
+CREATE DATABASE vision_assist;
 
 USE vission_assist;
 
@@ -14,6 +14,7 @@ CREATE TABLE Admins (
     id VARCHAR(36) PRIMARY KEY,
     facility_id VARCHAR(36),
     mail_address VARCHAR(30)NOT NULL,
+    login_id VARCHAR(20)NOT NULL,
     password_hash VARCHAR(255),
     `name` VARCHAR(10) NOT NULL,
     FOREIGN KEY (facility_id)
@@ -27,6 +28,7 @@ CREATE TABLE Patients (
     age INT,
     emergency_note VARCHAR(100),
     mail_address VARCHAR(30)NOT NULL,
+    login_id VARCHAR(20)NOT NULL,
     password_hash VARCHAR(255),
     FOREIGN KEY (facility_id)
     REFERENCES Facilities(id)
