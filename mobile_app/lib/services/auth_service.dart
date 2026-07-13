@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 
 /// バックエンド担当者と連携するための認証サービス
 class AuthService {
@@ -15,15 +18,25 @@ class AuthService {
 
   /// ログイン処理
   /// 現在はテスト用。将来的に http パッケージを使用してAPIと通信します。
-  Future<bool> login(String id, String password) async {
+  Future<bool> login(String mailAddress, String password) async {
     // --- 通信のシミュレーション ---
     await Future.delayed(const Duration(seconds: 1));
 
     // --- テスト用ログイン条件 ---
     // 他の人が設計したDBの初期ユーザーに合わせて変更してください
-    if (id == 'admin' && password == 'pass') {
-      _patientId = '1';
-      return true;
+    debugPrint("mail = $mailAddress");
+    debugPrint("pass = $password");
+    final response = await http.post(Uri.parse("http://localhost:3000/login"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "mail_address": mailAddress,
+          "password": password,
+        }));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data["success"];
     }
 
     // --- API連携時のイメージ ---
@@ -40,10 +53,6 @@ class AuthService {
     */
     return false;
   }
-
+  
   String? getpatientId() => _patientId;
-
-  void logout() {
-    _patientId = null;
-  }
 }
