@@ -43,7 +43,7 @@ function isValidEmail(mail_address) {
 //       差し替える。呼び出し側（上のsubmitハンドラ）は変更不要。
 // ────────────────────────────────────────────────
 async function authenticate(mail_address, password_hash) {
-    const res = await fetch("http://localhost:3000/login", {
+    const res = await fetch("http://localhost:3000/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mail_address, password_hash }),

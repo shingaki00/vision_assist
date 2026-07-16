@@ -31,7 +31,9 @@ class WalkingTrackerService {
 
   /// 歩行開始：walkingLogsを作成してlog_idを取得し、位置情報の送信を開始する
   Future<int> startTracking(String patientId) async {
+    debugPrint("startTracking開始");
     await _ensurePermission();
+    debugPrint("権限OK");
 
     // walkingLogsに end_time: null で新規作成
     final res = await http.post(
@@ -58,7 +60,7 @@ class WalkingTrackerService {
   }
 
   /// 歩行終了：end_timeを更新し、位置情報の送信を停止する
-  Future<void> stopTracking({ String reason = "auto" }) async {
+  Future<void> stopTracking({String reason = "auto"}) async {
     if (_currentLogId == null) return;
 
     await http.patch(
@@ -85,6 +87,7 @@ class WalkingTrackerService {
 
   Future<void> _ensurePermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
+    debugPrint("現在の権限: $permission");
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -101,15 +104,22 @@ class WalkingTrackerService {
   }
 
   void _startSendingPosition(int logId) {
+    debugPrint("_startSendingPosition開始");
+
     // 5m移動したら送信（間隔よりも移動量ベース）
     const settings = LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 5,
     );
 
-    _positionSub = Geolocator.getPositionStream(locationSettings: settings).listen((pos) {
-        _lastMovementTime = DateTime.now();
-        _sendPoint(logId, pos);
+    _positionSub =
+        Geolocator.getPositionStream(locationSettings: settings).listen((pos) {
+
+      debugPrint("位置更新");
+      debugPrint("${pos.latitude}, ${pos.longitude}");
+    
+      _lastMovementTime = DateTime.now();
+      _sendPoint(logId, pos);
     });
 
     // 時間ベースのハートビート（停止時のフォールバック）
@@ -127,18 +137,21 @@ class WalkingTrackerService {
 
   // 一定時間動きがなければ自動終了
   void _startStationaryWatcher() {
-  _stationaryCheckTimer = Timer.periodic(stationaryCheckInterval, (_) {
-    if (_lastMovementTime == null) return;
-    final idle = DateTime.now().difference(_lastMovementTime!);
-    if (idle >= stationaryTimeout) {
-      stopTracking(reason: "auto");
-    }
-  });
-}
+    _stationaryCheckTimer = Timer.periodic(stationaryCheckInterval, (_) {
+      if (_lastMovementTime == null) return;
+      final idle = DateTime.now().difference(_lastMovementTime!);
+      if (idle >= stationaryTimeout) {
+        stopTracking(reason: "auto");
+      }
+    });
+  }
 
   Future<void> _sendPoint(int logId, Position pos) async {
+    debugPrint("送信開始");
+    debugPrint("logId=$logId");
+    debugPrint("${pos.latitude}, ${pos.longitude}");
     try {
-      await http.post(
+      final response = await http.post(
         Uri.parse("$apiBase/gpsData"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
@@ -148,6 +161,8 @@ class WalkingTrackerService {
           "timestamp": DateTime.now().toIso8601String(),
         }),
       );
+      debugPrint("walkingLogs status=${response.statusCode}");
+      debugPrint("walkingLogs body=${response.body}");
     } catch (e) {
       // 通信失敗時はログのみ（次回のGPS更新で再送されるため致命的ではない）
       debugPrint("GPS送信失敗: $e");
