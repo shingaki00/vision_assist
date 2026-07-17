@@ -1,0 +1,95 @@
+/* 全体背景 */
+body {
+    margin: 0;
+    height: 100vh;
+    background-color: #ffffff;
+
+    display: flex;
+    justify-content: center; /* 横中央 */
+    align-items: center;     /* 縦中央 */
+    font-family: sans-serif;
+}
+
+.register-container {
+    width: 400px;
+}
+
+/* 白パネル */
+.register-form {
+    padding: 40px;
+    border-radius: 10px;
+}
+
+/* タイトル */
+.register-container h1 {
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #3A2C3D;
+}
+
+/* 入力欄 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-top: 15px;
+    font-size: 14px;
+    color: black;
+}
+
+.form-group input {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #69596C;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* ボタン */
+.register-button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 12px;
+
+    border: none;
+    border-radius: 5px;
+    background-color: #B67AC9;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* ボタンホバー */
+.register-button:hover {
+    background-color: #804893;
+}
+
+/* メッセージ文（エラー・成功） */
+.message {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+    font-weight: bold;
+}
+.message.error {
+    color: red;
+}
+.message.success {
+    color: green;
+}
+
+/* 下部リンクエリア */
+.login-redirect {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.login-redirect a {
+    font-size: 14px;
+    color: #804893;
+    text-decoration: underline;
+    cursor: pointer;
+}

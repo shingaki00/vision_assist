@@ -8,7 +8,6 @@
     <!-- CSS読み込み -->
     <link rel="stylesheet" href="./css/login.css">
     <script type="module" src="./js/login.js" defer></script>
-    <script type="module" src="./js/style.js" defer></script>
 
 </head>
 
@@ -22,19 +21,20 @@
             <form method="POST" class="login-form">
 
                 <div class="form-group">
-                    <label for="login_id">ユーザーID</label>
+                    <label for="mail_address">ユーザーID（登録メールアドレス）</label>
                     <input 
-                        type="text" 
-                        id="login_id" 
-                        name="login_id"
+                        type="email" 
+                        id="mail_address" 
+                        name="mail_address"
+                        placeholder="example@mail.com"
                         required
                     >
 
-                    <label for="password">パスワード</label>
+                    <label for="password_hash">パスワード</label>
                     <input 
                         type="password" 
-                        id="password" 
-                        name="password" 
+                        id="password_hash" 
+                        name="password_hash" 
                         required
                     >
                 </div>
@@ -45,6 +45,10 @@
                 <button type="submit" class="login-button">
                     ログイン
                 </button>
+                
+                <div class="register-link" style="margin-top: 15px; text-align: center;">
+                    <a href="./register.html">新規アカウント登録はこちら</a>
+                </div>
 
                 <!-- <p class="forgot-password">パスワードを忘れたら</p> -->
             </form>

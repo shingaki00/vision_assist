@@ -152,6 +152,18 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "http",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.6.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "leak_tracker",
       "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-11.0.2",
       "packageUri": "lib/",
@@ -305,6 +317,6 @@
   "generator": "pub",
   "generatorVersion": "3.11.5",
   "flutterRoot": "file:///C:/src/flutter",
-  "flutterVersion": "3.41.8",
+  "flutterVersion": "3.41.9",
   "pubCache": "file:///C:/Users/user/AppData/Local/Pub/Cache"
 }
