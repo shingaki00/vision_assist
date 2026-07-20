@@ -161,8 +161,8 @@ class WalkingTrackerService {
           "timestamp": DateTime.now().toIso8601String(),
         }),
       );
-      debugPrint("walkingLogs status=${response.statusCode}");
-      debugPrint("walkingLogs body=${response.body}");
+      debugPrint("gpsData status=${response.statusCode}");
+      debugPrint("gpsData body=${response.body}");
     } catch (e) {
       // 通信失敗時はログのみ（次回のGPS更新で再送されるため致命的ではない）
       debugPrint("GPS送信失敗: $e");

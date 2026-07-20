@@ -8,7 +8,7 @@ import 'walking_tracker_service.dart';
 /// 画面側はこのクラスを1つ持つだけでよい。
 class MotionAutoTracker {
   static const int movementStartDistanceM = 5; // これ以上動いたら「歩き出した」とみなす
-  static const LocationAccuracy idleAccuracy = LocationAccuracy.medium; // 待機中は省電力
+  static const LocationAccuracy idleAccuracy = LocationAccuracy.high; // 待機中は省電力
 
   final WalkingTrackerService _tracker;
   final String patientId;
