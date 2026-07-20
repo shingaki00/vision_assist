@@ -26,16 +26,19 @@ class AuthService {
     // 他の人が設計したDBの初期ユーザーに合わせて変更してください
     debugPrint("mail = $mailAddress");
     debugPrint("pass = $password");
-    final response = await http.post(Uri.parse("http://localhost:3000/login"),
+    final response = await http.post(Uri.parse("http://10.0.2.2:3000/patient/login"),
         headers: {
           "Content-Type": "application/json",
         },
         body: jsonEncode({
           "mail_address": mailAddress,
-          "password": password,
-        }));
+          "password_hash": password,
+          }));
+        debugPrint("status = ${response.statusCode}");
+        debugPrint("body = ${response.body}");
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      _patientId = data["patient_id"].toString();
       return data["success"];
     }
 
