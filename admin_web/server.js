@@ -178,7 +178,7 @@ app.post("/login", async (req, res) => {
     // 本番では使わないためコメントアウト
     /*
         const foundAdmin = testData.admins.find(
-        a => a.login_id === login_id && a.password === password
+        a => a.mail_address === mail_address && a.password_hash === password_hash
         );
         if (foundAdmin) {
             return res.json({ success: true, uid: String(foundAdmin.id), name: foundAdmin.name });
