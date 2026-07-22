@@ -18,21 +18,57 @@
       表示されるIPアドレスを使う。PCとスマホは同じWiFiに接続しておくこと)
 """
 
+import os
 import time
-
+from urllib.parse import urlparse
+from urllib.request import Request, urlopen
+from io import BytesIO
+import requests
+from PIL import Image
 import cv2
+import numpy as np
 from ultralytics import YOLO
+import time
 
 from serial_link import UltrasonicLink
 
 # ===== 設定 =====
 SERIAL_PORT = "COM3"
-CAMERA_SOURCE = 0  # PC内蔵Webカメラ(IP Webcamを使う場合は "http://<スマホのIP>:8080/video" に変更)
+CAMERA_SOURCE = os.environ.get("CAMERA_SOURCE", "http://192.168.4.1/api/v1/stream")
 
 OBSTACLE_ALERT_DISTANCE_CM = 200.0   # 物(人以外)はこの距離より近ければ警告(約2m)
 PERSON_ALERT_DISTANCE_CM = 100.0     # 人はこの距離より近ければ警告(50〜100cmの範囲で調整可)
 CENTER_OFFSET_RATIO = 0.3            # 画面中央からのズレがこの割合以下なら「正面」とみなす
 BEEP_COOLDOWN_SEC = 1.0              # 連続で鳴らしすぎないための最短間隔
+
+
+def camera_source_candidates(source):
+    if isinstance(source, int):
+        return [source]
+
+    source_text = str(source).strip().rstrip("/")
+    if not source_text:
+        return [0]
+
+    if source_text.endswith((".mjpg", ".mjpeg", ".mp4")) or "://" not in source_text:
+        return [source_text]
+
+    parsed = urlparse(source_text)
+    origin = f"{parsed.scheme}://{parsed.hostname}"
+    if parsed.port:
+        origin = f"{origin}:{parsed.port}"
+
+    candidates = [
+        source_text,
+        f"{origin}:81/stream" if not parsed.port else f"{origin}/stream",
+        f"{origin}/api/v1/stream",
+        f"{origin}/stream",
+        f"{origin}/video",
+        f"{origin}/mjpeg/1",
+    ]
+
+    return list(dict.fromkeys(candidates))
+
 
 
 def find_largest_centered(results, frame_w, frame_h, center_offset_ratio, want_person):
@@ -75,27 +111,23 @@ def main():
     print("YOLOモデルを読み込み中...")
     model = YOLO("yolov8n.pt")
 
-    cap = cv2.VideoCapture(CAMERA_SOURCE)
-    if not cap.isOpened():
-        print(f"カメラに接続できませんでした: {CAMERA_SOURCE}")
-        link.close()
-        return
 
     last_beep_time = 0.0
 
     try:
         while True:
-            ret, frame = cap.read()
-            if not ret:
-                continue
-
+            time.sleep(0.03)
+            url = "http://192.168.4.1/api/v1/capture"
+            resp = requests.get(url)
+            img = Image.open(BytesIO(resp.content))
             distance_cm = link.get_distance_cm()
-            results = model(frame, verbose=False)[0]
-            h, w = frame.shape[:2]
+            result = model.predict(img, verbose=True)[0]
+            
+            h, w = result.orig_shape
 
-            person_label = find_largest_centered(results, w, h, CENTER_OFFSET_RATIO, want_person=True)
-            obstacle_label = find_largest_centered(results, w, h, CENTER_OFFSET_RATIO, want_person=False)
-
+            person_label = find_largest_centered(result, w, h, CENTER_OFFSET_RATIO, want_person=True)
+            obstacle_label = find_largest_centered(result, w, h, CENTER_OFFSET_RATIO, want_person=False)
+            
             person_close = (
                 person_label is not None
                 and distance_cm is not None
@@ -133,11 +165,11 @@ def main():
                     link.request_beep(kind="obstacle", duration_ms=120)
                     last_beep_time = now
 
-            cv2.imshow("obstacle detection", results.plot())
+            cv2.imshow("obstacle detection", result.plot())
             if cv2.waitKey(1) == ord("q"):
                 break
     finally:
-        cap.release()
+        # cap.release()
         cv2.destroyAllWindows()
         link.close()
 
