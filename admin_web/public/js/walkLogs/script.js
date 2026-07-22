@@ -46,9 +46,9 @@ async function loadTestData() {
 // ─── URLパラメータからpatient_idを取得して初期化 ──────
 function initPage() {
     const params = new URLSearchParams(window.location.search);
-    const patientId = parseInt(params.get("patient_id"));
+    const patientId = params.get("patient_id");
  
-    currentPatient = testData.patients.find(p => p.id === patientId);
+    currentPatient = testData.patients.find(p => String(p.id) === patientId);
     if (!currentPatient) {
         document.getElementById("patientName").textContent = "利用者が見つかりません";
         return;
@@ -67,7 +67,7 @@ function initPage() {
 function renderList(patientId) {
     const container = document.getElementById("logList");
     const logs = testData.walkingLogs
-        .filter(log => log.patient_id === patientId)
+        .filter(log => String(log.patient_id) === String(patientId))
         .sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
  
     if (logs.length === 0) {
@@ -82,7 +82,7 @@ function renderList(patientId) {
         const startT = log.start_time.slice(11, 16);
         const endT = isLive ? "―" : log.end_time.slice(11, 16);
         const pts = testData.gpsData
-            .filter(g => g.log_id === log.id)
+            .filter(g => String(g.log_id) === String(log.id))
             .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)
         );
  
@@ -108,7 +108,7 @@ function renderList(patientId) {
         row.addEventListener("click", () => {
             container.querySelectorAll(".user-row").forEach(r => r.classList.remove("active"));
             row.classList.add("active");
-            selectLog(parseInt(row.dataset.id));
+            selectLog(row.dataset.id);
         });
     });
 }
@@ -123,7 +123,7 @@ function selectLog(logId) {
  
     selectedLogId = logId;
  
-    const log = testData.walkingLogs.find(l => l.id === logId);
+    const log = testData.walkingLogs.find(l => String(l.id) === String(logId));
     const gpsPoints = testData.gpsData
         .filter(g => String(g.log_id) === String(logId))
         .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
@@ -140,7 +140,7 @@ function selectLog(logId) {
                     if (currentPatient) updateUserStats(currentPatient.id);
                 },
                 onFinished: (updatedLog) => {
-                    const idx = testData.walkingLogs.findIndex(l => l.id === logId);
+                    const idx = testData.walkingLogs.findIndex(l => String(l.id) === String(logId));
                     if (idx !== -1) testData.walkingLogs[idx] = updatedLog;
                     if (currentPatient) {
                         updateUserStats(currentPatient.id);
@@ -206,13 +206,13 @@ function ensureMap() {
 //   統計カードを更新 
 // ─────────────────────────────────────
 function updateUserStats(patientId) {
-    const logs = testData.walkingLogs.filter(l => l.patient_id === patientId);
+    const logs = testData.walkingLogs.filter(l => String(l.patient_id) === String(patientId));
  
     document.getElementById("statLogCount").textContent = `${logs.length}件`;
  
     let totalDistM = 0;
     logs.forEach(log => {
-    const pts = [...testData.gpsData.filter(g => g.log_id === log.id)]
+    const pts = [...testData.gpsData.filter(g => String(g.log_id) === String(log.id))]
         .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
         totalDistM += calcTotalDistance(pts);}
     );

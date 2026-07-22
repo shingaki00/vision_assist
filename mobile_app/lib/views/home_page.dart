@@ -8,7 +8,8 @@ import '../services/tts_service.dart';
 import '../widgets/device_status_card.dart';
 import '../widgets/radar_display.dart';
 import '../widgets/emergency_button.dart';
-import '../models/log_model.dart';
+import '../services/motion_tracker_service.dart';
+import '../services/auth_service.dart';
 import 'login_page.dart'; // ログアウト後に戻るためのインポート
 
 class HomePage extends StatefulWidget {
@@ -27,7 +28,10 @@ class _HomePageState extends State<HomePage> {
   bool _hasObstacle = false;
 
   final Battery _battery = Battery();
+
   final TtsService _ttsService = TtsService();
+
+  MotionAutoTracker? _autoTracker;
 
   StreamSubscription<ServiceStatus>? _gpsServiceStatusSubscription;
   Timer? _batteryTimer;
@@ -35,8 +39,18 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    final patientId = AuthService().getpatientId();
+
+    if (patientId == null) {
+      debugPrint("patientIdが取得できませんでした（未ログイン状態です）");
+      return; // ログインしていなければ追跡を開始しない
+    }
+
     _ttsService.init();
     _initDeviceStates();
+    _autoTracker = MotionAutoTracker(patientId: patientId);
+    _autoTracker!.start();
   }
 
   void _initDeviceStates() async {
@@ -85,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     } else if (type == "railway") {
       message = "${distance.toInt()}メートル先に線路があります。注意してください。";
     } else {
-      message = "前方、${distance}メートルに障害物があります。";
+      message = "前方、$distanceメートルに障害物があります。";
     }
 
     setState(() {
@@ -192,7 +206,9 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _batteryTimer?.cancel();
     _gpsServiceStatusSubscription?.cancel();
+
     _ttsService.stop();
+    _autoTracker?.dispose();
     super.dispose();
   }
 
