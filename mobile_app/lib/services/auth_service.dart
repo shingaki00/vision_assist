@@ -9,7 +9,8 @@ class AuthService {
 
   /// ログイン処理
   /// 現在はテスト用。将来的に http パッケージを使用してAPIと通信します。
-  Future<bool> login(String mailAddress, String password) async {
+  Future<bool> login(
+      String mailAddress, String password, String login_id) async {
     // --- 通信のシミュレーション ---
     await Future.delayed(const Duration(seconds: 1));
 
@@ -20,12 +21,14 @@ class AuthService {
     // }
     print("mail = $mailAddress");
     print("pass = $password");
+    print("login_id = $login_id");
     final response = await http.post(Uri.parse("http://localhost:3000/login"),
         headers: {
           "Content-Type": "application/json",
         },
         body: jsonEncode({
           "mail_address": mailAddress,
+          "login_id": login_id,
           "password": password,
         }));
     if (response.statusCode == 200) {
