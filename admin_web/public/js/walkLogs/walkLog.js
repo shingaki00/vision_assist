@@ -38,7 +38,7 @@ function buildUsers() {
 
     // この患者の歩行ログを全件取得
     const logs = (testData.walkingLogs ?? []).filter(
-      log => log.patient_id === patient.id
+      log => String(log.patient_id) === String(patient.id)
     );
     
     // 今日のログ件数
@@ -174,9 +174,9 @@ function renderList() {
 
 // ─── 歩行ログ詳細表示（クリック時） ──────────────────
 function showLogs(patientId) {
-  const patient = testData.patients.find(p => p.id === patientId);
+  const patient = testData.patients.find(p => String(p.id) === String(patientId));
   const logs = testData.walkingLogs.filter(
-    log => log.patient_id === patientId
+    log => String(log.patient_id) === String(patientId)
   );
 
   // walkLogs-user.htmlへパラメータ付きで遷移

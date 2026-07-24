@@ -105,29 +105,29 @@ app.get("/patients/search", async (req, res) => {
   res.json(results);
 });
 
-// ログイン処理
-app.post("/login", async (req, res) => {
+// 管理者ログイン
+app.post("/admin/login", async (req, res) => {
   console.log(req.body);
-  const { login_id, password } = req.body;
-  console.log(login_id);
-  console.log(password);
+  const { mail_address, password_hash } = req.body;
+  console.log(mail_address);
+  console.log(password_hash);
 
-  if (!login_id || !password) {
+  if (!mail_address || !password_hash) {
     return res
       .status(400)
-      .json({ message: "IDとパスワードを入力してください" });
+      .json({ message: "メールアドレスとパスワードを入力してください" });
   }
-  if (!isValidEmail(login_id)) {
+  if (!isValidEmail(mail_address)) {
     return res
       .status(400)
-      .json({ message: "ログインIDはメールアドレス形式で入力してください" });
+      .json({ message: "メールアドレスの形式が正しくありません" });
   }
 
   // ── testData.json（開発用フォールバック・平文比較） ──
   // ⚠️ 一時的に有効化中。Firebase接続後は再度コメントアウトすること
   if (!db) {
     const foundAdmin = testData.admins.find(
-      (a) => a.login_id === login_id && a.password === password,
+      (a) => a.mail_address === mail_address && a.password_hash === password_hash,
     );
     if (foundAdmin) {
       return res.json({
@@ -144,21 +144,21 @@ app.post("/login", async (req, res) => {
   try {
     const snapshot = await db
       .collection("admins")
-      .where("login_id", "==", login_id)
+      .where("mail_address", "==", mail_address)
       .limit(1)
       .get();
 
     if (snapshot.empty) {
       return res
         .status(401)
-        .json({ message: "ログインIDまたはパスワードが違います" });
+        .json({ message: "メールアドレスまたはパスワードが違います" });
     }
 
     // ── 本番仕様：ハッシュ比較 ──
     // Firestore側の admins ドキュメントは password_hash（bcrypt.hash 済みの文字列）
     const adminDoc = snapshot.docs[0];
     const adminData = adminDoc.data();
-    const isMatch = await bcrypt.compare(password, adminData.password_hash);
+    const isMatch = await bcrypt.compare(password_hash, adminData.password_hash);
     if (isMatch) {
       // uid は将来 Firebase Authentication に切り替えた際の user.uid と同じ役割
       // （今はFirestoreのドキュメントIDを代用）
@@ -178,10 +178,91 @@ app.post("/login", async (req, res) => {
     // 本番では使わないためコメントアウト
     /*
         const foundAdmin = testData.admins.find(
-        a => a.login_id === login_id && a.password === password
+        a => a.mail_address === mail_address && a.password_hash === password_hash
         );
         if (foundAdmin) {
             return res.json({ success: true, uid: String(foundAdmin.id), name: foundAdmin.name });
+        }
+        */
+    return res.status(500).json({ message: "サーバーエラーが発生しました" });
+  }
+});
+
+// 患者ログイン
+app.post("/patient/login", async (req, res) => {
+  console.log(req.body);
+  const { mail_address, password_hash } = req.body;
+  console.log(mail_address);
+  console.log(password_hash);
+
+  if (!mail_address || !password_hash) {
+    return res
+      .status(400)
+      .json({ message: "メールアドレスとパスワードを入力してください" });
+  }
+  if (!isValidEmail(mail_address)) {
+    return res
+      .status(400)
+      .json({ message: "メールアドレスの形式が正しくありません" });
+  }
+
+  // ── testData.json（開発用フォールバック・平文比較） ──
+  // ⚠️ 一時的に有効化中。Firebase接続後は再度コメントアウトすること
+  if (!db) {
+    const foundPatient = testData.patients.find(
+      (p) => p.mail_address === mail_address && p.password_hash === password_hash,
+    );
+    if (foundPatient) {
+      return res.json({
+        success: true,
+        patient_id: String(foundPatient.id),
+      });
+    }
+    return res
+      .status(401)
+      .json({ message: "ログインIDまたはパスワードが違います" });
+  }
+
+  try {
+    const snapshot = await db
+      .collection("patients")
+      .where("mail_address", "==", mail_address)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
+      return res
+        .status(401)
+        .json({ message: "メールアドレスまたはパスワードが違います" });
+    }
+
+    // ── 本番仕様：ハッシュ比較 ──
+    // Firestore側の patients ドキュメントは password_hash（bcrypt.hash 済みの文字列）
+    const patientDoc = snapshot.docs[0];
+    const patientData = patientDoc.data();
+    const isMatch = await bcrypt.compare(password_hash, patientData.password_hash);
+    if (isMatch) {
+      // patient_id は将来 Firebase Authentication に切り替えた際の user.uid と同じ役割
+      // （今はFirestoreのドキュメントIDを代用）
+      return res.json({
+        success: true,
+        patient_id: patientDoc.id,
+      });
+    }
+    return res
+      .status(401)
+      .json({ message: "ログインIDまたはパスワードが違います" });
+  } catch (e) {
+    console.error("Firestoreへのログイン照会に失敗しました。", e.message);
+
+    // ── testData.json（開発用フォールバック・平文比較） ──
+    // 本番では使わないためコメントアウト
+    /*
+        const foundPatient = testData.patients.find(
+        p => p.mail_address === mail_address && p.password_hash === password_hash
+        );
+        if (foundPatient) {
+            return res.json({ success: true, patient_id: String(foundPatient.id) });
         }
         */
     return res.status(500).json({ message: "サーバーエラーが発生しました" });
@@ -192,7 +273,8 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-// 歩行ログ
+
+// 歩行ログ読み取り
 app.get("/walkingLogs", async (req, res) => {
   if (USE_TEST_DATA) {
     testData = loadTestData();
@@ -202,6 +284,39 @@ app.get("/walkingLogs", async (req, res) => {
     testData.walkingLogs,
   );
   res.json(walkingLogs);
+});
+
+//歩行ログ作成
+app.post("/walkingLogs", (req, res) => {
+  const { patient_id, start_time, end_time } = req.body;
+
+  const id =
+    testData.walkingLogs.length > 0
+      ? Math.max(...testData.walkingLogs.map(l => l.id)) + 1
+      : 1;
+
+  const log = {
+    id,
+    patient_id,
+    start_time,
+    end_time,
+  };
+
+  testData.walkingLogs.push(log);
+  res.status(201).json(log);
+});
+
+// 歩行ログ更新（end_timeのみ）
+app.patch("/walkingLogs/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const log = testData.walkingLogs.find(l => l.id === id);
+
+  if (!log) {
+    return res.status(404).json({ message: "ログが見つかりません" });
+  }
+
+  log.end_time = req.body.end_time;
+  res.json(log);
 });
 
 // アクティビティ
@@ -216,10 +331,34 @@ app.get("/devices", async (req, res) => {
   res.json(devices);
 });
 
-// GPSデータ
+// GPSデータ読み取り
 app.get("/gpsData", async (req, res) => {
   const gpsData = await fetchCollection("gpsData", testData.gpsData);
   res.json(gpsData);
+});
+
+// GPSデータ追加
+app.post("/gpsData", (req, res) => {
+  console.log("GPS受信:", req.body);
+
+  const id =
+    testData.gpsData.length > 0
+      ? Math.max(...testData.gpsData.map(g => g.id)) + 1
+      : 1;
+
+  const gps = {
+    id,
+    ...req.body,
+  };
+  testData.gpsData.push(gps);
+
+  fs.writeFileSync(
+    path.join(__dirname, "testData.json"),
+    JSON.stringify(testData, null, 2),
+    "utf-8");
+    console.log("GPS保存後件数:", testData.gpsData.length);
+
+  res.status(201).json(gps);
 });
 
 app.listen(3000, () => {

@@ -6,32 +6,32 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".login-form").addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        const login_id = document.getElementById("login_id").value.trim();
-        const password = document.getElementById("password").value;
+        const mail_address = document.getElementById("mail_address").value.trim();
+        const password_hash = document.getElementById("password_hash").value;
 
-        if (!login_id || !password) {
-            showError("IDとパスワードを入力してください");
+        if (!mail_address || !password_hash) {
+            showError("メールアドレスとパスワードを入力してください");
             return;
         }
 
-        if (!isValidEmail(login_id)) {
+        if (!isValidEmail(mail_address)) {
             showError("メールアドレスの形式が正しくありません");
             return;
         }
 
         try {
-            const user = await authenticate(login_id, password); // ← ここだけ意識する
+            const user = await authenticate(mail_address, password_hash); // ← ここだけ意識する
             sessionStorage.setItem("uid", user.uid);
             window.location.href = "./home.html";
         } catch (error) {
-            showError("IDまたはパスワードが違います");
+            showError("メールアドレスまたはパスワードが違います");
             console.error(error);
         }
     });
 });
 
-function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+function isValidEmail(mail_address) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail_address);
 }
 
 // ────────────────────────────────────────────────
@@ -42,11 +42,11 @@ function isValidEmail(email) {
 //       signInWithEmailAndPassword(auth, login_id, password) を使う実装に
 //       差し替える。呼び出し側（上のsubmitハンドラ）は変更不要。
 // ────────────────────────────────────────────────
-async function authenticate(login_id, password) {
-    const res = await fetch("http://localhost:3000/login", {
+async function authenticate(mail_address, password_hash) {
+    const res = await fetch("http://localhost:3000/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ login_id, password }),
+        body: JSON.stringify({ mail_address, password_hash }),
     });
  
     if (!res.ok) {

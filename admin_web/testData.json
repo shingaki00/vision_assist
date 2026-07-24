@@ -3,8 +3,8 @@
         {
             "id": 1,
             "facility_id": 1,
-            "login_id": "admin@gmail.com",
-            "password": "1234",
+            "mail_address": "admin@gmail.com",
+            "password_hash": "1234",
             "name": "田中 太郎"
         }
     ],
@@ -15,20 +15,18 @@
             "facility_id": 1,
             "name": "user1",
             "age": "72",
-            "emergency_note": "山田 花子",
-            "login_id": "user1",
-            "password": "abcd",
-            "patient_id": 1
+            "emergency_note": "",
+            "mail_address": "user1@gmail.com",
+            "password_hash": "abcd"
         },
         {
             "id": 2,
             "facility_id": 1,
             "name": "user2",
             "age": "65",
-            "emergency_note": "佐藤 次郎",
-            "login_id": "user2",
-            "password": "efgh",
-            "patient_id": 2
+            "emergency_note": "",
+            "mail_address": "user2@gmail.com",
+            "password_hash": "efgh"
         }
     ],
 
@@ -37,22 +35,19 @@
             "id": 1,
             "patient_id": 1,
             "start_time": "2026-04-01T08:00:00",
-            "end_time": "2026-04-01T08:30:00",
-            "log_id": 1
+            "end_time": "2026-04-01T08:30:00"
         },
         {
             "id": 2,
             "patient_id": 2,
             "start_time": "2026-06-10T09:00:00",
-            "end_time": "2026-06-10T09:30:00",
-            "log_id": 2
+            "end_time": "2026-06-10T09:30:00"
         },
         {
             "id": 3,
             "patient_id": 1,
             "start_time": "2026-04-02T10:00:00",
-            "end_time": "2026-04-02T10:45:00",
-            "log_id": 3
+            "end_time": "2026-04-02T10:45:00"
         }
     ],
 
