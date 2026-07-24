@@ -290,6 +290,20 @@ app.get("/walkingLogs", async (req, res) => {
 app.post("/walkingLogs", (req, res) => {
   const { patient_id, start_time, end_time } = req.body;
 
+  // 同じ患者で end_time が null/未設定の過去ログがあれば自動で終了扱いにする
+  testData.walkingLogs.forEach(log => {
+    if (String(log.patient_id) === String(patient_id) && !log.end_time) {
+      // 直近のGPSデータのタイムスタンプを探す
+      const lastGps = testData.gpsData
+        ? testData.gpsData.filter(g => g.log_id === log.id).pop()
+        : null;
+
+      // 最後のGPS時刻、無ければ新しいログの開始時刻(start_time)を入れる
+      log.end_time = lastGps ? lastGps.timestamp : (start_time || new Date().toISOString());
+      console.log(`[Auto-Fix] 過去の未終了ログ (id: ${log.id}) の end_time を自動補完しました`);
+    }
+  });
+
   const id =
     testData.walkingLogs.length > 0
       ? Math.max(...testData.walkingLogs.map(l => l.id)) + 1
@@ -299,7 +313,7 @@ app.post("/walkingLogs", (req, res) => {
     id,
     patient_id,
     start_time,
-    end_time,
+    end_time: end_time || null,
   };
 
   testData.walkingLogs.push(log);
