@@ -1,141 +1,847 @@
 {
-    "admins": [
-        {
-            "id": 1,
-            "facility_id": 1,
-            "mail_address": "admin@gmail.com",
-            "password_hash": "1234",
-            "name": "田中 太郎"
-        }
-    ],
-
-    "patients": [
-        {
-            "id": 1,
-            "facility_id": 1,
-            "name": "user1",
-            "age": "72",
-            "emergency_note": "",
-            "mail_address": "user1@gmail.com",
-            "password_hash": "abcd"
-        },
-        {
-            "id": 2,
-            "facility_id": 1,
-            "name": "user2",
-            "age": "65",
-            "emergency_note": "",
-            "mail_address": "user2@gmail.com",
-            "password_hash": "efgh"
-        }
-    ],
-
-    "walkingLogs": [
-        {
-            "id": 1,
-            "patient_id": 1,
-            "start_time": "2026-04-01T08:00:00",
-            "end_time": "2026-04-01T08:30:00"
-        },
-        {
-            "id": 2,
-            "patient_id": 2,
-            "start_time": "2026-06-10T09:00:00",
-            "end_time": "2026-06-10T09:30:00"
-        },
-        {
-            "id": 3,
-            "patient_id": 1,
-            "start_time": "2026-04-02T10:00:00",
-            "end_time": "2026-04-02T10:45:00"
-        }
-    ],
-
-    "gpsData": [
-        { "id": 1,  "log_id": 1, "latitude": 35.6890, "longitude": 139.6910, "timestamp": "2026-04-01T08:00:00" },
-        { "id": 2,  "log_id": 1, "latitude": 35.6893, "longitude": 139.6914, "timestamp": "2026-04-01T08:05:00" },
-        { "id": 3,  "log_id": 1, "latitude": 35.6895, "longitude": 139.6917, "timestamp": "2026-04-01T08:15:00" },
-        { "id": 4,  "log_id": 1, "latitude": 35.6900, "longitude": 139.6922, "timestamp": "2026-04-01T08:18:00" },
-        { "id": 5,  "log_id": 1, "latitude": 35.6901, "longitude": 139.6923, "timestamp": "2026-04-01T08:20:00" },
-        { "id": 6,  "log_id": 1, "latitude": 35.6901, "longitude": 139.6924, "timestamp": "2026-04-01T08:23:00" },
-        { "id": 7,  "log_id": 1, "latitude": 35.6905, "longitude": 139.6930, "timestamp": "2026-04-01T08:27:00" },
-        { "id": 8,  "log_id": 1, "latitude": 35.6908, "longitude": 139.6935, "timestamp": "2026-04-01T08:30:00" },
-
-        { "id": 9,  "log_id": 2, "latitude": 35.6896, "longitude": 139.6918, "timestamp": "2026-06-10T09:00:00" },
-        { "id": 10, "log_id": 2, "latitude": 35.6899, "longitude": 139.6921, "timestamp": "2026-06-10T09:08:00" },
-        { "id": 11, "log_id": 2, "latitude": 35.6903, "longitude": 139.6926, "timestamp": "2026-06-10T09:16:00" },
-        { "id": 12, "log_id": 2, "latitude": 35.6907, "longitude": 139.6930, "timestamp": "2026-06-10T09:24:00" },
-        { "id": 13, "log_id": 2, "latitude": 35.6910, "longitude": 139.6934, "timestamp": "2026-06-10T09:30:00" },
-
-        { "id": 14, "log_id": 3, "latitude": 35.6897, "longitude": 139.6919, "timestamp": "2026-04-02T10:00:00" },
-        { "id": 15, "log_id": 3, "latitude": 35.6901, "longitude": 139.6923, "timestamp": "2026-04-02T10:10:00" },
-        { "id": 16, "log_id": 3, "latitude": 35.6905, "longitude": 139.6927, "timestamp": "2026-04-02T10:20:00" },
-        { "id": 17, "log_id": 3, "latitude": 35.6905, "longitude": 139.6928, "timestamp": "2026-04-02T10:25:00" },
-        { "id": 18, "log_id": 3, "latitude": 35.6906, "longitude": 139.6928, "timestamp": "2026-04-02T10:30:00" },
-        { "id": 19, "log_id": 3, "latitude": 35.6910, "longitude": 139.6933, "timestamp": "2026-04-02T10:40:00" },
-        { "id": 20, "log_id": 3, "latitude": 35.6913, "longitude": 139.6937, "timestamp": "2026-04-02T10:45:00" }
-    ],
-
-    "devices": [
-        {
-            "id": 1,
-            "patient_id": 1,
-            "device_mac_address": "00:11:22:33:44:55",
-            "battery_status": "40%",
-            "last_heartbeat": "2026-04-01T08:30:00"
-        },
-        {
-            "id": 2,
-            "patient_id": 2,
-            "device_mac_address": "00:11:22:33:44:56",
-            "battery_status": "30%",
-            "last_heartbeat": "2026-05-01T09:15:00"
-        }
-    ],
-
-
-    "activities": [
-        {
-            "id": 1,
-            "title": "新規ユーザー登録",
-            "description": "田中 太郎さんが登録されました",
-            "time": "2026-04-01T01:00:00",
-            "read": false
-        },
-        {
-            "id": 2,
-            "title": "歩行ログ記録",
-            "description": "山田 花子さんの歩行ログが追加されました",
-            "time": "2026-04-01T08:45:00",
-            "read": false
-        },
-        {
-            "id": 3,
-            "title": "通知送信",
-            "description": "緊急メンテナンス通知を送信しました",
-            "time": "2026-04-02T08:30:00",
-            "read": false
-        },
-        {
-            "id": 4,
-            "title": "設定変更",
-            "description": "システム設定が更新されました",
-            "time": "2026-04-01T09:00:00",
-            "read": false
-        },
-        {
-            "id": 5,
-            "title": "ログイン",
-            "description": "管理者がログインしました",
-            "time": "2026-06-01T10:02:00",
-            "read": false
-        },
-        {
-            "id": 6,
-            "title": "ユーザー削除",
-            "description": "不要ユーザーを削除しました",
-            "time": "2026-05-01T12:00:00",
-            "read": false
-        }
-    ]
+  "admins": [
+    {
+        "id": 1,
+        "facility_id": 1,
+        "login_id": "admin@gmail.com",
+        "password": "1234",
+        "name": "田中 太郎"
+    }
+  ],
+  "patients": [
+    {
+      "id": 1,
+      "facility_id": 1,
+      "name": "user1",
+      "age": "72",
+      "emergency_note": "",
+      "mail_address": "user1@gmail.com",
+      "password_hash": "abcd"
+    },
+    {
+      "id": 2,
+      "facility_id": 1,
+      "name": "user2",
+      "age": "65",
+      "emergency_note": "",
+      "mail_address": "user2@gmail.com",
+      "password_hash": "efgh"
+    }
+  ],
+  "walkingLogs": [
+    {
+      "id": 1,
+      "patient_id": 1,
+      "start_time": "2026-04-01T08:00:00",
+      "end_time": "2026-04-01T08:30:00"
+    },
+    {
+      "id": 2,
+      "patient_id": 2,
+      "start_time": "2026-06-10T09:00:00",
+      "end_time": "2026-06-10T09:30:00"
+    },
+    {
+      "id": 3,
+      "patient_id": 1,
+      "start_time": "2026-04-02T10:00:00",
+      "end_time": "2026-04-02T10:45:00"
+    },
+    {
+      "id": 4,
+      "patient_id": "1",
+      "start_time": "2026-07-28T02:59:07.097641",
+      "end_time": "2026-07-28T03:02:08.186123"
+    },
+    {
+      "id": 5,
+      "patient_id": "1",
+      "start_time": "2026-07-28T03:04:41.994027",
+      "end_time": "2026-07-28T03:13:13.662533"
+    },
+    {
+      "id": 6,
+      "patient_id": "1",
+      "start_time": "2026-07-28T03:15:20.465626",
+      "end_time": "2026-07-28T03:18:21.331489"
+    },
+    {
+      "id": 7,
+      "patient_id": "1",
+      "start_time": "2026-07-28T03:20:56.713368",
+      "end_time": "2026-07-28T03:23:57.485477"
+    },
+    {
+      "id": 8,
+      "patient_id": "1",
+      "start_time": "2026-07-28T03:26:38.100113",
+      "end_time": "2026-07-28T03:30:09.502380"
+    },
+    {
+      "id": 9,
+      "patient_id": "1",
+      "start_time": "2026-07-28T03:32:15.495538",
+      "end_time": "2026-07-28T03:35:16.535722"
+    },
+    {
+      "id": 10,
+      "patient_id": "1",
+      "start_time": "2026-07-28T03:37:49.996144",
+      "end_time": "2026-07-28T03:49:00.025607"
+    },
+    {
+      "id": 11,
+      "patient_id": "1",
+      "start_time": "2026-07-28T04:30:35.325991",
+      "end_time": null
+    }
+  ],
+  "gpsData": [
+    {
+      "id": 1,
+      "log_id": 1,
+      "latitude": 35.689,
+      "longitude": 139.691,
+      "timestamp": "2026-04-01T08:00:00"
+    },
+    {
+      "id": 2,
+      "log_id": 1,
+      "latitude": 35.6893,
+      "longitude": 139.6914,
+      "timestamp": "2026-04-01T08:05:00"
+    },
+    {
+      "id": 3,
+      "log_id": 1,
+      "latitude": 35.6895,
+      "longitude": 139.6917,
+      "timestamp": "2026-04-01T08:15:00"
+    },
+    {
+      "id": 4,
+      "log_id": 1,
+      "latitude": 35.69,
+      "longitude": 139.6922,
+      "timestamp": "2026-04-01T08:18:00"
+    },
+    {
+      "id": 5,
+      "log_id": 1,
+      "latitude": 35.6901,
+      "longitude": 139.6923,
+      "timestamp": "2026-04-01T08:20:00"
+    },
+    {
+      "id": 6,
+      "log_id": 1,
+      "latitude": 35.6901,
+      "longitude": 139.6924,
+      "timestamp": "2026-04-01T08:23:00"
+    },
+    {
+      "id": 7,
+      "log_id": 1,
+      "latitude": 35.6905,
+      "longitude": 139.693,
+      "timestamp": "2026-04-01T08:27:00"
+    },
+    {
+      "id": 8,
+      "log_id": 1,
+      "latitude": 35.6908,
+      "longitude": 139.6935,
+      "timestamp": "2026-04-01T08:30:00"
+    },
+    {
+      "id": 9,
+      "log_id": 2,
+      "latitude": 35.6896,
+      "longitude": 139.6918,
+      "timestamp": "2026-06-10T09:00:00"
+    },
+    {
+      "id": 10,
+      "log_id": 2,
+      "latitude": 35.6899,
+      "longitude": 139.6921,
+      "timestamp": "2026-06-10T09:08:00"
+    },
+    {
+      "id": 11,
+      "log_id": 2,
+      "latitude": 35.6903,
+      "longitude": 139.6926,
+      "timestamp": "2026-06-10T09:16:00"
+    },
+    {
+      "id": 12,
+      "log_id": 2,
+      "latitude": 35.6907,
+      "longitude": 139.693,
+      "timestamp": "2026-06-10T09:24:00"
+    },
+    {
+      "id": 13,
+      "log_id": 2,
+      "latitude": 35.691,
+      "longitude": 139.6934,
+      "timestamp": "2026-06-10T09:30:00"
+    },
+    {
+      "id": 14,
+      "log_id": 3,
+      "latitude": 35.6897,
+      "longitude": 139.6919,
+      "timestamp": "2026-04-02T10:00:00"
+    },
+    {
+      "id": 15,
+      "log_id": 3,
+      "latitude": 35.6901,
+      "longitude": 139.6923,
+      "timestamp": "2026-04-02T10:10:00"
+    },
+    {
+      "id": 16,
+      "log_id": 3,
+      "latitude": 35.6905,
+      "longitude": 139.6927,
+      "timestamp": "2026-04-02T10:20:00"
+    },
+    {
+      "id": 17,
+      "log_id": 3,
+      "latitude": 35.6905,
+      "longitude": 139.6928,
+      "timestamp": "2026-04-02T10:25:00"
+    },
+    {
+      "id": 18,
+      "log_id": 3,
+      "latitude": 35.6906,
+      "longitude": 139.6928,
+      "timestamp": "2026-04-02T10:30:00"
+    },
+    {
+      "id": 19,
+      "log_id": 3,
+      "latitude": 35.691,
+      "longitude": 139.6933,
+      "timestamp": "2026-04-02T10:40:00"
+    },
+    {
+      "id": 20,
+      "log_id": 3,
+      "latitude": 35.6913,
+      "longitude": 139.6937,
+      "timestamp": "2026-04-02T10:45:00"
+    },
+    {
+      "id": 21,
+      "log_id": 4,
+      "latitude": 35.17927,
+      "longitude": 136.88147,
+      "timestamp": "2026-07-28T02:59:08.256263"
+    },
+    {
+      "id": 22,
+      "log_id": 4,
+      "latitude": 35.1792759,
+      "longitude": 136.8814644,
+      "timestamp": "2026-07-28T03:02:08.186123"
+    },
+    {
+      "id": 23,
+      "log_id": 5,
+      "latitude": 35.1714934,
+      "longitude": 136.8784818,
+      "timestamp": "2026-07-28T03:04:46.726335"
+    },
+    {
+      "id": 24,
+      "log_id": 5,
+      "latitude": 35.1715943,
+      "longitude": 136.878527,
+      "timestamp": "2026-07-28T03:04:51.778542"
+    },
+    {
+      "id": 25,
+      "log_id": 5,
+      "latitude": 35.1717424,
+      "longitude": 136.8785913,
+      "timestamp": "2026-07-28T03:04:56.813751"
+    },
+    {
+      "id": 26,
+      "log_id": 5,
+      "latitude": 35.1718735,
+      "longitude": 136.8786531,
+      "timestamp": "2026-07-28T03:05:02.189949"
+    },
+    {
+      "id": 27,
+      "log_id": 5,
+      "latitude": 35.1713734,
+      "longitude": 136.8784249,
+      "timestamp": "2026-07-28T03:04:42.698655"
+    },
+    {
+      "id": 28,
+      "log_id": 5,
+      "latitude": 35.1719934,
+      "longitude": 136.87872,
+      "timestamp": "2026-07-28T03:05:07.251213"
+    },
+    {
+      "id": 29,
+      "log_id": 5,
+      "latitude": 35.1721151,
+      "longitude": 136.8787867,
+      "timestamp": "2026-07-28T03:05:12.345069"
+    },
+    {
+      "id": 30,
+      "log_id": 5,
+      "latitude": 35.1722306,
+      "longitude": 136.8788486,
+      "timestamp": "2026-07-28T03:05:17.766333"
+    },
+    {
+      "id": 31,
+      "log_id": 5,
+      "latitude": 35.1723518,
+      "longitude": 136.8789099,
+      "timestamp": "2026-07-28T03:05:22.836901"
+    },
+    {
+      "id": 32,
+      "log_id": 5,
+      "latitude": 35.172475,
+      "longitude": 136.8789699,
+      "timestamp": "2026-07-28T03:05:27.789866"
+    },
+    {
+      "id": 33,
+      "log_id": 5,
+      "latitude": 35.1725983,
+      "longitude": 136.8790299,
+      "timestamp": "2026-07-28T03:05:32.777635"
+    },
+    {
+      "id": 34,
+      "log_id": 5,
+      "latitude": 35.1727088,
+      "longitude": 136.8790819,
+      "timestamp": "2026-07-28T03:05:37.783701"
+    },
+    {
+      "id": 35,
+      "log_id": 5,
+      "latitude": 35.1729535,
+      "longitude": 136.8791966,
+      "timestamp": "2026-07-28T03:05:47.791503"
+    },
+    {
+      "id": 36,
+      "log_id": 5,
+      "latitude": 35.1730751,
+      "longitude": 136.8792567,
+      "timestamp": "2026-07-28T03:05:52.783951"
+    },
+    {
+      "id": 37,
+      "log_id": 5,
+      "latitude": 35.1731983,
+      "longitude": 136.8793183,
+      "timestamp": "2026-07-28T03:05:57.813692"
+    },
+    {
+      "id": 38,
+      "log_id": 5,
+      "latitude": 35.1733284,
+      "longitude": 136.8794189,
+      "timestamp": "2026-07-28T03:06:03.236846"
+    },
+    {
+      "id": 39,
+      "log_id": 5,
+      "latitude": 35.1734586,
+      "longitude": 136.8794844,
+      "timestamp": "2026-07-28T03:06:08.668997"
+    },
+    {
+      "id": 40,
+      "log_id": 5,
+      "latitude": 35.1728333,
+      "longitude": 136.8791383,
+      "timestamp": "2026-07-28T03:05:42.773075"
+    },
+    {
+      "id": 41,
+      "log_id": 5,
+      "latitude": 35.1736757,
+      "longitude": 136.879415,
+      "timestamp": "2026-07-28T03:06:13.834049"
+    },
+    {
+      "id": 42,
+      "log_id": 5,
+      "latitude": 35.1739001,
+      "longitude": 136.8793417,
+      "timestamp": "2026-07-28T03:06:18.823811"
+    },
+    {
+      "id": 43,
+      "log_id": 5,
+      "latitude": 35.1741202,
+      "longitude": 136.8792683,
+      "timestamp": "2026-07-28T03:06:23.814467"
+    },
+    {
+      "id": 44,
+      "log_id": 5,
+      "latitude": 35.174345,
+      "longitude": 136.87919,
+      "timestamp": "2026-07-28T03:06:28.843074"
+    },
+    {
+      "id": 45,
+      "log_id": 5,
+      "latitude": 35.1745508,
+      "longitude": 136.8791198,
+      "timestamp": "2026-07-28T03:06:33.820856"
+    },
+    {
+      "id": 46,
+      "log_id": 5,
+      "latitude": 35.1747829,
+      "longitude": 136.8790202,
+      "timestamp": "2026-07-28T03:06:38.826696"
+    },
+    {
+      "id": 47,
+      "log_id": 5,
+      "latitude": 35.1749921,
+      "longitude": 136.8789266,
+      "timestamp": "2026-07-28T03:06:43.830506"
+    },
+    {
+      "id": 48,
+      "log_id": 5,
+      "latitude": 35.1752083,
+      "longitude": 136.8788167,
+      "timestamp": "2026-07-28T03:06:48.841113"
+    },
+    {
+      "id": 49,
+      "log_id": 5,
+      "latitude": 35.1754233,
+      "longitude": 136.8787066,
+      "timestamp": "2026-07-28T03:06:53.833985"
+    },
+    {
+      "id": 50,
+      "log_id": 5,
+      "latitude": 35.1756531,
+      "longitude": 136.8785868,
+      "timestamp": "2026-07-28T03:06:59.038925"
+    },
+    {
+      "id": 51,
+      "log_id": 5,
+      "latitude": 35.1758641,
+      "longitude": 136.8784757,
+      "timestamp": "2026-07-28T03:07:04.841476"
+    },
+    {
+      "id": 52,
+      "log_id": 5,
+      "latitude": 35.1760921,
+      "longitude": 136.8783605,
+      "timestamp": "2026-07-28T03:07:09.845367"
+    },
+    {
+      "id": 53,
+      "log_id": 5,
+      "latitude": 35.1762764,
+      "longitude": 136.878263,
+      "timestamp": "2026-07-28T03:07:14.855025"
+    },
+    {
+      "id": 54,
+      "log_id": 5,
+      "latitude": 35.1764884,
+      "longitude": 136.8781483,
+      "timestamp": "2026-07-28T03:07:19.889795"
+    },
+    {
+      "id": 55,
+      "log_id": 5,
+      "latitude": 35.1767097,
+      "longitude": 136.8780349,
+      "timestamp": "2026-07-28T03:07:24.853695"
+    },
+    {
+      "id": 56,
+      "log_id": 5,
+      "latitude": 35.1771433,
+      "longitude": 136.8778217,
+      "timestamp": "2026-07-28T03:07:34.864743"
+    },
+    {
+      "id": 57,
+      "log_id": 5,
+      "latitude": 35.1773696,
+      "longitude": 136.8777101,
+      "timestamp": "2026-07-28T03:07:39.878766"
+    },
+    {
+      "id": 58,
+      "log_id": 5,
+      "latitude": 35.1773696,
+      "longitude": 136.8777101,
+      "timestamp": "2026-07-28T03:07:42.680721"
+    },
+    {
+      "id": 59,
+      "log_id": 5,
+      "latitude": 35.1775609,
+      "longitude": 136.8776097,
+      "timestamp": "2026-07-28T03:07:44.882601"
+    },
+    {
+      "id": 60,
+      "log_id": 5,
+      "latitude": 35.1775842,
+      "longitude": 136.877798,
+      "timestamp": "2026-07-28T03:07:49.879378"
+    },
+    {
+      "id": 61,
+      "log_id": 5,
+      "latitude": 35.1775736,
+      "longitude": 136.878043,
+      "timestamp": "2026-07-28T03:07:54.884742"
+    },
+    {
+      "id": 62,
+      "log_id": 5,
+      "latitude": 35.1775668,
+      "longitude": 136.8782577,
+      "timestamp": "2026-07-28T03:07:59.889663"
+    },
+    {
+      "id": 63,
+      "log_id": 5,
+      "latitude": 35.1769267,
+      "longitude": 136.8779283,
+      "timestamp": "2026-07-28T03:07:29.864954"
+    },
+    {
+      "id": 64,
+      "log_id": 5,
+      "latitude": 35.1775582,
+      "longitude": 136.8784741,
+      "timestamp": "2026-07-28T03:08:04.886272"
+    },
+    {
+      "id": 65,
+      "log_id": 5,
+      "latitude": 35.1775583,
+      "longitude": 136.8787229,
+      "timestamp": "2026-07-28T03:08:09.913855"
+    },
+    {
+      "id": 66,
+      "log_id": 5,
+      "latitude": 35.1775583,
+      "longitude": 136.878968,
+      "timestamp": "2026-07-28T03:08:14.917465"
+    },
+    {
+      "id": 67,
+      "log_id": 5,
+      "latitude": 35.1775583,
+      "longitude": 136.879205,
+      "timestamp": "2026-07-28T03:08:19.918714"
+    },
+    {
+      "id": 68,
+      "log_id": 5,
+      "latitude": 35.1775583,
+      "longitude": 136.8794369,
+      "timestamp": "2026-07-28T03:08:24.918310"
+    },
+    {
+      "id": 69,
+      "log_id": 5,
+      "latitude": 35.1775616,
+      "longitude": 136.8796781,
+      "timestamp": "2026-07-28T03:08:29.931103"
+    },
+    {
+      "id": 70,
+      "log_id": 5,
+      "latitude": 35.1775651,
+      "longitude": 136.8798702,
+      "timestamp": "2026-07-28T03:08:34.975533"
+    },
+    {
+      "id": 71,
+      "log_id": 5,
+      "latitude": 35.1775684,
+      "longitude": 136.8801051,
+      "timestamp": "2026-07-28T03:08:39.960010"
+    },
+    {
+      "id": 72,
+      "log_id": 5,
+      "latitude": 35.1775799,
+      "longitude": 136.8803884,
+      "timestamp": "2026-07-28T03:08:45.119498"
+    },
+    {
+      "id": 73,
+      "log_id": 5,
+      "latitude": 35.1775918,
+      "longitude": 136.8806252,
+      "timestamp": "2026-07-28T03:08:50.210379"
+    },
+    {
+      "id": 74,
+      "log_id": 5,
+      "latitude": 35.1776067,
+      "longitude": 136.8808548,
+      "timestamp": "2026-07-28T03:08:55.971910"
+    },
+    {
+      "id": 75,
+      "log_id": 5,
+      "latitude": 35.1776266,
+      "longitude": 136.8811354,
+      "timestamp": "2026-07-28T03:09:01.202751"
+    },
+    {
+      "id": 76,
+      "log_id": 5,
+      "latitude": 35.1776727,
+      "longitude": 136.8813344,
+      "timestamp": "2026-07-28T03:09:06.963984"
+    },
+    {
+      "id": 77,
+      "log_id": 5,
+      "latitude": 35.177845,
+      "longitude": 136.8813919,
+      "timestamp": "2026-07-28T03:09:11.975519"
+    },
+    {
+      "id": 78,
+      "log_id": 5,
+      "latitude": 35.1780167,
+      "longitude": 136.8814533,
+      "timestamp": "2026-07-28T03:09:16.974994"
+    },
+    {
+      "id": 79,
+      "log_id": 5,
+      "latitude": 35.1781883,
+      "longitude": 136.8815133,
+      "timestamp": "2026-07-28T03:09:21.984239"
+    },
+    {
+      "id": 80,
+      "log_id": 5,
+      "latitude": 35.1783944,
+      "longitude": 136.8815914,
+      "timestamp": "2026-07-28T03:09:27.499355"
+    },
+    {
+      "id": 81,
+      "log_id": 5,
+      "latitude": 35.1785768,
+      "longitude": 136.8816568,
+      "timestamp": "2026-07-28T03:09:32.902818"
+    },
+    {
+      "id": 82,
+      "log_id": 5,
+      "latitude": 35.1787485,
+      "longitude": 136.8817166,
+      "timestamp": "2026-07-28T03:09:37.985621"
+    },
+    {
+      "id": 83,
+      "log_id": 5,
+      "latitude": 35.1788881,
+      "longitude": 136.8817653,
+      "timestamp": "2026-07-28T03:09:43.010474"
+    },
+    {
+      "id": 84,
+      "log_id": 5,
+      "latitude": 35.1790889,
+      "longitude": 136.8818298,
+      "timestamp": "2026-07-28T03:09:48.063574"
+    },
+    {
+      "id": 85,
+      "log_id": 5,
+      "latitude": 35.1791242,
+      "longitude": 136.8816918,
+      "timestamp": "2026-07-28T03:09:53.170965"
+    },
+    {
+      "id": 86,
+      "log_id": 5,
+      "latitude": 35.1791891,
+      "longitude": 136.8815492,
+      "timestamp": "2026-07-28T03:09:58.994633"
+    },
+    {
+      "id": 87,
+      "log_id": 5,
+      "latitude": 35.17927,
+      "longitude": 136.8814689,
+      "timestamp": "2026-07-28T03:10:04.013004"
+    },
+    {
+      "id": 88,
+      "log_id": 5,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:10:42.678691"
+    },
+    {
+      "id": 89,
+      "log_id": 6,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:15:21.335188"
+    },
+    {
+      "id": 90,
+      "log_id": 6,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:18:21.331489"
+    },
+    {
+      "id": 91,
+      "log_id": 7,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:20:57.495627"
+    },
+    {
+      "id": 92,
+      "log_id": 7,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:23:57.485477"
+    },
+    {
+      "id": 93,
+      "log_id": 8,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:26:38.877027"
+    },
+    {
+      "id": 94,
+      "log_id": 8,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:29:38.979621"
+    },
+    {
+      "id": 95,
+      "log_id": 9,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:32:16.554317"
+    },
+    {
+      "id": 96,
+      "log_id": 9,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:35:16.535722"
+    },
+    {
+      "id": 97,
+      "log_id": 10,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T03:37:50.782117"
+    },
+    {
+      "id": 98,
+      "log_id": 11,
+      "latitude": 35.1792736,
+      "longitude": 136.8814664,
+      "timestamp": "2026-07-28T04:30:36.222228"
+    }
+  ],
+  "devices": [
+    {
+      "id": 1,
+      "patient_id": 1,
+      "device_mac_address": "00:11:22:33:44:55",
+      "battery_status": "40%",
+      "last_heartbeat": "2026-04-01T08:30:00"
+    },
+    {
+      "id": 2,
+      "patient_id": 2,
+      "device_mac_address": "00:11:22:33:44:56",
+      "battery_status": "30%",
+      "last_heartbeat": "2026-05-01T09:15:00"
+    }
+  ],
+  "activities": [
+    {
+      "id": 1,
+      "title": "新規ユーザー登録",
+      "description": "田中 太郎さんが登録されました",
+      "time": "2026-04-01T01:00:00",
+      "read": false
+    },
+    {
+      "id": 2,
+      "title": "歩行ログ記録",
+      "description": "山田 花子さんの歩行ログが追加されました",
+      "time": "2026-04-01T08:45:00",
+      "read": false
+    },
+    {
+      "id": 3,
+      "title": "通知送信",
+      "description": "緊急メンテナンス通知を送信しました",
+      "time": "2026-04-02T08:30:00",
+      "read": false
+    },
+    {
+      "id": 4,
+      "title": "設定変更",
+      "description": "システム設定が更新されました",
+      "time": "2026-04-01T09:00:00",
+      "read": false
+    },
+    {
+      "id": 5,
+      "title": "ログイン",
+      "description": "管理者がログインしました",
+      "time": "2026-06-01T10:02:00",
+      "read": false
+    },
+    {
+      "id": 6,
+      "title": "ユーザー削除",
+      "description": "不要ユーザーを削除しました",
+      "time": "2026-05-01T12:00:00",
+      "read": false
+    }
+  ]
 }
