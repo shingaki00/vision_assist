@@ -17,6 +17,12 @@ function loadTestData() {
 let testData = loadTestData();
 const USE_TEST_DATA = true; // 本番に切り替えるときは false にする
 
+function writeDebugLog(message, payload) {
+  const timestamp = new Date().toISOString();
+  const content = `[${timestamp}] ${message}${payload ? ` ${JSON.stringify(payload)}` : ""}\n`;
+  fs.appendFileSync(path.join(__dirname, "auth-debug.log"), content, "utf8");
+}
+
 app.use(express.static(path.join(__dirname, "..")));
 app.use(cors());
 app.use(express.json());
@@ -107,12 +113,20 @@ app.get("/patients/search", async (req, res) => {
 
 // 管理者ログイン
 app.post("/admin/login", async (req, res) => {
-  console.log(req.body);
-  const { mail_address, password_hash } = req.body;
-  console.log(mail_address);
-  console.log(password_hash);
+  const rawBody = req.body || {};
+  const mail_address = rawBody.mail_address ?? rawBody.login_id ?? "";
+  const password_hash = rawBody.password_hash ?? rawBody.password ?? "";
+
+  console.log("[admin/login] request body", JSON.stringify(rawBody));
+  console.log("[admin/login] extracted credentials", {
+    mail_address,
+    password_provided: Boolean(password_hash),
+    password_length: password_hash ? String(password_hash).length : 0,
+  });
+  writeDebugLog("[admin/login] request", { rawBody, mail_address, password_provided: Boolean(password_hash) });
 
   if (!mail_address || !password_hash) {
+    console.warn("[admin/login] missing credentials in request");
     return res
       .status(400)
       .json({ message: "メールアドレスとパスワードを入力してください" });
@@ -126,9 +140,12 @@ app.post("/admin/login", async (req, res) => {
   // ── testData.json（開発用フォールバック・平文比較） ──
   // ⚠️ 一時的に有効化中。Firebase接続後は再度コメントアウトすること
   if (!db) {
-    const foundAdmin = testData.admins.find(
-      (a) => a.mail_address === mail_address && a.password_hash === password_hash,
-    );
+    const foundAdmin = testData.admins.find((a) => {
+      const storedMail = a.mail_address ?? a.login_id ?? "";
+      const storedPassword = a.password_hash ?? a.password ?? "";
+      return storedMail === mail_address && storedPassword === password_hash;
+    });
+    console.log("[admin/login] fallback match", foundAdmin ? "matched" : "no match");
     if (foundAdmin) {
       return res.json({
         success: true,
@@ -190,12 +207,20 @@ app.post("/admin/login", async (req, res) => {
 
 // 患者ログイン
 app.post("/patient/login", async (req, res) => {
-  console.log(req.body);
-  const { mail_address, password_hash } = req.body;
-  console.log(mail_address);
-  console.log(password_hash);
+  const rawBody = req.body || {};
+  const mail_address = rawBody.mail_address ?? rawBody.login_id ?? "";
+  const password_hash = rawBody.password_hash ?? rawBody.password ?? "";
+
+  console.log("[patient/login] request body", JSON.stringify(rawBody));
+  console.log("[patient/login] extracted credentials", {
+    mail_address,
+    password_provided: Boolean(password_hash),
+    password_length: password_hash ? String(password_hash).length : 0,
+  });
+  writeDebugLog("[patient/login] request", { rawBody, mail_address, password_provided: Boolean(password_hash) });
 
   if (!mail_address || !password_hash) {
+    console.warn("[patient/login] missing credentials in request");
     return res
       .status(400)
       .json({ message: "メールアドレスとパスワードを入力してください" });
@@ -209,9 +234,11 @@ app.post("/patient/login", async (req, res) => {
   // ── testData.json（開発用フォールバック・平文比較） ──
   // ⚠️ 一時的に有効化中。Firebase接続後は再度コメントアウトすること
   if (!db) {
-    const foundPatient = testData.patients.find(
-      (p) => p.mail_address === mail_address && p.password_hash === password_hash,
-    );
+    const foundPatient = testData.patients.find((p) => {
+      const storedMail = p.mail_address ?? p.login_id ?? "";
+      const storedPassword = p.password_hash ?? p.password ?? "";
+      return storedMail === mail_address && storedPassword === password_hash;
+    });
     if (foundPatient) {
       return res.json({
         success: true,

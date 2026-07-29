@@ -93,12 +93,28 @@ class WalkingTrackerService {
         if (checkRes.statusCode == 200) {
           final List gpsList = jsonDecode(checkRes.body);
 
+          // 総移動距離の計算（または最大移動距離のチェック）
+          double totalDistance = 0;
+          if (gpsList.length >= 2) {
+            for (int i = 0; i < gpsList.length - 1; i++) {
+              final p1 = gpsList[i];
+              final p2 = gpsList[i + 1];
+              totalDistance += Geolocator.distanceBetween(
+                (p1['latitude'] as num).toDouble(),
+                (p1['longitude'] as num).toDouble(),
+                (p2['latitude'] as num).toDouble(),
+                (p2['longitude'] as num).toDouble(),
+              );
+            }
+          }
+          debugPrint("ログ (log_id: $targetLogId) の総移動距離: ${totalDistance.toStringAsFixed(1)}m (件数: ${gpsList.length})");
+
           // GPSが2件以下、または移動がない場合は空ログとみなして削除
-          if (gpsList.length <= 2) {
-            debugPrint("移動がなかったため空ログ (log_id: $targetLogId) を削除します");
+          if (gpsList.length <= 3) {
+            debugPrint("移動が短すぎるためログ (log_id: $targetLogId) を削除します");
             await http.delete(Uri.parse("$apiBase/walkingLogs/$targetLogId"));
             onStopped?.call(reason);
-            return; // 終了処理を行わず終了
+            return;
           }
         }
       }
@@ -109,13 +125,8 @@ class WalkingTrackerService {
           "end_time": DateTime.now().toIso8601String(),
         }),
       );
-
       debugPrint("walkingLogs PATCH status=${patchRes.statusCode}");
-      debugPrint("walkingLogs PATCH response=${patchRes.body}");
 
-      if (patchRes.statusCode != 200 && patchRes.statusCode != 204) {
-        debugPrint("【エラー】end_timeの更新に失敗しました: status=${patchRes.statusCode}");
-      }
     } catch (e) {
       debugPrint("walkingLogsの終了更新に失敗しました: $e");
     }
