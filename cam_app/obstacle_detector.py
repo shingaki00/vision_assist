@@ -71,7 +71,7 @@ def camera_source_candidates(source):
 
 
 
-def find_largest_centered(results, frame_w, frame_h, center_offset_ratio, want_person):
+def find_largest_centered(results, frame_w, frame_h, center_offset_ratio, want_person, person_classes=["person"]):
     """画面中央付近にある物体のうち、指定した種類(人 or 人以外)で一番大きいものを探す。
     見つからなければNoneを返す。
     """
@@ -81,7 +81,7 @@ def find_largest_centered(results, frame_w, frame_h, center_offset_ratio, want_p
 
     for box in results.boxes:
         class_name = results.names[int(box.cls[0])]
-        is_person = (class_name == "person")
+        is_person = (class_name in person_classes)
         if is_person != want_person:
             continue
 
@@ -97,9 +97,11 @@ def find_largest_centered(results, frame_w, frame_h, center_offset_ratio, want_p
             best_name = class_name
 
     return best_name
-
-
 def main():
+    # カスタムデータセットにおける「人」を表すクラス名のリスト
+    # data.yaml の names に定義した名前に合わせて変更してください
+    person_classes = ["person"]
+
     print("超音波センサーに接続中...")
     try:
         link = UltrasonicLink(SERIAL_PORT)
@@ -109,8 +111,7 @@ def main():
         return
 
     print("YOLOモデルを読み込み中...")
-    model = YOLO("yolov8n.pt")
-
+    model = YOLO("best.pt")
 
     last_beep_time = 0.0
 
@@ -118,15 +119,23 @@ def main():
         while True:
             time.sleep(0.03)
             url = "http://192.168.4.1/api/v1/capture"
-            resp = requests.get(url)
-            img = Image.open(BytesIO(resp.content))
+            
+            try:
+                # タイムアウトを設定し、カメラとの通信障害による無限ブロックを防止
+                resp = requests.get(url, timeout=3.0)
+                resp.raise_for_status()
+                img = Image.open(BytesIO(resp.content))
+            except Exception as e:
+                print(f"カメラからの画像取得に失敗しました: {e}")
+                continue
+
             distance_cm = link.get_distance_cm()
-            result = model.predict(img, verbose=True)[0]
+            result = model.predict(img, verbose=False)[0]
             
             h, w = result.orig_shape
 
-            person_label = find_largest_centered(result, w, h, CENTER_OFFSET_RATIO, want_person=True)
-            obstacle_label = find_largest_centered(result, w, h, CENTER_OFFSET_RATIO, want_person=False)
+            person_label = find_largest_centered(result, w, h, CENTER_OFFSET_RATIO, want_person=True, person_classes=person_classes)
+            obstacle_label = find_largest_centered(result, w, h, CENTER_OFFSET_RATIO, want_person=False, person_classes=person_classes)
             
             person_close = (
                 person_label is not None
@@ -169,10 +178,8 @@ def main():
             if cv2.waitKey(1) == ord("q"):
                 break
     finally:
-        # cap.release()
         cv2.destroyAllWindows()
         link.close()
-
 
 if __name__ == "__main__":
     main()
