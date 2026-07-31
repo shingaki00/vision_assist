@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mobile_app/views/log_page.dart';
 
 // 各コンポーネント・サービスのインポート
 import '../services/tts_service.dart';
@@ -65,20 +66,18 @@ class _HomePageState extends State<HomePage> {
       _syncStatus = isGpsEnabled ? "同期中" : "停止中";
     });
 
-    if (!kIsWeb) {
-      _gpsServiceStatusSubscription =
-          Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
-        setState(() {
-          if (status == ServiceStatus.enabled) {
-            _gpsStatus = "ON";
-            _syncStatus = "同期中";
-          } else {
-            _gpsStatus = "OFF";
-            _syncStatus = "停止中";
-          }
-        });
+    _gpsServiceStatusSubscription =
+        Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+      setState(() {
+        if (status == ServiceStatus.enabled) {
+          _gpsStatus = "ON";
+          _syncStatus = "同期中";
+        } else {
+          _gpsStatus = "OFF";
+          _syncStatus = "停止中";
+        }
       });
-    }
+    });
   }
 
   void _updateBatteryLevel() async {
@@ -250,6 +249,22 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 24),
             _buildSectionTitle('緊急アクション'),
             const EmergencyButton(),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.map),
+                label: const Text("移動ログ"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LogPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

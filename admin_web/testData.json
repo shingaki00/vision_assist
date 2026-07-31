@@ -1,11 +1,11 @@
 {
   "admins": [
     {
-        "id": 1,
-        "facility_id": 1,
-        "login_id": "admin@gmail.com",
-        "password": "1234",
-        "name": "田中 太郎"
+      "id": 1,
+      "facility_id": 1,
+      "login_id": "admin@gmail.com",
+      "password": "1234",
+      "name": "田中 太郎"
     }
   ],
   "patients": [

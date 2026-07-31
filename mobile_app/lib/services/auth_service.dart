@@ -18,15 +18,17 @@ class AuthService {
 
   /// ログイン処理
   /// 現在はテスト用。将来的に http パッケージを使用してAPIと通信します。
-  Future<bool> login(String mailAddress, String password) async {
+  Future<bool> login(
+      String mailAddress, String password, String login_id) async {
     // --- 通信のシミュレーション ---
     await Future.delayed(const Duration(seconds: 1));
-    
+
     debugPrint("mail = $mailAddress");
     debugPrint("pass = $password");
 
     // Webなら localhost、Androidエミュレータなら 10.0.2.2 を自動で選択
-    final String baseUrl = kIsWeb ? "http://localhost:3000" : "http://10.0.2.2:3000";
+    final String baseUrl =
+        kIsWeb ? "http://localhost:3000" : "http://10.0.2.2:3000";
 
     // ログイン処理内
     final response = await http.post(
@@ -62,6 +64,6 @@ class AuthService {
     */
     return false;
   }
-  
+
   String? getpatientId() => _patientId;
 }

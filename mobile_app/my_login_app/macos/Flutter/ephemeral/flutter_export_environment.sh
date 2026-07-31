@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=C:\src\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\user\Desktop\zemina-ru\vissionassist\vision_assist\mobile_app"
+export "FLUTTER_APPLICATION_PATH=C:\Users\user\Desktop\卒業研究\vissionassist\vision_assist\mobile_app\my_login_app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
