@@ -66,18 +66,24 @@ class _HomePageState extends State<HomePage> {
       _syncStatus = isGpsEnabled ? "同期中" : "停止中";
     });
 
-    _gpsServiceStatusSubscription =
-        Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
-      setState(() {
-        if (status == ServiceStatus.enabled) {
-          _gpsStatus = "ON";
-          _syncStatus = "同期中";
-        } else {
-          _gpsStatus = "OFF";
-          _syncStatus = "停止中";
-        }
+    if (!kIsWeb) {
+      _gpsServiceStatusSubscription =
+          Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+        setState(() {
+          if (status == ServiceStatus.enabled) {
+            _gpsStatus = "ON";
+            _syncStatus = "同期中";
+          } else {
+            _gpsStatus = "OFF";
+            _syncStatus = "停止中";
+          }
+        });
       });
-    });
+    } else {
+      // Web環境用の初期値設定（必要に応じて）
+      _gpsStatus = "ON";
+      _syncStatus = "同期中";
+    }
   }
 
   void _updateBatteryLevel() async {
