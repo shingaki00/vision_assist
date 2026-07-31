@@ -7,11 +7,10 @@ import 'package:flutter/foundation.dart';
 
 class WalkingTrackerService {
   // ★実機テスト時は "localhost" ではなくPCのローカルIPを指定
-  // 何も指定しなければAndroidエミュレータ用がデフォルト
-  static const String apiBase = String.fromEnvironment(
-    'API_BASE',
-    defaultValue: 'http://10.0.2.2:3000',
-  );
+  // Web実行時は localhost、Androidエミュレータ時は 10.0.2.2 を自動切替
+  final String apiBase = kIsWeb 
+    ? "http://localhost:3000" 
+    : "http://10.0.2.2:3000";
 
   int? _currentLogId;
   StreamSubscription<Position>? _positionSub;
@@ -34,6 +33,13 @@ class WalkingTrackerService {
   /// 歩行開始：walkingLogsを作成してlog_idを取得し、位置情報の送信を開始する
   Future<int> startTracking(String patientId) async {
     debugPrint("startTracking開始");
+
+    // 未終了のログが残っている場合は先に安全に停止
+    if (_currentLogId != null) {
+      debugPrint("未終了のログ(logId: $_currentLogId)が存在するため、強制終了を実行します");
+      await stopTracking(reason: "auto_cleanup");
+    }
+
     await _positionSub?.cancel();
     _positionSub = null;
     _heartbeatTimer?.cancel();
@@ -56,7 +62,7 @@ class WalkingTrackerService {
       }),
     );
 
-    if (res.statusCode != 201) {
+    if (res.statusCode != 201 && res.statusCode != 200) {
       throw Exception("歩行ログの作成に失敗しました: ${res.statusCode}");
     }
 
@@ -89,7 +95,7 @@ class WalkingTrackerService {
     try {
       if (reason == "auto") {
         final checkRes =
-          await http.get(Uri.parse("$apiBase/gpsData?log_id=$targetLogId"));
+            await http.get(Uri.parse("$apiBase/gpsData?log_id=$targetLogId"));
         if (checkRes.statusCode == 200) {
           final List gpsList = jsonDecode(checkRes.body);
 
@@ -107,10 +113,11 @@ class WalkingTrackerService {
               );
             }
           }
-          debugPrint("ログ (log_id: $targetLogId) の総移動距離: ${totalDistance.toStringAsFixed(1)}m (件数: ${gpsList.length})");
+          debugPrint(
+              "ログ (log_id: $targetLogId) の総移動距離: ${totalDistance.toStringAsFixed(1)}m (件数: ${gpsList.length})");
 
           // GPSが2件以下、または移動がない場合は空ログとみなして削除
-          if (gpsList.length <= 3) {
+          if (gpsList.length <= 3 || totalDistance < 10) {
             debugPrint("移動が短すぎるためログ (log_id: $targetLogId) を削除します");
             await http.delete(Uri.parse("$apiBase/walkingLogs/$targetLogId"));
             onStopped?.call(reason);
@@ -126,7 +133,6 @@ class WalkingTrackerService {
         }),
       );
       debugPrint("walkingLogs PATCH status=${patchRes.statusCode}");
-
     } catch (e) {
       debugPrint("walkingLogsの終了更新に失敗しました: $e");
     }
@@ -162,14 +168,16 @@ class WalkingTrackerService {
       distanceFilter: 5,
     );
 
-    _positionSub =
-        Geolocator.getPositionStream(locationSettings: settings).listen((pos) {
-      debugPrint("位置更新");
-      debugPrint("${pos.latitude}, ${pos.longitude}");
+    if (!kIsWeb) {
+      _positionSub = Geolocator.getPositionStream(locationSettings: settings)
+          .listen((pos) {
+        debugPrint("位置更新");
+        debugPrint("${pos.latitude}, ${pos.longitude}");
 
-      _lastMovementTime = DateTime.now();
-      _sendPoint(logId, pos);
-    });
+        _lastMovementTime = DateTime.now();
+        _sendPoint(logId, pos);
+      });
+    }
 
     // 時間ベースのハートビート（停止時のフォールバック）
     _heartbeatTimer = Timer.periodic(const Duration(seconds: 180), (_) async {
@@ -196,7 +204,7 @@ class WalkingTrackerService {
   }
 
   Future<void> _sendPoint(int logId, Position pos) async {
-  // ---【追加】あまりにも遠くへジャンプ（ワープ）したら別ログとして分割 ---
+    // --- あまりにも遠くへジャンプ（ワープ）したら別ログとして分割 ---
     if (_lastPosition != null) {
       double distanceInMeters = Geolocator.distanceBetween(
         _lastPosition!.latitude,
