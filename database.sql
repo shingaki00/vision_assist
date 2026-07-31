@@ -1,52 +1,64 @@
-CRREATE DATABASE vission_asset;
+CREATE DATABASE vision_assist;
 
-USE vission_asset;
+USE vission_assist;
 
 CREATE TABLE Facilities (
-    id BINARY(16) PRIMARY KEY,
-    name VARCHAR(10) NOT NULL,
-    address VARCHAR(255),
-    representative_name VARCHAR(100),
+    id VARCHAR(36) PRIMARY KEY,
+    `name` VARCHAR(20) NOT NULL,
+    `address` VARCHAR(30),
+    representative_name VARCHAR(20),
     emergency_contact VARCHAR(11)
 );
 
 CREATE TABLE Admins (
-    id BINARY(16) PRIMARY KEY,
-    facility_id BINARY(16) FOREIGN KEY,
-    login_id VARCHAR(100),
+    id VARCHAR(36) PRIMARY KEY,
+    facility_id VARCHAR(36),
+    mail_address VARCHAR(30)NOT NULL,
+    login_id VARCHAR(20)NOT NULL,
     password_hash VARCHAR(255),
-    name VARCHAR(10)
+    `name` VARCHAR(10) NOT NULL,
+    FOREIGN KEY (facility_id)
+    REFERENCES Facilities(id)
 );
 
 CREATE TABLE Patients (
-    id BINARY(16) PRIMARY KEY,
-    facility_id BINARY(16) FOREIGN KEY,
-    name VARCHAR(10) NOT NULL,
-    age CHAR(3),
+    id VARCHAR(36) PRIMARY KEY,
+    facility_id VARCHAR(36),
+    `name` VARCHAR(10) NOT NULL,
+    age INT,
     emergency_note VARCHAR(100),
-    login_id VARCHAR(100),
-    password_hash VARCHAR(255)
+    mail_address VARCHAR(30)NOT NULL,
+    login_id VARCHAR(20)NOT NULL,
+    password_hash VARCHAR(255),
+    FOREIGN KEY (facility_id)
+    REFERENCES Facilities(id)
 );
 
 CREATE TABLE Devices (
-    id BINARY(16) PRIMARY KEY,
-    patient_id BINARY(16) FOREIGN KEY,
-    device_mac_address VARCHAR(255),
+    id VARCHAR(36) PRIMARY KEY,
+    patient_id VARCHAR(36),
+    device_mac_address VARCHAR(17),
     battery_status CHAR(3),
-    last_hertbeat DATETIME
+    last_heartbeat DATETIME,
+    FOREIGN KEY (patient_id)
+    REFERENCES Patients(id)
 );
 
 CREATE TABLE WalkingLogs (
-    id BINARY(16) PRIMARY KEY,
-    patient_id BINARY(16) FOREIGN KEY,
+    id VARCHAR(36) PRIMARY KEY,
+    patient_id VARCHAR(36),
     start_time DATETIME,
-    end_time DATETIME
+    end_time DATETIME,
+    FOREIGN KEY (patient_id)
+    REFERENCES Patients(id)
 );
 
-CREATE TABLE CPSData (
-    id BIGINT(100) PRIMARY KEY,
-    log_id BINARY(16) FOREIGN KEY,
+CREATE TABLE GPSData (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    log_id VARCHAR(36),
     latitude DECIMAL(7,4),
     longitude DECIMAL(7,4),
-    timestamp DATETIME
+    `timestamp` DATETIME,
+    FOREIGN KEY (log_id)
+    REFERENCES WalkingLogs(id)
 );

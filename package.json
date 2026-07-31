@@ -1,0 +1,29 @@
+{
+  "name": "vision_assist",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node admin_web/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shingaki00/vision_assist.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shingaki00/vision_assist/issues"
+  },
+  "homepage": "https://github.com/shingaki00/vision_assist#readme",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "firebase-admin": "^14.1.0",
+    "mysql2": "^3.22.3",
+    "uuid": "^14.0.0"
+  }
+}
