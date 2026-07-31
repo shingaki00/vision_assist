@@ -12,7 +12,7 @@ import '../widgets/emergency_button.dart';
 import '../services/motion_tracker_service.dart';
 import '../services/auth_service.dart';
 import 'login_page.dart'; // ログアウト後に戻るためのインポート
-import 'log_page.dart';
+import 'package:flutter/foundation.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage> {
   bool _hasObstacle = false;
 
   final Battery _battery = Battery();
-
   final TtsService _ttsService = TtsService();
 
   MotionAutoTracker? _autoTracker;
@@ -208,7 +207,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _batteryTimer?.cancel();
     _gpsServiceStatusSubscription?.cancel();
-
     _ttsService.stop();
     _autoTracker?.dispose();
     super.dispose();
