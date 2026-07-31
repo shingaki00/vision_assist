@@ -18,24 +18,32 @@ class AuthService {
 
   /// ログイン処理
   /// 現在はテスト用。将来的に http パッケージを使用してAPIと通信します。
-  Future<bool> login(String mailAddress, String password) async {
+  Future<bool> login(
+      String mailAddress, String password, String login_id) async {
     // --- 通信のシミュレーション ---
     await Future.delayed(const Duration(seconds: 1));
 
-    // --- テスト用ログイン条件 ---
-    // 他の人が設計したDBの初期ユーザーに合わせて変更してください
     debugPrint("mail = $mailAddress");
     debugPrint("pass = $password");
-    final response = await http.post(Uri.parse("http://10.0.2.2:3000/patient/login"),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({
-          "mail_address": mailAddress,
-          "password_hash": password,
-          }));
-        debugPrint("status = ${response.statusCode}");
-        debugPrint("body = ${response.body}");
+
+    // Webなら localhost、Androidエミュレータなら 10.0.2.2 を自動で選択
+    final String baseUrl =
+        kIsWeb ? "http://localhost:3000" : "http://10.0.2.2:3000";
+
+    // ログイン処理内
+    final response = await http.post(
+      Uri.parse("$baseUrl/patient/login"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "mail_address": mailAddress,
+        "password_hash": password,
+      }),
+    );
+    debugPrint("status = ${response.statusCode}");
+    debugPrint("body = ${response.body}");
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       _patientId = data["patient_id"].toString();
@@ -56,6 +64,6 @@ class AuthService {
     */
     return false;
   }
-  
+
   String? getpatientId() => _patientId;
 }

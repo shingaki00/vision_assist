@@ -6,8 +6,9 @@
 
 /*背景色*/
 body{
-    background-color: #f6f5f5;
+    background: linear-gradient(180deg, #f5f7fb 0%, #eef2f7 100%);
     margin: 0;
+    color: #1f2937;
 }
 
 
@@ -129,4 +130,11 @@ header {
     color: red;
     font-size: 14px;
     margin-top: 10px;
+}
+
+/* ------- ページ共通の横幅・余白（ダッシュボード基準） --------*/
+.page-container {
+    max-width: 1080px;
+    margin: 20px auto 0;
+    padding: 0 20px 40px;
 }
