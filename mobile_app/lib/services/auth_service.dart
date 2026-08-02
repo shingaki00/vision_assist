@@ -19,7 +19,7 @@ class AuthService {
   /// ログイン処理
   /// 現在はテスト用。将来的に http パッケージを使用してAPIと通信します。
   Future<bool> login(
-      String mailAddress, String password, String login_id) async {
+      String mailAddress, String password, String loginId) async {
     // --- 通信のシミュレーション ---
     await Future.delayed(const Duration(seconds: 1));
 

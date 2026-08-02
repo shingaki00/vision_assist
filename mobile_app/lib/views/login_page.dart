@@ -28,8 +28,8 @@ class _LoginPageState extends State<LoginPage> {
 
     final id = _idController.text.trim();
     final password = _passwordController.text.trim();
-    final login_id = _loginIdController.text.trim();
-    bool success = await _authService.login(id, password, login_id);
+    final loginId = _loginIdController.text.trim();
+    bool success = await _authService.login(id, password, loginId);
 
     setState(() => _isLoading = false);
 

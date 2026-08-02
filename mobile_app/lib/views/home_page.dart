@@ -12,7 +12,6 @@ import '../widgets/emergency_button.dart';
 import '../services/motion_tracker_service.dart';
 import '../services/auth_service.dart';
 import 'login_page.dart'; // ログアウト後に戻るためのインポート
-import 'package:flutter/foundation.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
