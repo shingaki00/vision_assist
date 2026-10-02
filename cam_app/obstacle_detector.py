@@ -26,6 +26,7 @@ OBSTACLE_ALERT_DISTANCE_CM = 200.0   # 物(人以外)はこの距離より近け
 PERSON_ALERT_DISTANCE_CM = 100.0     # 人はこの距離より近ければ警告(50〜100cmの範囲で調整可)
 CENTER_OFFSET_RATIO = 0.3            # 画面中央からのズレがこの割合以下なら「正面」とみなす
 BEEP_COOLDOWN_SEC = 1.0              # 連続で鳴らしすぎないための最短間隔
+INFERENCE_INTERVAL_SEC = 0.01         # 推論頻度を最大約10回/秒に制限
 
 
 def find_largest_centered(results, frame_w, frame_h, center_offset_ratio, want_person, person_classes=["person"]):
@@ -71,8 +72,8 @@ def main():
 
     print("[2/3] YOLOモデル(best.pt)を読み込み中...")
     try:
-        model = YOLO("best.pt")
-        model = YOLO("yolov8n.pt")
+        model_path = os.path.join(os.path.dirname(__file__), "best.pt")
+        model = YOLO(model_path)
         print("  └─ [成功] YOLOモデルの読み込みが完了しました！")
     except Exception as e:
         print(f"  └─ [エラー] モデルの読み込みに失敗しました: {e}")
@@ -88,7 +89,7 @@ def main():
 
     try:
         while True:
-            time.sleep(0.03)
+            time.sleep(INFERENCE_INTERVAL_SEC)
 
             # 1. カメラ画像取得
             try:
@@ -107,7 +108,7 @@ def main():
             distance_cm = link.get_distance_cm()
 
             # 3. YOLOでの物体認識
-            result = model.predict(img, verbose=False)[0]
+            result = model.predict(img, verbose=False, imgsz=416)[0]
             h, w = result.orig_shape
 
             # 4. 正面にある対象の識別
