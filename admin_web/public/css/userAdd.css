@@ -1,182 +1,172 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", "Hiragino Sans", sans-serif;
+/* ─── カラー変数（他のページと完全共通） ────────────── */
+:root {
+  --primary:          #804893;
+  --highlight:        #EEB1FF;
+  --secondary:        #69596C;
+  --border:           #3A2C3D;
+  --tertiary:         #82524F;
+  --error:            #BA1A1A;
+ 
+  /* テキスト */
+  --text-main:        #1C1B1E;
+  --text-sub:         #49454F;
+  --text-muted:       #79747E;
+  --text-on-primary:  #FFFFFF;
+ 
+  /* 背景 */
+  --bg-card:          #FFFFFF;
+  --bg-active:        #f3d1ff;
+  --bg-hover:         rgb(230, 230, 230);
+ 
+  /* その他 */
+  --radius-card:      14px;
+  --radius-badge:     99px;
+  --shadow-card:      0 1px 4px rgba(60, 30, 70, 0.08);
 }
 
-body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f4f7fb 0%, #e9eef5 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
+/* ─── ページ全体コンテナ（他の画面と統一しつつ中央寄せ） ────────────── */
+.page-container {
+  max-width: 1080px;
+  margin: 20px auto 0;
+  padding: 0 20px 40px;
 }
 
-/* メインカード */
-.register-container {
-  width: 700px;
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 48px;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08),
-              0 8px 16px rgba(15, 23, 42, 0.05);
-  border: 1px solid #e5e7eb;
+/* 戻るリンク */
+.back-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: none;
+  margin-bottom: 12px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.back-link:hover {
+  opacity: 0.7;
 }
 
-/* タイトル */
-.register-title {
-  text-align: center;
-  font-size: 36px;
+/* ページタイトル */
+h1 {
+  font-size: 22px;
   font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 40px;
-  letter-spacing: 1px;
+  color: var(--primary);
+  margin-bottom: 4px;
 }
 
-/* 入力グループ */
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* ─── リストカード仕様（幅を広げ、中央に配置） ─── */
+.list-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  border: 1.6px solid rgb(197, 197, 197);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  max-width: 1080px; /* 他のページと幅を合わせる */
+  margin: 0 auto;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 2px solid rgb(197, 197, 197);
+  background: var(--bg-card);
+}
+
+.list-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* ─── フォームパーツ ────────────────────── */
 .form-group {
-  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ラベル */
 .form-label {
   display: block;
-  margin-bottom: 10px;
-  font-size: 15px;
+  margin-bottom: 6px;
+  font-size: 13px;
   font-weight: 600;
-  color: #475569;
+  color: var(--text-sub);
 }
 
-/* 入力欄 */
 .form-input {
   width: 100%;
-  padding: 16px 18px;
-  border-radius: 14px;
-  border: 1.5px solid #cbd5e1;
-  background: #f8fafc;
-  font-size: 16px;
-  color: #1e293b;
-  transition: border-color 0.25s ease,
-              box-shadow 0.25s ease,
-              background 0.25s ease;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1.5px solid rgb(197, 197, 197);
+  background: var(--bg-card);
+  font-size: 14px;
+  color: var(--text-main);
+  margin-bottom: 16px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 80px;
 }
 
 .form-input::placeholder {
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
-/* フォーカス時 */
 .form-input:focus {
-  outline: none;
-  background: #ffffff;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.12);
+  border-color: var(--primary);
 }
 
 /* 登録ボタン */
 .register-button {
   width: 100%;
-  margin-top: 12px;
-  padding: 16px;
+  margin-top: 8px;
+  padding: 10px 18px;
   border: none;
-  border-radius: 14px;
-  background: #8c50a0; /* 1色指定のため単色に変更（グラデーションにする場合は2色指定してください） */
-  color: #ffffff;
-  font-size: 17px;
+  border-radius: var(--radius-badge);
+  background: var(--primary);
+  color: var(--text-on-primary);
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease,
-              box-shadow 0.2s ease,
-              opacity 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.1s ease;
 }
 
-/* ホバー */
 .register-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(140, 80, 160, 0.25); /* ボタンの色(#8c50a0)に合わせてシャドウの色味も調整 */
+  opacity: 0.85;
 }
 
-/* クリック */
 .register-button:active {
-  transform: scale(0.99);
+  transform: scale(0.98);
 }
 
-/* 下部テキスト */
-.register-footer {
-  margin-top: 28px;
-  text-align: center;
-  font-size: 14px;
-  color: #64748b;
+/* ─── ダークモード対応 ────────────────────── */
+body.dark-mode {
+  background: #121014;
+  color: #E6E1E6;
 }
 
-/* ログインリンク */
-.register-footer a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: 600;
-  margin-left: 4px;
-  transition: color 0.2s ease;
+body.dark-mode .list-card,
+body.dark-mode .list-header,
+body.dark-mode .form-input {
+  background: #1C1B1E;
+  border-color: #49454F;
+  color: #E6E1E6;
 }
 
-.register-footer a:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
+body.dark-mode h1,
+body.dark-mode .list-title {
+  color: #E6E1E6;
 }
 
-/* レスポンシブ調整 */
-@media (min-width: 1200px) {
-  .register-container {
-    max-width: 700px; /* PC画面で不自然に狭くならないよう基本幅に合わせました */
-    padding: 56px;
-  }
-
-  .register-title {
-    font-size: 40px;
-  }
-
-  .form-input {
-    font-size: 17px;
-  }
-}
-
-/* タブレット */
-@media (max-width: 768px) {
-  .register-container {
-    padding: 40px 32px;
-  }
-
-  .register-title {
-    font-size: 32px;
-  }
-}
-
-/* スマホ */
-@media (max-width: 480px) {
-  body {
-    padding: 16px;
-  }
-
-  .register-container {
-    padding: 30px 22px;
-    border-radius: 20px;
-    width: 100%; /* 固定幅350pxよりも、画面幅に合わせて100%にする方がはみ出し防止になります */
-    max-width: 350px;
-  }
-
-  .register-title {
-    font-size: 28px;
-    margin-bottom: 30px;
-  }
-
-  .form-input {
-    padding: 14px 15px;
-    font-size: 15px;
-  }
-
-  .register-button {
-    padding: 15px;
-    font-size: 16px;
-  }
+body.dark-mode .form-label {
+  color: #938F99;
 }
