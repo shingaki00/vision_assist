@@ -19,7 +19,7 @@ class RadarDisplay extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: hasObstacle ? Colors.red[900] : Colors.black87,
+        color: hasObstacle ? Colors.red[700] : Colors.grey[100],
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
@@ -29,14 +29,14 @@ class RadarDisplay extends StatelessWidget {
           children: [
             Icon(
               Icons.radar, 
-              color: hasObstacle ? Colors.white : Colors.greenAccent, 
+              color: hasObstacle ? Colors.white : Colors.green[700], 
               size: 40
             ),
             const SizedBox(height: 8),
             Text(
               radarMessage, 
               style: TextStyle(
-                color: hasObstacle ? Colors.white : Colors.greenAccent,
+                color: hasObstacle ? Colors.white : Colors.green[800],
                 fontWeight: FontWeight.bold
               ),
               textAlign: TextAlign.center,
@@ -46,14 +46,17 @@ class RadarDisplay extends StatelessWidget {
               const SizedBox(height: 8),
               TextButton.icon(
                 onPressed: onClear,
-                icon: const Icon(Icons.refresh, color: Colors.white70, size: 16),
-                label: const Text('安全状態に戻す', style: TextStyle(color: Colors.white70)),
+                icon: const Icon(Icons.refresh, color: Colors.white, size: 16),
+                label: const Text('安全状態に戻す', style: TextStyle(color: Colors.white)),
               ),
             ],
 
-            const Divider(color: Colors.white24, height: 24),
+            Divider(color: hasObstacle ? Colors.white24 : Colors.black12, height: 24),
             
-            const Text('音声テスト用ボタン (他班へのデモにも使えます)', style: TextStyle(color: Colors.white60, fontSize: 11)),
+            Text(
+              '音声テスト用ボタン (他班へのデモにも使えます)',
+              style: TextStyle(color: hasObstacle ? Colors.white70 : Colors.black54, fontSize: 11),
+            ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -73,7 +76,7 @@ class RadarDisplay extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white24, 
+        backgroundColor: Colors.green[700], 
         foregroundColor: Colors.white
       ),
       child: Text(label, style: const TextStyle(fontSize: 12)),

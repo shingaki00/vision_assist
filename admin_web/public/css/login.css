@@ -1,0 +1,92 @@
+/* 全体背景 */
+body {
+    margin: 0;
+    height: 100vh;
+    background-color: #ffffff;
+
+    display: flex;
+    justify-content: center; /* 横中央 */
+    align-items: center;     /* 縦中央 */
+    font-family: sans-serif;
+}
+
+.login-container {
+    width: 400px;
+}
+
+/* 白パネル */
+.login-form{
+    padding: 40px;
+    border-radius: 10px;
+}
+
+/* タイトル */
+.login-container h1 {
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 入力欄 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-top: 10px;
+    font-size: 14px;
+    color: black;
+}
+
+.form-group input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #69596C;
+    border-radius: 5px;
+}
+
+/* ボタン */
+.login-button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+
+    border: none;
+    border-radius: 5px;
+    background-color: #B67AC9;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* ボタンホバー */
+.login-button:hover {
+    background-color: #804893;
+}
+
+/* 下のテキスト */
+.login-form > label {
+    display: block;
+    margin-top: 15px;
+    font-size: 12px;
+    text-align: center;
+    color: black;
+}
+
+.forgot-password {
+    font-size: 13px;
+    color: #804893;
+    text-align: center;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* ------ エラー文 -------*/
+#error-message {
+    text-align: center;
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}

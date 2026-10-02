@@ -29,7 +29,6 @@ class DeviceStatusCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildStatusItem(
               Icons.battery_charging_full, 
@@ -56,13 +55,24 @@ class DeviceStatusCard extends StatelessWidget {
   }
 
   Widget _buildStatusItem(IconData icon, String value, String label, Color color) {
-    return Column(
-      children: [
-        Icon(icon, color: color, size: 30),
-        const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-      ],
+    return Expanded(
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 30),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+        ],
+      ),
     );
   }
 }

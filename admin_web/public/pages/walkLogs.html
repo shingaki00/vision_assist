@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歩行ログ確認｜VisionAssist</title>
+
+    <!-- 読み込み -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/walkLog.css">
+    <script type="module" src="../js/style.js" defer></script>
+    <script type="module" src="../js/walkLogs/walkLog.js" defer></script>
+
+    <script>
+        (function () {
+            if (sessionStorage.getItem('uid') === null) {
+                window.location.replace('../index.html');
+            }
+        })();
+    </script>
+</head>
+
+<body>
+    <div id="header-inner"></div>
+
+    <main class="walklog-page">
+
+        <a href="../home.html" class="back-link">← ダッシュボードに戻る</a>
+        <h2>歩行ログの確認</h2>
+        <p class="page-subtitle">利用者の歩行記録を確認できます</p>
+
+        <!-- 検索 -->
+        <div class="filter-tabs">
+            <input class="search-box" type="text" placeholder="ユーザー名で検索..." id="searchInput">
+        </div>
+
+        <!-- フィルタータブ -->
+        <div class="filter-tabs">
+            <button class="filter-btn active" data-filter="all">すべて</button>
+            <button class="filter-btn" data-filter="active">アクティブ</button>
+            <button class="filter-btn" data-filter="inactive">非アクティブ</button>
+        </div>
+
+        <!-- ユーザー一覧 -->
+        <div class="list-card">
+            <div class="list-header">
+                <div class="list-header-left">
+                    <span class="list-title">ユーザー 一覧</span>
+                    <span class="list-count" id="listCount"></span>
+                </div>
+            </div>
+            <div id="userList"></div>
+        </div>
+
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+/* ─── カラー変数（歩行ログと完全に同一のシステムカラー） ──────── */
+:root {
+  --primary:          #804893;
+  --highlight:        #EEB1FF;
+  --secondary:        #69596C;
+  --border:           #3A2C3D;
+  --tertiary:         #82524F;
+  --error:            #BA1A1A;
+ 
+  /* テキスト */
+  --text-main:        #1C1B1E;
+  --text-sub:         #49454F;
+  --text-muted:       #79747E;
+  --text-on-primary:  #FFFFFF;
+ 
+  /* 背景 */
+  --bg-card:          #FFFFFF;
+  --bg-active:        #f3d1ff;
+  --bg-hover:         rgb(230, 230, 230);
+ 
+  /* バッジ */
+  --badge-active-bg:   #F3E8F7;
+  --badge-active-text: #804893;
+  --badge-inactive-bg: #EDE0E4;
+  --badge-inactive-text: #69596C;
+ 
+  /* その他 */
+  --radius-card:      14px;
+  --radius-badge:     99px;
+  --shadow-card:      0 1px 4px rgba(60, 30, 70, 0.08);
+}
+
+/* ─── メインコンテンツ領域（歩行ログと共通） ────────────── */
+.walklog-page {
+  max-width: 1080px;
+  margin: 20px auto 0;
+  padding: 0 20px 40px;
+}
+
+/* 戻るリンク */
+.back-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: none;
+  margin-bottom: 12px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.back-link:hover {
+  opacity: 0.7;
+}
+
+/* ページタイトル */
+h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* ─── レイアウト：左リスト ＋ 右詳細（歩行ログの構造を完全踏襲） ─── */
+.walk-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 16px;
+}
+
+.detail-panel {
+  flex: 6;
+  min-width: 0;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeInUp 0.3s ease both;
+}
+
+/* ─── リストカード仕様 ────────────────────── */
+.list-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  border: 1.6px solid rgb(197, 197, 197);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 2px solid rgb(197, 197, 197);
+  background: var(--bg-card);
+}
+
+.list-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.list-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.list-count {
+  font-size: 12px;
+  color: var(--text-sub);
+}
+
+/* ─── メニュー行（歩行ログのuser-rowと完全に同じデザイン） ─── */
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: 1px solid rgb(197, 197, 197);
+  background: var(--bg-card);
+  gap: 4px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+
+.user-row:last-child {
+  border-bottom: none;
+}
+
+.log-row-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.user-row:hover {
+  background: var(--bg-hover);
+}
+
+.user-row.active {
+  background: var(--badge-active-bg);
+  border-left: 3px solid var(--primary);
+  color: var(--primary);
+}
+
+/* ─── トグルスイッチ ──────────────────────── */
+.modeToggle {
+  display: inline-block;
+  position: relative;
+  width: 52px;
+  height: 28px;
+  border-radius: var(--radius-badge);
+  border: 2px solid var(--primary);
+  background: #eee;
+  box-sizing: content-box;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modeToggle:has(:checked) {
+  background: var(--primary);
+}
+
+.modeToggle::after {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  content: "";
+  transition: left 0.3s, background-color 0.3s;
+}
+
+.modeToggle:has(:checked)::after {
+  left: 27px;
+  background-color: #fff;
+}
+
+.modeToggle input {
+  display: none;
+}
+
+/* アニメーション */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* レスポンシブ (PC基準ですがスマホにも対応) */
+@media (max-width: 768px) {
+  .walk-layout {
+    flex-direction: column;
+  }
+  .list-card, .detail-panel {
+    width: 100%;
+    flex: none;
+  }
+}
+
+/* ─── ダークモード対応 ────────────────────── */
+body.dark-mode {
+  background: #121014;
+  color: #E6E1E6;
+}
+
+body.dark-mode .list-card,
+body.dark-mode .list-header,
+body.dark-mode .user-row {
+  background: #1C1B1E;
+  border-color: #49454F;
+  color: #E6E1E6;
+}
+
+body.dark-mode .user-row:hover {
+  background: #2D2831;
+}
+
+body.dark-mode .user-row.active {
+  background: rgba(144, 72, 147, 0.2);
+  color: var(--highlight);
+  border-left-color: var(--highlight);
+}
+
+body.dark-mode .list-title,
+body.dark-mode h2,
+body.dark-mode .log-row-top {
+  color: #E6E1E6;
+}
+
+body.dark-mode .list-count,
+body.dark-mode .page-subtitle {
+  color: #938F99;
+}
