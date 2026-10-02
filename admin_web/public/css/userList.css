@@ -1,206 +1,209 @@
+/* ─── カラー変数（歩行ログ・設定ページと共通） ──────────────── */
+:root {
+  --primary:          #804893;
+  --highlight:        #EEB1FF;
+  --secondary:        #69596C;
+  --border:           #3A2C3D;
+  --tertiary:         #82524F;
+  --error:            #BA1A1A;
+ 
+  /* テキスト */
+  --text-main:        #1C1B1E;
+  --text-sub:         #49454F;
+  --text-muted:       #79747E;
+  --text-on-primary:  #FFFFFF;
+ 
+  /* 背景 */
+  --bg-card:          #FFFFFF;
+  --bg-active:        #f3d1ff;
+  --bg-hover:         rgb(230, 230, 230);
+ 
+  /* バッジ */
+  --badge-active-bg:   #F3E8F7;
+  --badge-active-text: #804893;
+  --badge-inactive-bg: #EDE0E4;
+  --badge-inactive-text: #69596C;
+ 
+  /* その他 */
+  --radius-card:      14px;
+  --radius-badge:     99px;
+  --shadow-card:      0 1px 4px rgba(60, 30, 70, 0.08);
+}
 
-/* 検索エリア */
+/* ─── ページ全体コンテナ（歩行ログ等と統一） ──────────────── */
+.page-container {
+  max-width: 1080px;
+  margin: 20px auto 0;
+  padding: 0 20px 40px;
+}
+
+/* 戻るリンク */
+.back-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: none;
+  margin-bottom: 12px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.back-link:hover {
+  opacity: 0.7;
+}
+
+/* ページタイトル */
+h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+/* ─── 検索エリア ────────────────────────────── */
 .search-area {
   display: flex;
-
-  justify-content: center;
-
-  margin-bottom: 30px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .search-icon {
-  font-size: 30px;
-  border: none;
-  border-radius: 10%;
-
-  background-color: #3498db;
-
+  padding: 9px 16px;
+  font-size: 14px;
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-badge);
+  background-color: var(--primary);
+  color: var(--text-on-primary);
   cursor: pointer;
-
-  transition:
-    background-color 0.2s,
-    transform 0.1s,
-    box-shadow 0.2s;
-
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: background 0.15s, opacity 0.15s;
 }
 
 .search-icon:hover {
-  background-color: #2980b9;
-
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  opacity: 0.85;
 }
 
 .search-icon:active {
-  transform: scale(0.9);
-
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transform: scale(0.98);
 }
 
 /* 検索ボックス */
 #searchBox {
-  width: 400px;
-
-  max-width: 90%;
-
-  padding: 12px 15px;
-
-  font-size: 16px;
-
-  border: 2px solid #dcdfe6;
-
-  border-radius: 10px;
-
+  flex: 1;
+  min-width: 180px;
+  padding: 9px 14px;
+  border: 1.5px solid rgb(197, 197, 197);
+  border-radius: var(--radius-badge);
+  font-size: 14px;
+  color: var(--text-main);
+  background: var(--bg-card);
   outline: none;
-
-  transition: 0.2s;
-
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s;
 }
 
-/* フォーカス時 */
 #searchBox:focus {
-  border-color: #3498db;
-
-  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+  border-color: var(--primary);
 }
 
-/* 一覧全体 */
+/* ─── ユーザー一覧グリッド ──────────────────── */
 #patientList {
   display: grid;
-
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
 }
 
-/* カード */
+/* 患者・ユーザーカード */
 .patient-card {
-  background-color: white;
-
-  border-radius: 15px;
-
-  padding: 20px;
-
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  border: 1.6px solid rgb(197, 197, 197);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-card);
   cursor: pointer;
-
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s, box-shadow 0.15s;
 }
 
-/* ホバー時 */
 .patient-card:hover {
-  transform: translateY(-5px);
-
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  background: var(--bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(60, 30, 70, 0.12);
 }
 
-/* 名前 */
 .patient-card h3 {
-  margin-top: 0;
-
-  color: #2c3e50;
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
-/* テキスト */
 .patient-card p {
-  color: #555;
-
-  margin: 8px 0;
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
 }
 
-/* モーダル背景 */
+/* ─── モーダル ──────────────────────────────── */
 .modal {
   display: none;
-
   position: fixed;
-
   z-index: 1000;
-
   left: 0;
   top: 0;
-
   width: 100%;
   height: 100%;
-
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(28, 27, 30, 0.5);
 }
 
-/* モーダル本体 */
 .modal-content {
-  background-color: white;
-
+  background-color: var(--bg-card);
   width: 450px;
-
   max-width: 90%;
-
   margin: 80px auto;
-
-  padding: 30px;
-
-  border-radius: 15px;
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-
+  padding: 24px;
+  border-radius: var(--radius-card);
+  border: 1.6px solid rgb(197, 197, 197);
+  box-shadow: 0 10px 30px rgba(60, 30, 70, 0.2);
   animation: modalFade 0.2s ease;
 }
 
-/* モーダルアニメーション */
 @keyframes modalFade {
   from {
     opacity: 0;
-
     transform: translateY(-20px);
   }
-
   to {
     opacity: 1;
-
     transform: translateY(0);
   }
 }
 
-/* 詳細タイトル */
 .modal-content h2 {
   margin-top: 0;
-
-  color: #2c3e50;
+  color: var(--primary);
+  font-size: 18px;
 }
 
-/* 詳細テキスト */
 .modal-content p {
-  margin: 12px 0;
-
-  color: #444;
-
+  margin: 10px 0;
+  color: var(--text-main);
+  font-size: 14px;
   line-height: 1.5;
 }
 
 /* 閉じるボタン */
 #closeBtn {
-  background-color: #8c50a0;
-
-  color: white;
-
+  background-color: var(--primary);
+  color: var(--text-on-primary);
   border: none;
-
-  padding: 10px 18px;
-
-  border-radius: 8px;
-
+  padding: 8px 16px;
+  border-radius: var(--radius-badge);
   cursor: pointer;
-
-  font-size: 14px;
-
+  font-size: 13px;
+  font-weight: 600;
   float: right;
-
-  transition: 0.2s;
+  transition: opacity 0.2s;
 }
 
-/* ボタンホバー */
 #closeBtn:hover {
   opacity: 0.85;
 }
@@ -208,10 +211,34 @@
 /* 読み込み表示 */
 #loading {
   text-align: center;
-
-  font-size: 18px;
-
-  color: #666;
-
+  font-size: 15px;
+  color: var(--text-muted);
   margin-top: 50px;
+}
+
+/* ─── ダークモード対応 ────────────────────── */
+body.dark-mode {
+  background: #121014;
+  color: #E6E1E6;
+}
+
+body.dark-mode .patient-card,
+body.dark-mode .modal-content,
+body.dark-mode #searchBox {
+  background: #1C1B1E;
+  border-color: #49454F;
+  color: #E6E1E6;
+}
+
+body.dark-mode .patient-card:hover {
+  background: #2D2831;
+}
+
+body.dark-mode .patient-card h3,
+body.dark-mode .modal-content p {
+  color: #E6E1E6;
+}
+
+body.dark-mode .patient-card p {
+  color: #938F99;
 }
