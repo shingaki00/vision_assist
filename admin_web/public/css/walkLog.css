@@ -33,9 +33,9 @@
  
 /* ─── メインコンテンツ領域 ────────────────────── */
 .walklog-page {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 24px 16px;
+  max-width: 1080px;
+  margin: 20px auto 0;
+  padding: 0 20px 40px;
 }
  
 /* ─── ページタイトル ─────────────────────────── */
