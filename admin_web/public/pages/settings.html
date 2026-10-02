@@ -1,71 +1,136 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>設定｜VisionAssist</title>
 
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/settings.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/settings.css">
     <script type="module" src="../js/style.js" defer></script>
-  </head>
-  <body>
+    <script>
+        (function () {
+            if (sessionStorage.getItem('uid') === null) {
+                window.location.replace('../index.html');
+            }
+        })();
+    </script>
+</head>
+<body>
     <div id="header-inner"></div>
 
-    <main class="page-container">
-      <a href="../home.html" class="back-link">← ダッシュボードに戻る</a>
+    <main class="walklog-page">
 
-      <div class="container">
-        <!-- サイドメニュー -->
-        <aside class="sidebar">
-          <h2>⚙️ 設定</h2>
+        <a href="../home.html" class="back-link">← ダッシュボードに戻る</a>
+        <h2>設定</h2>
+        <p class="page-subtitle">システム環境や各種設定を変更できます</p>
 
-          <ul class="menu">
-            <li class="tab active" data-tab="account">👤 アカウント設定</li>
-
-            <li class="tab" data-tab="notification">🔔 通知設定</li>
-
-            <li class="tab" data-tab="display">🎨 表示設定</li>
-
-            <li class="tab" data-tab="system">ℹ️ システム情報</li>
-          </ul>
-        </aside>
-
-        <!-- 右側 -->
-        <div class="content">
-          <div id="account" class="tab-content active">
-            <h3>アカウント設定</h3>
-            <div class="card">ログインID変更</div>
-          </div>
-
-          <div id="notification" class="tab-content">
-            <h3>通知設定</h3>
-
-            <div class="card">通知ON/OFF</div>
-          </div>
-
-          <div id="display" class="tab-content">
-            <h3>表示設定</h3>
-
-            <div class="card">
-              <div class="buttonBlock">
-                <p>ダークモード</p>
-                <label class="modeToggle">
-                  <input type="checkbox" id="modeSwitch" />
-                </label>
-              </div>
+        <!-- 歩行ログと同じ左右レイアウト (walk-layout) -->
+        <div class="walk-layout">
+            
+            <!-- 左：設定メニューリスト -->
+            <div class="list-card" style="flex: 4;">
+                <div class="list-header">
+                    <div class="list-header-left">
+                        <span class="list-title">設定メニュー</span>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <div class="user-row active" data-tab="account">
+                        <div class="log-row-top">
+                            <span style="font-size: 16px;">👤</span>
+                            <span style="font-weight: 600;">アカウント設定</span>
+                        </div>
+                    </div>
+                    <div class="user-row" data-tab="notification">
+                        <div class="log-row-top">
+                            <span style="font-size: 16px;">🔔</span>
+                            <span style="font-weight: 600;">通知設定</span>
+                        </div>
+                    </div>
+                    <div class="user-row" data-tab="display">
+                        <div class="log-row-top">
+                            <span style="font-size: 16px;">🎨</span>
+                            <span style="font-weight: 600;">表示設定</span>
+                        </div>
+                    </div>
+                    <div class="user-row" data-tab="system">
+                        <div class="log-row-top">
+                            <span style="font-size: 16px;">ℹ️</span>
+                            <span style="font-weight: 600;">システム情報</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div id="system" class="tab-content">
-            <h3>システム情報</h3>
+            <!-- 右：詳細コンテンツパネル (detail-panel) -->
+            <div class="detail-panel">
+                <div id="account" class="tab-content active">
+                    <div class="list-card">
+                        <div class="list-header">
+                            <div class="list-header-left">
+                                <span class="list-title">アカウント設定</span>
+                                <span class="list-count">ログイン情報の管理を行います</span>
+                            </div>
+                        </div>
+                        <div style="padding: 24px;">
+                            <div style="font-size: 14px; color: var(--text-main);">ログインIDの変更</div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="card">Version 1.0</div>
-          </div>
+                <div id="notification" class="tab-content">
+                    <div class="list-card">
+                        <div class="list-header">
+                            <div class="list-header-left">
+                                <span class="list-title">通知設定</span>
+                                <span class="list-count">各種アラートの通知有無を設定します</span>
+                            </div>
+                        </div>
+                        <div style="padding: 24px;">
+                            <div style="font-size: 14px; color: var(--text-main);">通知ON/OFF設定</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="display" class="tab-content">
+                    <div class="list-card">
+                        <div class="list-header">
+                            <div class="list-header-left">
+                                <span class="list-title">表示設定</span>
+                                <span class="list-count">画面のカラーテーマを切り替えます</span>
+                            </div>
+                        </div>
+                        <div style="padding: 24px;">
+                            <div class="buttonBlock" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 14px; font-weight: 600; color: var(--text-main);">ダークモード</span>
+                                <label class="modeToggle">
+                                    <input type="checkbox" id="modeSwitch">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="system" class="tab-content">
+                    <div class="list-card">
+                        <div class="list-header">
+                            <div class="list-header-left">
+                                <span class="list-title">システム情報</span>
+                                <span class="list-count">現在のアプリケーションバージョン</span>
+                            </div>
+                        </div>
+                        <div style="padding: 24px;">
+                            <div style="font-size: 14px; color: var(--text-main);">Version 1.0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
+
     </main>
 
     <script src="../js/settings.js"></script>
-  </body>
+</body>
 </html>
