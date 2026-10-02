@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>会員登録｜VisionAssist</title>
 
-    <link rel="stylesheet" href="../css/userAdd.css" />
     <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/userAdd.css" />
     <script type="module" src="../js/style.js" defer></script>
 
     <script>
@@ -19,45 +19,62 @@
   </head>
 
   <body>
-    <main>
-      <div class="register-container">
-        <a href="../home.html" class="back-link">← ダッシュボードに戻る</a>
+    <!-- ヘルパーの共通読み込み等があればここへ -->
+    <div id="header-inner"></div>
 
-        <h1 class="register-title">会員登録</h1>
+    <main class="page-container">
+      <a href="../home.html" class="back-link">← ダッシュボードに戻る</a>
+      <h1>会員登録</h1>
+      <p class="page-subtitle">新しい利用者の情報を入力して登録します</p>
 
-        <form method="post" class="form-group">
-          <p class="form-label">メールアドレス</p>
-          <input
-            type="text"
-            maxlength="30"
-            class="form-input"
-            id="mail_address"
-          />
-          <p class="form-label">パスワード</p>
-          <input
-            type="password"
-            maxlength="10"
-            class="form-input"
-            placeholder="**********"
-            id="password"
-          />
-          <p class="form-label">氏名</p>
-          <input type="text" maxlength="10" class="form-input" id="name" />
-          <p class="form-label">年齢</p>
-          <input type="number" maxlength="3" class="form-input" id="age" />
-          <p class="form-label">持病などについて</p>
-          <textarea
-            name="emergency_note"
-            class="form-input"
-            id="emergency_note"
-            maxlength="100"
-          ></textarea>
-          <button type="button" class="register-button" id="touroku">
-            登録
-          </button>
-        </form>
+      <div class="list-card" style="max-width: 700px;">
+        <div class="list-header">
+          <div class="list-header-left">
+            <span class="list-title">利用者情報入力</span>
+          </div>
+        </div>
+
+        <div style="padding: 24px;">
+          <form method="post" class="form-group">
+            <label class="form-label" for="mail_address">メールアドレス</label>
+            <input
+              type="text"
+              maxlength="30"
+              class="form-input"
+              id="mail_address"
+            />
+
+            <label class="form-label" for="password">パスワード</label>
+            <input
+              type="password"
+              maxlength="10"
+              class="form-input"
+              placeholder="**********"
+              id="password"
+            />
+
+            <label class="form-label" for="name">氏名</label>
+            <input type="text" maxlength="10" class="form-input" id="name" />
+
+            <label class="form-label" for="age">年齢</label>
+            <input type="number" maxlength="3" class="form-input" id="age" />
+
+            <label class="form-label" for="emergency_note">持病などについて</label>
+            <textarea
+              name="emergency_note"
+              class="form-input"
+              id="emergency_note"
+              maxlength="100"
+            ></textarea>
+
+            <button type="button" class="register-button" id="touroku">
+              登録
+            </button>
+          </form>
+        </div>
       </div>
-      <script src="../js/userAdd.js"></script>
     </main>
+
+    <script src="../js/userAdd.js"></script>
   </body>
 </html>
