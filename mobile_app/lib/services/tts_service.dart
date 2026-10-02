@@ -2,9 +2,10 @@ import 'package:flutter_tts/flutter_tts.dart';
 
 // 1. 通知ロジックを定義するクラス（責務の分離）
 class ObstacleMessageGenerator {
-  // ここにルールを追加するだけで、他の場所を触らずに拡張可能
+  // ルールを追加
   static final Map<String, String Function(double)> _templates = {
     "stairs": (dist) => "${dist.toInt()}メートル先に階段があります。",
+    "glass": (dist) => "${dist.toInt()}メートル先にガラスがあります。",
     "railway": (dist) => "${dist.toInt()}メートル先に線路があります。注意してください。",
     "default": (dist) => "前方、${dist.toInt()}メートルに障害物があります。",
   };
@@ -19,6 +20,11 @@ class ObstacleMessageGenerator {
 class TtsService {
   final FlutterTts _flutterTts = FlutterTts();
 
+  // 連続読み上げ防止用
+  String _lastKey = "";
+  DateTime _lastTime = DateTime.fromMillisecondsSinceEpoch(0);
+  static const _cooldown = Duration(seconds: 2);
+
   Future<void> init() async {
     await _flutterTts.setLanguage("ja-JP");
     await _flutterTts.setSpeechRate(0.8); // 少しゆっくりめの方が聞き取りやすいです
@@ -28,12 +34,16 @@ class TtsService {
 
   // UIやメインロジックから呼ばれるメソッド
   Future<void> speakObstacle(String type, double distance) async {
+    // 同じ種類・同じ距離が短時間に連続したら無視
+    final key = "$type:${distance.toInt()}";
+    final now = DateTime.now();
+    if (key == _lastKey && now.difference(_lastTime) < _cooldown) return;
+    _lastKey = key;
+    _lastTime = now;
+
     // 割り込みを防ぐため、再生前に一度ストップする（任意）
     await _flutterTts.stop();
-
-    // ロジッククラスからメッセージを取得
-    String message = ObstacleMessageGenerator.generate(type, distance);
-    
+    final message = ObstacleMessageGenerator.generate(type, distance);
     await _flutterTts.speak(message);
   }
 

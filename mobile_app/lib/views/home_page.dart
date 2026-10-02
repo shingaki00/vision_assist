@@ -6,6 +6,7 @@ import 'package:mobile_app/views/log_page.dart';
 
 // 各コンポーネント・サービスのインポート
 import '../services/tts_service.dart';
+import '../services/obstacle_source.dart';
 import '../widgets/device_status_card.dart';
 import '../widgets/radar_display.dart';
 import '../widgets/emergency_button.dart';
@@ -31,6 +32,9 @@ class _HomePageState extends State<HomePage> {
   final Battery _battery = Battery();
   final TtsService _ttsService = TtsService();
 
+  ObstacleSource? _obstacleSource;
+  StreamSubscription<ObstacleEvent>? _obstacleSub;
+
   MotionAutoTracker? _autoTracker;
 
   StreamSubscription<ServiceStatus>? _gpsServiceStatusSubscription;
@@ -51,6 +55,11 @@ class _HomePageState extends State<HomePage> {
     _initDeviceStates();
     _autoTracker = MotionAutoTracker(patientId: patientId);
     _autoTracker!.start();
+
+    // 障害物イベントの購読(実機がつながったらBLE版に差し替え)
+    _obstacleSource = DummyObstacleSource();
+    _obstacleSub = _obstacleSource!.stream
+      .listen((e) => _handleObstacleDetected(e.type, e.distance));
   }
 
   void _initDeviceStates() async {
@@ -93,20 +102,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _handleObstacleDetected(String type, double distance) async {
-    String message = "";
-    if (type == "stairs") {
-      message = "${distance.toInt()}メートル先に階段があります。";
-    } else if (type == "railway") {
-      message = "${distance.toInt()}メートル先に線路があります。注意してください。";
-    } else {
-      message = "前方、$distanceメートルに障害物があります。";
+    // 画面表示も読み上げと同じテンプレートを使う
+    final message = ObstacleMessageGenerator.generate(type, distance);
+
+    if (mounted) {
+      setState(() {
+        _radarMessage = message;
+        _hasObstacle = true;
+      });
     }
-
-    setState(() {
-      _radarMessage = message;
-      _hasObstacle = true;
-    });
-
     await _ttsService.speakObstacle(type, distance);
   }
 
@@ -204,6 +208,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    _obstacleSub?.cancel();
+    _obstacleSource?.dispose();
     _batteryTimer?.cancel();
     _gpsServiceStatusSubscription?.cancel();
     _ttsService.stop();
@@ -243,7 +249,6 @@ class _HomePageState extends State<HomePage> {
               radarMessage: _radarMessage,
               hasObstacle: _hasObstacle,
               onClear: _clearObstacleStatus,
-              onTestPressed: _handleObstacleDetected,
             ),
             const SizedBox(height: 24),
             _buildSectionTitle('緊急アクション'),
