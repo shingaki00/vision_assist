@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
 
   StreamSubscription<ServiceStatus>? _gpsServiceStatusSubscription;
   Timer? _batteryTimer;
+  Timer? _clearTimer;
 
   @override
   void initState() {
@@ -110,6 +111,8 @@ class _HomePageState extends State<HomePage> {
         _radarMessage = message;
         _hasObstacle = true;
       });
+      _clearTimer?.cancel();
+      _clearTimer = Timer(const Duration(seconds: 4), _clearObstacleStatus);
     }
     await _ttsService.speakObstacle(type, distance);
   }
@@ -215,6 +218,7 @@ class _HomePageState extends State<HomePage> {
     _ttsService.stop();
     _autoTracker?.dispose();
     super.dispose();
+    _clearTimer?.cancel();
   }
 
   @override

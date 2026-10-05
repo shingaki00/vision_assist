@@ -19,12 +19,18 @@ class DummyObstacleSource implements ObstacleSource {
 
   DummyObstacleSource() {
     final dummy = [
-      ObstacleEvent("stairs", 3),
-      ObstacleEvent("glass", 2),
-      ObstacleEvent("railway", 5),
+        ObstacleEvent("stairs", 3),
+        ObstacleEvent("stairs", 3),   // 同じ → 読まない
+        ObstacleEvent("stairs", 2),   // 2区分に近づいた → 読む
+        ObstacleEvent("stairs", 2),   // 同じ → 読まない
+        ObstacleEvent("stairs", 1),   // 1区分に近づいた → 読む
+        ObstacleEvent("glass", 2),
+        ObstacleEvent("stairs", 2),
+        ObstacleEvent("railway", 4),
+        ObstacleEvent("railway", 3),
     ];
     var i = 0;
-    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+    _timer = Timer.periodic(const Duration(milliseconds: 2000), (_) {
       _controller.add(dummy[i++ % dummy.length]);
     });
   }
