@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
 
 import '../models/log_model.dart';
 
 class LogService {
   // Node.jsのURL
-  static const String apiUrl = "http://192.168.1.10:3000/logs";
+  //static const String apiUrl = "http://192.168.1.10:3000/logs";
 
   // ログ取得
   Future<List<LogModel>> fetchLogs() async {
@@ -23,6 +23,7 @@ class LogService {
     print(jsonData);
 
     //if (response.statusCode == 200) {
+
     // JSONへ変換
     //List json = jsonDecode(response.body);
     final Map<String, dynamic> json = jsonDecode(jsonData);

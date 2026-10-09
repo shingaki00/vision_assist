@@ -29,7 +29,7 @@ class _LogPageState extends State<LogPage> {
 
   Future<void> _loadLogs() async {
     try {
-      final logs = await _service.fetchLogs();
+      final List<LogModel> logs = await _service.fetchLogs();
 
       if (logs.isEmpty) {
         setState(() {
@@ -63,29 +63,37 @@ class _LogPageState extends State<LogPage> {
         );
       }
 
-      final polyline = Polyline(
-        polylineId: const PolylineId("route"),
-        points: routePoints,
-        width: 5,
-      );
+      final Set<Polyline> polylines = {};
+
+      if (routePoints.length >= 2) {
+        polylines.add(
+          Polyline(
+            polylineId: const PolylineId("route"),
+            points: routePoints,
+            width: 5,
+          ),
+        );
+      }
 
       setState(() {
         _markers = markers;
-        _polylines = {polyline};
+        _polylines = polylines;
         _isLoading = false;
       });
 
-      final first = logs.first;
+      if (logs.isNotEmpty && _mapController != null) {
+        final first = logs.first;
 
-      _mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(
-          LatLng(
-            first.latitude,
-            first.longitude,
+        _mapController?.animateCamera(
+          CameraUpdate.newLatLngZoom(
+            LatLng(
+              first.latitude,
+              first.longitude,
+            ),
+            17,
           ),
-          17,
-        ),
-      );
+        );
+      }
     } catch (e) {
       debugPrint(e.toString());
 
@@ -99,20 +107,20 @@ class _LogPageState extends State<LogPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("移動ログ"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              setState(() {
-                _isLoading = true;
-              });
+          //title: const Text("移動ログ"),
+          // actions: [
+          //   IconButton(
+          //     icon: const Icon(Icons.refresh),
+          //     onPressed: () {
+          //       setState(() {
+          //         _isLoading = true;
+          //       });
 
-              _loadLogs();
-            },
+          //       _loadLogs();
+          //     },
+          //   ),
+          // ],
           ),
-        ],
-      ),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -120,8 +128,8 @@ class _LogPageState extends State<LogPage> {
           : GoogleMap(
               initialCameraPosition: const CameraPosition(
                 target: LatLng(
-                  35.17091,
-                  136.88153,
+                  35.689,
+                  139.691,
                 ),
                 zoom: 15,
               ),
