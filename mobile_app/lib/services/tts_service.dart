@@ -1,4 +1,5 @@
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 // 1. 通知ロジックを定義するクラス（責務の分離）
 class ObstacleMessageGenerator {
@@ -49,7 +50,7 @@ class TtsService {
 
   Future<void> init() async {
     await _flutterTts.setLanguage("ja-JP");
-    await _flutterTts.setSpeechRate(0.8); // 少しゆっくりめの方が聞き取りやすいです
+    await _flutterTts.setSpeechRate(kIsWeb ? 0.8 : 0.5); // 少しゆっくりめの方が聞き取りやすいです
     await _flutterTts.setVolume(1.0);
     await _flutterTts.setPitch(1.0);
   }
