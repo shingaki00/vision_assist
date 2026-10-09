@@ -29,7 +29,7 @@ class LogModel {
       logId: int.parse(json["log_id"].toString()),
       latitude: double.parse(json["latitude"].toString()),
       longitude: double.parse(json["longitude"].toString()),
-      timestamp: json["created_at"].toString(),
+      timestamp: json["timestamp"].toString(),
     );
   }
 }

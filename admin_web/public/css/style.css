@@ -1,56 +1,55 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /*背景色*/
-body{
-    background: linear-gradient(180deg, #f5f7fb 0%, #eef2f7 100%);
-    margin: 0;
-    color: #1f2937;
+body {
+  background: linear-gradient(180deg, #f5f7fb 0%, #eef2f7 100%);
+  margin: 0;
+  color: #1f2937;
 }
-
 
 /* -------------*/
 /* ヘッダー */
 /* -------------*/
-h1{
-    color: #3A2C3D;
-    font-size: 26px;
-    margin-left: 20px;
-    margin-bottom: 0px;
-    margin-top: 14px;
+h1 {
+  color: #3a2c3d;
+  font-size: 26px;
+  margin-left: 20px;
+  margin-bottom: 0px;
+  margin-top: 14px;
 }
 
-h2{
-    color: #3A2C3D;
-    font-size: 22px;
-    margin-left: 10px;
+h2 {
+  color: #3a2c3d;
+  font-size: 22px;
+  margin-left: 10px;
 }
 
-h3{
-    color: #3A2C3D;
+h3 {
+  color: #3a2c3d;
 }
 
 #header-inner {
-    width: 100%;
-    background-color: white;
-    border-bottom: 2px solid #ccc;
-    position: sticky;
-    top: 0;
-    z-index: 100;  
+  width: 100%;
+  background-color: white;
+  border-bottom: 2px solid #ccc;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 header {
-    max-width: 1080px;
-    height: 90px;
-    margin: 0 auto;
-    padding: 0 20px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  max-width: 1080px;
+  height: 90px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* 左側 */
@@ -63,31 +62,29 @@ header {
 
 /* 右側 */
 .header-right {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
-
 
 /* ログアウトボタン */
 .btn-logout {
-    font-size: 14px;
-    padding: 8px 14px;
-    color:dimgrey;
-    background-color: white;
-    border:white solid 1px;
-    border-radius: 6px;
-    cursor: pointer;
+  font-size: 14px;
+  padding: 8px 14px;
+  color: dimgrey;
+  background-color: white;
+  border: white solid 1px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .btn-logout:hover {
-    color: white;
-    background-color: #BA1A1A;
-    border: none;
-    border-radius: 6px;
-    transition: 0.3s;
+  color: white;
+  background-color: #ba1a1a;
+  border: none;
+  border-radius: 6px;
+  transition: 0.3s;
 }
-
 
 /* ------ シェブロン（＞矢印）-------*/
 .chevron {
@@ -95,7 +92,9 @@ header {
   height: 18px;
   color: var(--text-muted);
   flex-shrink: 0;
-  transition: color 0.2s, transform 0.2s;
+  transition:
+    color 0.2s,
+    transform 0.2s;
 }
 
 /* ※ 戻るアイコンを表示するときのコマンド　以下、右と左
@@ -106,7 +105,6 @@ header {
 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
     <polyline points="15 18 9 12 15 6"/>
 </svg> */
-
 
 /* ------- 戻るボタン（矢印で表示する） --------*/
 .back-link {
@@ -121,20 +119,44 @@ header {
 }
 
 .back-link:hover {
-    color: var(--focus);
-    text-decoration: underline;
+  color: var(--focus);
+  text-decoration: underline;
 }
 
 /* ------ エラー文 -------*/
 #error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
 /* ------- ページ共通の横幅・余白（ダッシュボード基準） --------*/
 .page-container {
-    max-width: 1080px;
-    margin: 20px auto 0;
-    padding: 0 20px 40px;
+  max-width: 1080px;
+  margin: 20px auto 0;
+  padding: 0 20px 40px;
+}
+
+/* ─── ダークモード対応 ────────────────────── */
+body.dark-mode {
+  background: #121014;
+  color: #e6e1e6;
+  --text-main: #e6e1e6;
+}
+
+body.dark-mode .header-left,
+body.dark-mode .header-right,
+body.dark-mode .btn-logout,
+body.dark-mode #header-inner {
+  background: #1c1b1e;
+  border-color: #49454f;
+  color: #e6e1e6;
+}
+
+body.dark-mode .btn-logout:hover {
+  background: #ba1a1a;
+}
+
+body.dark-mode h1 {
+  color: #e6e1e6;
 }

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mobile_app/views/log_page.dart';
+//import 'package:mobile_app/views/log_page.dart';
 
 // 各コンポーネント・サービスのインポート
 import '../services/tts_service.dart';
@@ -12,7 +12,7 @@ import '../widgets/emergency_button.dart';
 import '../services/motion_tracker_service.dart';
 import '../services/auth_service.dart';
 import 'login_page.dart'; // ログアウト後に戻るためのインポート
-import 'package:flutter/foundation.dart';
+//import 'log_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   bool _hasObstacle = false;
 
   final Battery _battery = Battery();
+
   final TtsService _ttsService = TtsService();
 
   MotionAutoTracker? _autoTracker;
@@ -207,6 +208,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _batteryTimer?.cancel();
     _gpsServiceStatusSubscription?.cancel();
+
     _ttsService.stop();
     _autoTracker?.dispose();
     super.dispose();
@@ -252,18 +254,18 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.map),
-                label: const Text("移動ログ"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LogPage(),
-                    ),
-                  );
-                },
-              ),
+              // child: ElevatedButton.icon(
+              //   icon: const Icon(Icons.map),
+              //   label: const Text("移動ログ"),
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => const LogPage(),
+              //       ),
+              //     );
+              //   },
+              // ),
             ),
           ],
         ),
