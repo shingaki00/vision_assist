@@ -70,14 +70,14 @@ def main():
         print("     SERIAL_PORTの設定やマイコンの接続を確認してください。")
         return
 
-    print("[2/3] YOLOモデル(best.pt)を読み込み中...")
+    print("[2/3] YOLOモデル(vidvipo_yolov8n_2023-05-19.pt)を読み込み中...")
     try:
-        model_path = os.path.join(os.path.dirname(__file__), "best.pt")
+        model_path = os.path.join(os.path.dirname(__file__), "vidvipo_yolov8n_2023-05-19.pt")
         model = YOLO(model_path)
         print("  └─ [成功] YOLOモデルの読み込みが完了しました！")
     except Exception as e:
         print(f"  └─ [エラー] モデルの読み込みに失敗しました: {e}")
-        print("     実行フォルダ内に 'best.pt' が存在するか確認してください。")
+        print("     実行フォルダ内に 'vidvipo_yolov8n_2023-05-19.pt' が存在するか確認してください。")
         link.close()
         return
 
