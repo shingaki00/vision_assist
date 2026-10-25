@@ -6,11 +6,20 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart';
 
 class WalkingTrackerService {
-  // ★実機テスト時は "localhost" ではなくPCのローカルIPを指定
+  // ★実機テスト時はトンネルのURLを指定する
   // Web実行時は localhost、Androidエミュレータ時は 10.0.2.2 を自動切替
-  final String apiBase = kIsWeb 
-    ? "http://localhost:3000" 
-    : "http://10.0.2.2:3000";
+  static bool offlineMode = false;     // trueならサーバー通信をしない（GPS確認用）
+  static String? hostOverride =
+    "https://bureau-acquired-protected-retailer.trycloudflare.com";
+  void Function(Position)? onPosition; // 画面表示用
+
+String get apiBase =>
+    (hostOverride?.trim()) ??
+    (kIsWeb
+        ? "http://localhost:3000"
+        : (defaultTargetPlatform == TargetPlatform.android
+            ? "http://10.0.2.2:3000"
+            : "http://localhost:3000"));
 
   int? _currentLogId;
   StreamSubscription<Position>? _positionSub;
@@ -50,6 +59,16 @@ class WalkingTrackerService {
 
     await _ensurePermission();
     debugPrint("権限OK");
+
+    if (offlineMode) {
+      _currentLogId = -1;
+      _lastMovementTime = DateTime.now();
+      _sessionStartTime = DateTime.now();
+      _lastPosition = null;
+      _startSendingPosition(_currentLogId!);
+      _startStationaryWatcher();
+      return _currentLogId!;
+    }
 
     // walkingLogsに end_time: null で新規作成
     final res = await http.post(
@@ -91,6 +110,11 @@ class WalkingTrackerService {
     _stationaryCheckTimer = null;
     _lastMovementTime = null;
     _sessionStartTime = null;
+
+    if (offlineMode) {
+      onStopped?.call(reason);
+      return;
+    }
 
     try {
       if (reason == "auto") {
@@ -175,6 +199,7 @@ class WalkingTrackerService {
         debugPrint("${pos.latitude}, ${pos.longitude}");
 
         _lastMovementTime = DateTime.now();
+        onPosition?.call(pos);
         _sendPoint(logId, pos);
       });
     }
@@ -204,6 +229,8 @@ class WalkingTrackerService {
   }
 
   Future<void> _sendPoint(int logId, Position pos) async {
+    if (offlineMode) return;
+
     // --- あまりにも遠くへジャンプ（ワープ）したら別ログとして分割 ---
     if (_lastPosition != null) {
       double distanceInMeters = Geolocator.distanceBetween(
