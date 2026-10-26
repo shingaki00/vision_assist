@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+import 'walking_tracker_service.dart';
 
 /// バックエンド担当者と連携するための認証サービス
 class AuthService {
@@ -26,9 +27,8 @@ class AuthService {
     debugPrint("mail = $mailAddress");
     debugPrint("pass = $password");
 
-    // Webなら localhost、Androidエミュレータなら 10.0.2.2 を自動で選択
-    final String baseUrl =
-        kIsWeb ? "http://localhost:3000" : "http://10.0.2.2:3000";
+    // トンネルのURL(hostOverride)があればそれを使う。無ければ自動切替
+    final String baseUrl = WalkingTrackerService().apiBase;
 
     // ログイン処理内
     final response = await http.post(
@@ -40,7 +40,7 @@ class AuthService {
         "mail_address": mailAddress,
         "password_hash": password,
       }),
-    );
+    ).timeout(const Duration(seconds: 10));
     debugPrint("status = ${response.statusCode}");
     debugPrint("body = ${response.body}");
 
@@ -50,18 +50,6 @@ class AuthService {
       return data["success"];
     }
 
-    // --- API連携時のイメージ ---
-    /*
-    final response = await http.post(
-      Uri.parse('$baseUrl/auth/login'),
-      body: {'username': id, 'password': password},
-    );
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      _patientId = data['patient_id']; // ★patientIdを受け取る
-      return true;
-    }
-    */
     return false;
   }
 
