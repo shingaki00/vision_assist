@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'home_page.dart';
-import '../services/motion_tracker_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -124,14 +123,6 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold)),
                   ),
-                ),
-
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const GpsTestPage()),
-                  ),
-                  child: const Text('GPSテストへ（一時）'),
                 ),
                 
                 const SizedBox(height: 32),
