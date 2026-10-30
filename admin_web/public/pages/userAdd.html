@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/userAdd.css" />
     <script type="module" src="../js/style.js" defer></script>
+    <script type="module" src="../js/settings.js" defer></script>
 
     <script>
       (function () {
@@ -27,14 +28,14 @@
       <h1>会員登録</h1>
       <p class="page-subtitle">新しい利用者の情報を入力して登録します</p>
 
-      <div class="list-card" style="max-width: 700px;">
+      <div class="list-card" style="max-width: 700px">
         <div class="list-header">
           <div class="list-header-left">
             <span class="list-title">利用者情報入力</span>
           </div>
         </div>
 
-        <div style="padding: 24px;">
+        <div style="padding: 24px">
           <form method="post" class="form-group">
             <label class="form-label" for="mail_address">メールアドレス</label>
             <input
@@ -57,9 +58,17 @@
             <input type="text" maxlength="10" class="form-input" id="name" />
 
             <label class="form-label" for="age">年齢</label>
-            <input type="number" maxlength="3" class="form-input" id="age" />
+            <input
+              type="number"
+              maxlength="3"
+              min="0"
+              class="form-input"
+              id="age"
+            />
 
-            <label class="form-label" for="emergency_note">持病などについて</label>
+            <label class="form-label" for="emergency_note"
+              >持病などについて</label
+            >
             <textarea
               name="emergency_note"
               class="form-input"

@@ -1,33 +1,33 @@
 /* ─── カラー変数（歩行ログと完全に同一のシステムカラー） ──────── */
 :root {
-  --primary:          #804893;
-  --highlight:        #EEB1FF;
-  --secondary:        #69596C;
-  --border:           #3A2C3D;
-  --tertiary:         #82524F;
-  --error:            #BA1A1A;
- 
+  --primary: #804893;
+  --highlight: #eeb1ff;
+  --secondary: #69596c;
+  --border: #3a2c3d;
+  --tertiary: #82524f;
+  --error: #ba1a1a;
+
   /* テキスト */
-  --text-main:        #1C1B1E;
-  --text-sub:         #49454F;
-  --text-muted:       #79747E;
-  --text-on-primary:  #FFFFFF;
- 
+  --text-main: #1c1b1e;
+  --text-sub: #49454f;
+  --text-muted: #79747e;
+  --text-on-primary: #ffffff;
+
   /* 背景 */
-  --bg-card:          #FFFFFF;
-  --bg-active:        #f3d1ff;
-  --bg-hover:         rgb(230, 230, 230);
- 
+  --bg-card: #ffffff;
+  --bg-active: #f3d1ff;
+  --bg-hover: rgb(230, 230, 230);
+
   /* バッジ */
-  --badge-active-bg:   #F3E8F7;
+  --badge-active-bg: #f3e8f7;
   --badge-active-text: #804893;
-  --badge-inactive-bg: #EDE0E4;
-  --badge-inactive-text: #69596C;
- 
+  --badge-inactive-bg: #ede0e4;
+  --badge-inactive-text: #69596c;
+
   /* その他 */
-  --radius-card:      14px;
-  --radius-badge:     99px;
-  --shadow-card:      0 1px 4px rgba(60, 30, 70, 0.08);
+  --radius-card: 14px;
+  --radius-badge: 99px;
+  --shadow-card: 0 1px 4px rgba(60, 30, 70, 0.08);
 }
 
 /* ─── メインコンテンツ領域（歩行ログと共通） ────────────── */
@@ -138,7 +138,10 @@ h2 {
   gap: 4px;
   padding: 14px 16px;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.15s;
 }
 
 .user-row:last-child {
@@ -191,7 +194,9 @@ h2 {
   border-radius: 50%;
   background-color: var(--primary);
   content: "";
-  transition: left 0.3s, background-color 0.3s;
+  transition:
+    left 0.3s,
+    background-color 0.3s;
 }
 
 .modeToggle:has(:checked)::after {
@@ -220,7 +225,8 @@ h2 {
   .walk-layout {
     flex-direction: column;
   }
-  .list-card, .detail-panel {
+  .list-card,
+  .detail-panel {
     width: 100%;
     flex: none;
   }
@@ -229,19 +235,20 @@ h2 {
 /* ─── ダークモード対応 ────────────────────── */
 body.dark-mode {
   background: #121014;
-  color: #E6E1E6;
+  color: #e6e1e6;
+  --text-main: #e6e1e6;
 }
 
 body.dark-mode .list-card,
 body.dark-mode .list-header,
 body.dark-mode .user-row {
-  background: #1C1B1E;
-  border-color: #49454F;
-  color: #E6E1E6;
+  background: #1c1b1e;
+  border-color: #49454f;
+  color: #e6e1e6;
 }
 
 body.dark-mode .user-row:hover {
-  background: #2D2831;
+  background: #2d2831;
 }
 
 body.dark-mode .user-row.active {
@@ -253,10 +260,10 @@ body.dark-mode .user-row.active {
 body.dark-mode .list-title,
 body.dark-mode h2,
 body.dark-mode .log-row-top {
-  color: #E6E1E6;
+  color: #e6e1e6;
 }
 
 body.dark-mode .list-count,
 body.dark-mode .page-subtitle {
-  color: #938F99;
+  color: #938f99;
 }
