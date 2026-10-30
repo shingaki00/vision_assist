@@ -8,18 +8,19 @@ import 'package:flutter/foundation.dart';
 class WalkingTrackerService {
   // ★実機テスト時はトンネルのURLを指定する
   // Web実行時は localhost、Androidエミュレータ時は 10.0.2.2 を自動切替
-  static bool offlineMode = false;     // trueならサーバー通信をしない（GPS確認用）
+  static bool offlineMode = false; 
+  static bool dummyGps = false;
   static String? hostOverride =
     "https://bureau-acquired-protected-retailer.trycloudflare.com";
   void Function(Position)? onPosition; // 画面表示用
 
-String get apiBase =>
+  String get apiBase =>
     (hostOverride?.trim()) ??
     (kIsWeb
-        ? "http://localhost:3000"
-        : (defaultTargetPlatform == TargetPlatform.android
-            ? "http://10.0.2.2:3000"
-            : "http://localhost:3000"));
+      ? "http://localhost:3000"
+      : (defaultTargetPlatform == TargetPlatform.android
+        ? "http://10.0.2.2:3000"
+        : "http://localhost:3000"));
 
   int? _currentLogId;
   StreamSubscription<Position>? _positionSub;
@@ -191,6 +192,23 @@ String get apiBase =>
       accuracy: LocationAccuracy.high,
       distanceFilter: 5,
     );
+
+    if (dummyGps) {
+      double lat = 35.1243, lng = 136.9115;
+      _heartbeatTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+        lat += 0.00005; lng += 0.00005;          // 約7mずつ進む
+        final pos = Position(
+          latitude: lat, longitude: lng,
+          timestamp: DateTime.now(),
+          accuracy: 5, altitude: 0, altitudeAccuracy: 0,
+          heading: 0, headingAccuracy: 0, speed: 1.4, speedAccuracy: 0,
+        );
+        _lastMovementTime = DateTime.now();
+        onPosition?.call(pos);
+        _sendPoint(logId, pos);
+      });
+      return;
+    }
 
     if (!kIsWeb) {
       _positionSub = Geolocator.getPositionStream(locationSettings: settings)

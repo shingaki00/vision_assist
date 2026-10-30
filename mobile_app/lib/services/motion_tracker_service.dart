@@ -158,7 +158,8 @@ class _GpsTestPageState extends State<GpsTestPage> {
   @override
   void initState() {
     super.initState();
-    WalkingTrackerService.offlineMode = false;
+    WalkingTrackerService.offlineMode = false;  // trueなら実機テスト用のトンネルURLを使用する
+    WalkingTrackerService.dummyGps = false;     // trueならテストデータを使用する
     _tracker = MotionAutoTracker(patientId: '1')
       ..onPosition = (p) {
         if (!mounted) return;
