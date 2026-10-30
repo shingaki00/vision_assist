@@ -2,15 +2,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:geolocator/geolocator.dart';
+//import 'package:mobile_app/views/log_page.dart';
 
 // 各コンポーネント・サービスのインポート
 import '../services/tts_service.dart';
+import '../services/obstacle_source.dart';
 import '../widgets/device_status_card.dart';
 import '../widgets/radar_display.dart';
 import '../widgets/emergency_button.dart';
 import '../services/motion_tracker_service.dart';
 import '../services/auth_service.dart';
 import 'login_page.dart'; // ログアウト後に戻るためのインポート
+//import 'log_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,12 +31,17 @@ class _HomePageState extends State<HomePage> {
   bool _hasObstacle = false;
 
   final Battery _battery = Battery();
-  final TtsService _ttsService = TtsService(); 
+
+  final TtsService _ttsService = TtsService();
+
+  ObstacleSource? _obstacleSource;
+  StreamSubscription<ObstacleEvent>? _obstacleSub;
 
   MotionAutoTracker? _autoTracker;
-  
+
   StreamSubscription<ServiceStatus>? _gpsServiceStatusSubscription;
   Timer? _batteryTimer;
+  Timer? _clearTimer;
 
   @override
   void initState() {
@@ -46,10 +54,15 @@ class _HomePageState extends State<HomePage> {
       return; // ログインしていなければ追跡を開始しない
     }
 
-    _ttsService.init(); 
+    _ttsService.init();
     _initDeviceStates();
     _autoTracker = MotionAutoTracker(patientId: patientId);
     _autoTracker!.start();
+
+    // 障害物イベントの購読(実機がつながったらBLE版に差し替え)
+    _obstacleSource = DummyObstacleSource();
+    _obstacleSub = _obstacleSource!.stream
+      .listen((e) => _handleObstacleDetected(e.type, e.distance));
   }
 
   void _initDeviceStates() async {
@@ -64,7 +77,8 @@ class _HomePageState extends State<HomePage> {
       _syncStatus = isGpsEnabled ? "同期中" : "停止中";
     });
 
-    _gpsServiceStatusSubscription = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+    _gpsServiceStatusSubscription =
+        Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
       setState(() {
         if (status == ServiceStatus.enabled) {
           _gpsStatus = "ON";
@@ -91,20 +105,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _handleObstacleDetected(String type, double distance) async {
-    String message = "";
-    if (type == "stairs") {
-      message = "${distance.toInt()}メートル先に階段があります。";
-    } else if (type == "railway") {
-      message = "${distance.toInt()}メートル先に線路があります。注意してください。";
-    } else {
-      message = "前方、$distanceメートルに障害物があります。";
+    // 画面表示も読み上げと同じテンプレートを使う
+    final message = ObstacleMessageGenerator.generate(type, distance);
+
+    if (mounted) {
+      setState(() {
+        _radarMessage = message;
+        _hasObstacle = true;
+      });
+      _clearTimer?.cancel();
+      _clearTimer = Timer(const Duration(seconds: 4), _clearObstacleStatus);
     }
-
-    setState(() {
-      _radarMessage = message;
-      _hasObstacle = true;
-    });
-
     await _ttsService.speakObstacle(type, distance);
   }
 
@@ -124,7 +135,8 @@ class _HomePageState extends State<HomePage> {
       context: context,
       barrierDismissible: false, // ダイアログの外をタップしても閉じないようにする
       builder: (context) {
-        return StatefulBuilder( // ダイアログ内の文字入力をリアルタイムに検知してボタン状態を変える
+        return StatefulBuilder(
+          // ダイアログ内の文字入力をリアルタイムに検知してボタン状態を変える
           builder: (context, setDialogState) {
             return AlertDialog(
               backgroundColor: Colors.white, // 全体に合わせてダーク系に
@@ -151,8 +163,10 @@ class _HomePageState extends State<HomePage> {
                     decoration: InputDecoration(
                       hintText: 'ログアウト',
                       hintStyle: const TextStyle(color: Colors.black38),
-                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black26)),
-                      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)),
+                      enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black26)),
+                      focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green)),
                     ),
                     onChanged: (text) {
                       // 入力された文字が「ログアウト」と完全一致しているか判定
@@ -166,7 +180,8 @@ class _HomePageState extends State<HomePage> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('キャンセル', style: TextStyle(color: Colors.black54)),
+                  child: const Text('キャンセル',
+                      style: TextStyle(color: Colors.black54)),
                 ),
                 ElevatedButton(
                   // 文字が正しく入力されているときだけ関数を有効化（それ以外はボタンが無効＝灰色になる）
@@ -175,7 +190,8 @@ class _HomePageState extends State<HomePage> {
                           Navigator.pop(context); // ダイアログを閉じる
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (_) => const LoginPage()), // ログイン画面へ戻る
+                            MaterialPageRoute(
+                                builder: (_) => const LoginPage()), // ログイン画面へ戻る
                           );
                         }
                       : null,
@@ -184,7 +200,8 @@ class _HomePageState extends State<HomePage> {
                     disabledBackgroundColor: Colors.black12, // 無効化されているときのボタンの色
                     disabledForegroundColor: Colors.black38, // 無効化されているときの文字の色
                   ),
-                  child: const Text('確定', style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text('確定',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ],
             );
@@ -196,11 +213,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    _obstacleSub?.cancel();
+    _obstacleSource?.dispose();
     _batteryTimer?.cancel();
     _gpsServiceStatusSubscription?.cancel();
-    _ttsService.stop(); 
+
+    _ttsService.stop();
     _autoTracker?.dispose();
     super.dispose();
+    _clearTimer?.cancel();
   }
 
   @override
@@ -213,7 +234,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           // ログアウトボタン押下時に確認アラートを呼ぶように変更
           IconButton(
-            icon: const Icon(Icons.logout), 
+            icon: const Icon(Icons.logout),
             onPressed: () => _showLogoutConfirmation(context),
           ),
         ],
@@ -230,18 +251,31 @@ class _HomePageState extends State<HomePage> {
               syncStatus: _syncStatus,
             ),
             const SizedBox(height: 24),
-
             _buildSectionTitle('障害物検知システム'),
             RadarDisplay(
               radarMessage: _radarMessage,
               hasObstacle: _hasObstacle,
               onClear: _clearObstacleStatus,
-              onTestPressed: _handleObstacleDetected,
             ),
             const SizedBox(height: 24),
-
             _buildSectionTitle('緊急アクション'),
             const EmergencyButton(),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              // child: ElevatedButton.icon(
+              //   icon: const Icon(Icons.map),
+              //   label: const Text("移動ログ"),
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => const LogPage(),
+              //       ),
+              //     );
+              //   },
+              // ),
+            ),
           ],
         ),
       ),
@@ -251,7 +285,8 @@ class _HomePageState extends State<HomePage> {
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      child: Text(title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
     );
   }
 }

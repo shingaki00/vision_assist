@@ -33,6 +33,7 @@ OBSTACLE_ALERT_DISTANCE_CM = 200.0   # 物(人以外)はこの距離より近け
 PERSON_ALERT_DISTANCE_CM = 100.0     # 人はこの距離より近ければ警告(50〜100cmの範囲で調整可)
 CENTER_OFFSET_RATIO = 0.3            # 画面中央からのズレがこの割合以下なら「正面」とみなす
 BEEP_COOLDOWN_SEC = 1.0              # 連続で鳴らしすぎないための最短間隔
+INFERENCE_INTERVAL_SEC = 0.01         # 推論頻度を最大約10回/秒に制限
 
 
 def find_largest_centered(results, frame_w, frame_h, center_offset_ratio, want_person):
@@ -72,12 +73,14 @@ def main():
         print("SERIAL_PORTの設定を確認してください。")
         return
 
-    print("YOLOモデルを読み込み中...")
-    model = YOLO("yolov8n.pt")
-
-    cap = cv2.VideoCapture(CAMERA_SOURCE)
-    if not cap.isOpened():
-        print(f"カメラに接続できませんでした: {CAMERA_SOURCE}")
+    print("[2/3] YOLOモデル(best.pt)を読み込み中...")
+    try:
+        model_path = os.path.join(os.path.dirname(__file__), "best.pt")
+        model = YOLO(model_path)
+        print("  └─ [成功] YOLOモデルの読み込みが完了しました！")
+    except Exception as e:
+        print(f"  └─ [エラー] モデルの読み込みに失敗しました: {e}")
+        print("     実行フォルダ内に 'best.pt' が存在するか確認してください。")
         link.close()
         return
 
@@ -85,16 +88,30 @@ def main():
 
     try:
         while True:
-            ret, frame = cap.read()
-            if not ret:
+            time.sleep(INFERENCE_INTERVAL_SEC)
+
+            # 1. カメラ画像取得
+            try:
+                # タイムアウトを3秒に設定して接続待ちでのフリーズを防止
+                resp = requests.get(CAMERA_SOURCE, timeout=3.0)
+                resp.raise_for_status()
+                img = Image.open(BytesIO(resp.content))
+                consecutive_camera_errors = 0  # 成功したらエラーカウントをリセット
+            except Exception as e:
+                consecutive_camera_errors += 1
+                if consecutive_camera_errors % 10 == 1:  # ログが埋まらないよう定期的に表示
+                    print(f"[警告] カメラ画像取得失敗 ({consecutive_camera_errors}回目): Wi-Fi接続やIPアドレスを確認してください。")
                 continue
 
             distance_cm = link.get_distance_cm()
-            results = model(frame, verbose=False)[0]
-            h, w = frame.shape[:2]
 
-            person_label = find_largest_centered(results, w, h, CENTER_OFFSET_RATIO, want_person=True)
-            obstacle_label = find_largest_centered(results, w, h, CENTER_OFFSET_RATIO, want_person=False)
+            # 3. YOLOでの物体認識
+            result = model.predict(img, verbose=False, imgsz=416)[0]
+            h, w = result.orig_shape
+
+            # 4. 正面にある対象の識別
+            person_label = find_largest_centered(result, w, h, CENTER_OFFSET_RATIO, want_person=True, person_classes=person_classes)
+            obstacle_label = find_largest_centered(result, w, h, CENTER_OFFSET_RATIO, want_person=False, person_classes=person_classes)
 
             person_close = (
                 person_label is not None

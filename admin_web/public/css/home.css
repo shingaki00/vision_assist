@@ -1,312 +1,424 @@
 /* 横並びにする */
 .home-container {
-    display: flex;
-    flex-direction: row;
-    margin: 20px auto;
-    max-width: 1080px;
-    padding: 0 20px;
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  margin: 20px auto;
+  max-width: 1080px;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* 共通のスタイル */
 .quick-access,
 .activity-feed {
-    padding: 10px;
+  padding: 10px;
 }
 
 .left-col {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
+  flex: 2;
+  display: flex;
+  flex-direction: column;
 }
 
 /* -------------------------------------- */
 /* サマリーカードの配置 */
 /* -------------------------------------- */
 .summary-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 20px 30px 30px 30px;
-    list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px 30px 30px 30px;
+  list-style: none;
 }
 
 .summary-card {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background-color: white;
-    padding: 20px;
-    border-radius: 12px;
-    border: 2px solid #ccc;
-    transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  transition: 0.2s;
 }
 
 .summary-label {
-    margin: 0 0 4px;
-    font-size: 14px;
-    color: #49454F;
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: #49454f;
 }
 
 .summary-value {
-    margin: 0 0 3px;
-    font-size: 24px;
-    font-weight: bold;
-    color: black;
-    line-height: 1.1;
+  margin: 0 0 3px;
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  line-height: 1.1;
 }
 
-.summary-change { margin: 0; font-size: 13px; }
-.summary-change.up   { color: #1aac88; }
-.summary-change.down { color: #c52c2c; }
-
+.summary-change {
+  margin: 0;
+  font-size: 13px;
+}
+.summary-change.up {
+  color: #1aac88;
+}
+.summary-change.down {
+  color: #c52c2c;
+}
 
 /* -------------------------------------- */
 /* クイックアクセスの配置 */
 /* -------------------------------------- */
 
 .quick-access-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 20px;
-    list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  list-style: none;
 }
 
 /* クイックアクセスのカード */
 .quick-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    background-color: white;
-    padding: 20px;
-    border-radius: 12px;
-    border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid #ccc;
 
-    text-decoration: none;
-    transition: 0.2s;
+  text-decoration: none;
+  transition: 0.2s;
 }
 
 .quick-card:hover {
-    transform: translateY(-3px);
-    border-color: #714876;
+  transform: translateY(-3px);
+  border-color: #714876;
 }
 
 /* アイコンとテキストのスタイル */
 .icon {
-    font-size: 24px;
-    padding: 12px;
-    border-radius: 10px;
+  font-size: 24px;
+  padding: 12px;
+  border-radius: 10px;
 }
 
 .text h4 {
-    margin: 0;
-    font-size: 18px;
-    color: #804893;
+  margin: 0;
+  font-size: 18px;
+  color: #804893;
 }
 
 .text p {
-    margin: 5px 0 0;
-    font-size: 14px;
-    color: #9ca3af;
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #9ca3af;
 }
 
 /* 矢印アイコン */
 .arrow {
-    margin-left: auto;
-    font-size: 30px;
-    color: #3A2C3D;
+  margin-left: auto;
+  font-size: 30px;
+  color: #3a2c3d;
 }
-
 
 /* -------------------------------------- */
 /* アクティビティフィードのアイテム          */
 /* -------------------------------------- */
 .activity-feed {
-    flex: 1;  /* 少し狭く */
-    margin: 12px;
-    padding: 15px;
-    border: 2px solid #ccc;
-    border-radius: 12px;
-    background-color: white;
-    align-self: flex-start;
+  flex: 1; /* 少し狭く */
+  margin: 12px;
+  padding: 15px;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  background-color: white;
+  align-self: flex-start;
 }
 
 .activity-list {
-    margin: 0;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 各アイテム */
 .activity-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding:  8px 8px;
-    margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 8px;
+  margin: 10px;
 }
 
 .activity-feed-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    margin: 5px 0 12px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0 12px 0;
 }
 
 .activity-header-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* ----- 左側 ------*/
 
 /* 未読アイテムとバッジ */
 .activity-item.unread {
-    border-left: 3px solid #7c3aed; 
+  border-left: 3px solid #7c3aed;
 }
 
 .unread-dot {
-    border-radius: 50%;
-    background: #7c3aed;
-    flex-shrink: 0;
+  border-radius: 50%;
+  background: #7c3aed;
+  flex-shrink: 0;
 }
 
 #unread-badge {
-    background: #7c3aed;
-    color: #fff;
-    font-size: .7rem;
-    font-weight: 700;
-    border-radius: 99px;
-    padding: 2px 8px;
+  background: #7c3aed;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 99px;
+  padding: 2px 8px;
 }
 
 .activity-text {
-    flex: 1;
+  flex: 1;
 }
 
 .activity-title {
-    color: #804893;
-    margin: 0;
-    font-weight: bold;
+  color: #804893;
+  margin: 0;
+  font-weight: bold;
 }
 
 .activity-desc {
-    margin: 4px 0 0;
-    font-size: 14px;
-    color: #9ca3af;
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #9ca3af;
 }
 
 /*  既読ボタン */
-#btn-mark-all{
-    font-size: 11px;
-    padding: 6px 10px;
-    color:dimgrey;
-    background-color: white;
-    border:2px solid #ccc;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
+#btn-mark-all {
+  font-size: 11px;
+  padding: 6px 10px;
+  color: dimgrey;
+  background-color: white;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 #btn-mark-all:hover {
-    transform: translateY(-3px);
-    background-color: #8c50a0;
-    border:2px solid transparent;
-    color: white;
+  transform: translateY(-3px);
+  background-color: #8c50a0;
+  border: 2px solid transparent;
+  color: white;
 }
 
 /* ----- 左側(時間) ------*/
 .activity-time {
-    font-size: 12px;
-    color: #9ca3af;
+  font-size: 12px;
+  color: #9ca3af;
 }
 
 /* もっとみるボタン */
 .activity-footer {
-    text-align: center;
-    padding: 14px 0 4px;
-    border-top: 1px solid #e5e7eb;
+  text-align: center;
+  padding: 14px 0 4px;
+  border-top: 1px solid #e5e7eb;
 }
 
 #btn-show-all {
-    background: none;
-    border: none;
-    color: #804893;
-    font-size: .8rem;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: 0.4s;
+  background: none;
+  border: none;
+  color: #804893;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: 0.4s;
 }
 
 #btn-show-all:hover {
-   transform: translateY(-3px);
+  transform: translateY(-3px);
 }
 
-
 /* --- -- モーダル ------ */
-#modal-title{
-    font-size: 20px;
-    color:#1C1B1E;
+#modal-title {
+  font-size: 20px;
+  color: #1c1b1e;
 }
 
 #activity-modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.35);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none;
-    transition: opacity .2s;
-    z-index: 100;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 100;
 }
 
 #activity-modal-overlay.open {
-    opacity: 1;
-    pointer-events: auto; 
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .activity-modal {
-    background: #fff;
-    border-radius: 12px;
-    padding: 24px;
-    width: min(400px, 90vw);
-    box-shadow: 0 20px 60px rgba(0,0,0,.15);
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  width: min(400px, 90vw);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
-.modal-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
-.modal-close { background: none; border: none; cursor: pointer; font-size: 14px; }
-.modal-time { font-size: .75rem; color: #6b7280; margin-top: 12px; }
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+.modal-time {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 12px;
+}
 
 .all-activity-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 10px 0;
-    border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .all-activity-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 /* ──────────────────────────────────────────── */
 /*      レスポンシブ                               */
 /* ──────────────────────────────────────────── */
 @media (max-width: 950px) {
-    .home-container {
-        flex-direction: column;
-    }
+  .home-container {
+    flex-direction: column;
+  }
 
-    .quick-access,
-    .activity-feed {
-        width: 100%;
-    }
+  .quick-access,
+  .activity-feed {
+    width: 100%;
+  }
 
-    .activity-header-actions {
-        margin-right: 18px;
-    }
+  .activity-header-actions {
+    margin-right: 18px;
+  }
+}
+/* ─── ダークモード対応 ────────────────────── */
+body.dark-mode {
+  background: #121212;
+  color: #f1edf1;
+}
+
+/* =========================
+   カード
+========================= */
+
+body.dark-mode .summary-card,
+body.dark-mode .quick-card,
+body.dark-mode .activity-feed {
+  background: #1e1e22;
+  border-color: #3f3f46;
+  color: #f1edf1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* クイックカード ホバー */
+body.dark-mode .quick-card:hover {
+  background: #29282d;
+  border-color: #6b6570;
+}
+
+/* クイックカード 選択中 */
+body.dark-mode .quick-card.active {
+  background: rgba(144, 72, 147, 0.18);
+  color: var(--highlight);
+  border-left-color: var(--highlight);
+}
+
+/* =========================
+   まとめて既読ボタン
+========================= */
+
+body.dark-mode #btn-mark-all {
+  background: #29272c;
+  color: #e6e1e6;
+  border-color: #49454f;
+}
+
+body.dark-mode #btn-mark-all:hover {
+  background: rgba(144, 72, 147, 0.2);
+  color: var(--highlight);
+  border-color: var(--highlight);
+}
+
+/* =========================
+   テキスト
+========================= */
+
+body.dark-mode .summary-list,
+body.dark-mode .summary-label,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode #modal-title,
+body.dark-mode .modal-close {
+  color: #f1edf1;
+}
+
+body.dark-mode p {
+  color: #aaa5ad;
+}
+
+body.dark-mode .activity-title {
+  color: #804893;
+}
+
+/* =========================
+   モーダル
+========================= */
+
+body.dark-mode .activity-modal {
+  background: #29252e;
+  color: #f1edf1;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+/* モーダル閉じるボタン */
+body.dark-mode .modal-close:hover {
+  color: var(--highlight);
+}
+
+/* =========================
+   アイコン
+========================= */
+
+body.dark-mode #eye {
+  color: #121212;
 }

@@ -14,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _idController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _loginIdController = TextEditingController();
   final _authService = AuthService();
   bool _isLoading = false;
   String _errorMessage = "";
@@ -27,7 +28,8 @@ class _LoginPageState extends State<LoginPage> {
 
     final id = _idController.text.trim();
     final password = _passwordController.text.trim();
-    bool success = await _authService.login(id, password);
+    final loginId = _loginIdController.text.trim();
+    bool success = await _authService.login(id, password, loginId);
 
     setState(() => _isLoading = false);
 
@@ -43,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _idController.dispose();
     _passwordController.dispose();
+    _loginIdController.dispose();
     super.dispose();
   }
 
@@ -121,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                                 fontWeight: FontWeight.bold)),
                   ),
                 ),
-
+                
                 const SizedBox(height: 32),
 
                 // スマホで見やすい注釈エリア
