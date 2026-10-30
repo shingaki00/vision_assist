@@ -457,7 +457,7 @@ h2 {
 /* Google Map 本体 */
 #map {
     width: 100%;
-    height: 420px;
+    height: 600px;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,.12);
@@ -465,10 +465,10 @@ h2 {
 }
 
 /* レスポンシブ */
-@media (max-width: 768px) {
+@media (max-width: 770px) {
     .walk-layout { flex-direction: column; }
     .list-card   { flex: none; width: 100%; }
     .detail-panel { flex: none; width: 100%; }
     .stats-grid  { grid-template-columns: 1fr 1fr; }
-    #map         { height: 420px; }
+    #map         { height: 600px; }
 }
