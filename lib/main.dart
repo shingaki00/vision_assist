@@ -41,9 +41,9 @@ class VisionAssistScreen extends StatefulWidget {
 }
 
 class _VisionAssistScreenState extends State<VisionAssistScreen> {
-  // ★CamS3のIPアドレス（ブラウザで確認したストリームURLに合わせて変更してください）
+  // ★CamS3の正規エンドポイント（capture API）
   final TextEditingController _urlController =
-      TextEditingController(text: 'http://192.168.4.1/stream');
+      TextEditingController(text: 'http://192.168.4.1/api/v1/capture');
 
   Interpreter? _interpreter;
   List<String> _labels = [];
@@ -89,18 +89,77 @@ class _VisionAssistScreenState extends State<VisionAssistScreen> {
     }
   }
 
-  // CamS3のMJPEGストリームの開始
+  bool _isStreaming = false;
+
+  // CamS3のキャプチャ/ストリーム開始
   Future<void> _startStreaming() async {
     _stopStreaming();
+    _isStreaming = true;
     setState(() {
       _isConnecting = true;
       _errorMessage = null;
     });
+
     final url = Uri.parse(_urlController.text.trim());
 
+    if (url.path.contains('capture')) {
+      _runCaptureLoop(url);
+    } else {
+      _runMjpegStream(url);
+    }
+  }
+
+  // capture API用ループポーリング（cam_appと同一仕様）
+  Future<void> _runCaptureLoop(Uri url) async {
+    final client = HttpClient()..connectionTimeout = const Duration(seconds: 3);
+    setState(() {
+      _isConnecting = false;
+    });
+
+    while (_isStreaming && mounted) {
+      try {
+        final request = await client.getUrl(url);
+        _activeRequest = request;
+        final response = await request.close();
+
+        if (response.statusCode == 200) {
+          final builder = await response.fold<BytesBuilder>(
+            BytesBuilder(),
+            (b, chunk) => b..add(chunk),
+          );
+          final bytes = builder.takeBytes();
+
+          if (!_isStreaming || !mounted) break;
+
+          setState(() {
+            _currentFrame = bytes;
+            _errorMessage = null;
+          });
+
+          if (!_isDetecting && _isModelLoaded) {
+            await _runInference(bytes);
+          }
+        } else {
+          setState(() {
+            _errorMessage = 'HTTPステータス: ${response.statusCode}';
+          });
+          await Future.delayed(const Duration(milliseconds: 300));
+        }
+      } catch (e) {
+        if (!_isStreaming) break;
+        setState(() {
+          _errorMessage = '接続エラー: $e';
+        });
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+    }
+    client.close();
+  }
+
+  // MJPEGストリーム用
+  Future<void> _runMjpegStream(Uri url) async {
     try {
-      final client = HttpClient()
-        ..connectionTimeout = const Duration(seconds: 5);
+      final client = HttpClient()..connectionTimeout = const Duration(seconds: 5);
       _activeRequest = await client.getUrl(url);
       final response = await _activeRequest!.close();
 
@@ -118,7 +177,6 @@ class _VisionAssistScreenState extends State<VisionAssistScreen> {
         (chunk) {
           buffer.addAll(chunk);
 
-          // バッファ肥大化防止（5MB超過時はクリア）
           if (buffer.length > 5 * 1024 * 1024) {
             buffer.clear();
             return;
@@ -186,6 +244,7 @@ class _VisionAssistScreenState extends State<VisionAssistScreen> {
   }
 
   void _stopStreaming() {
+    _isStreaming = false;
     _activeRequest?.abort();
     _activeRequest = null;
   }
