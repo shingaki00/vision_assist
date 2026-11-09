@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 //import 'package:http/http.dart' as http;
 
@@ -19,8 +20,8 @@ class LogService {
 
     // 通信成功
 
-    print("JSON読み込み成功");
-    print(jsonData);
+    debugPrint("JSON読み込み成功");
+    debugPrint(jsonData);
 
     //if (response.statusCode == 200) {
 
@@ -34,6 +35,6 @@ class LogService {
     return gpsData.map((e) => LogModel.fromJson(e)).toList();
     //}
 
-    throw Exception("取得失敗");
+    
   }
 }
