@@ -219,18 +219,26 @@ admin_web/node_modules/
 # Flutter / Dart
 **/doc/api/
 **/ios/Flutter/.last_build_id
+**/ios/Flutter/ephemeral/
+**/macos/Flutter/ephemeral/
 .dart_tool/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
 /build/
-/coverage/
+**/coverage/
 app.*.symbols
 app.*.map.json
-/android/app/debug
-/android/app/profile
-/android/app/release
-/android/local.properties
+**/android/app/debug
+**/android/app/profile
+**/android/app/release
+**/android/local.properties
+**/android/key.properties
+**/android/captures/
+**/android/.cxx/
+.gradle/
+**/*.keystore
+**/*.jks
 
 # Mobile app editor/build artifacts
 *.class
@@ -246,3 +254,6 @@ migrate_working_dir/
 *.ipr
 *.iws
 .idea/
+
+# aiskel output directory
+ai_meta/
