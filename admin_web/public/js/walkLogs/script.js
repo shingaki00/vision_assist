@@ -3,6 +3,8 @@ import { renderHistory, clearHistory } from "./historyView.js";
 import { startLiveTracking, stopLiveTracking } from "./liveTracking.js";
 
 const API_BASE = "http://localhost:3000"; // server.js のURL
+const PAGE_SIZE = 15;
+let currentPage = 1;
 
 // ─── データ ────────────────────────────────────
 let testData = null;
@@ -72,10 +74,17 @@ function renderList(patientId) {
  
     if (logs.length === 0) {
         container.innerHTML = `<div class="log-empty">ログがありません</div>`;
+        document.getElementById("pagination").innerHTML = "";
         return;
     }
+
+    const totalPages = Math.ceil(logs.length / PAGE_SIZE);
+    currentPage = Math.min(Math.max(currentPage, 1), totalPages);
+
+    const startIdx = (currentPage - 1) * PAGE_SIZE;
+    const pageLogs = logs.slice(startIdx, startIdx + PAGE_SIZE);
  
-    container.innerHTML = logs.map((log, i) => {
+    container.innerHTML = pageLogs.map((log, i) => {
         const isLive = !log.end_time;
         const duration = isLive ? "進行中" : calcDuration(log.start_time, log.end_time);
         const date = log.start_time.slice(0, 10);
@@ -87,9 +96,10 @@ function renderList(patientId) {
         );
  
         const distStr = pts.length >= 2 ? formatDistance(calcTotalDistance(pts)) : " —";
+        const activeClass = String(log.id) === String(selectedLogId) ? " active" : "";
  
         return `
-            <div class="user-row"
+            <div class="user-row ${activeClass}"
                 style="animation-delay:${i * 0.04}s"
                 data-id="${log.id}">
                 <div class="log-row-top">
@@ -111,6 +121,7 @@ function renderList(patientId) {
             selectLog(row.dataset.id);
         });
     });
+    renderPagination(totalPages, patientId);
 }
  
 // ─────────────────────────────────────
@@ -378,4 +389,52 @@ export function createMarker(map, position, icon, title, infoContent = null) {
     marker.addListener("click", () => infoWindow.open(map, marker));
   }
   return marker;
+}
+
+// ページ番号リストを生成（例：1 … 4 5 6 … 12） 
+function buildPageList(current, total) {
+    if (total <= 7) {
+        return Array.from({ length: total }, (_, i) => i + 1);
+    }
+    const pages = [1];
+    const left  = Math.max(2, current - 1);
+    const right = Math.min(total - 1, current + 1);
+
+    if (left > 2) pages.push("…");
+    for (let p = left; p <= right; p++) pages.push(p);
+    if (right < total - 1) pages.push("…");
+
+    pages.push(total);
+    return pages;
+}
+
+// ページネーションUIを描画
+function renderPagination(totalPages, patientId) {
+    const el = document.getElementById("pagination");
+
+    // 1ページ以内なら非表示
+    if (totalPages <= 1) {
+        el.innerHTML = "";
+        return;
+    }
+
+    const pageButtons = buildPageList(currentPage, totalPages).map(p =>
+        p === "…"
+            ? `<span class="page-ellipsis">…</span>`
+            : `<button class="page-btn${p === currentPage ? " active" : ""}" data-page="${p}">${p}</button>`
+    ).join("");
+
+    el.innerHTML = `
+        <button class="page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? "disabled" : ""}>前へ</button>
+        ${pageButtons}
+        <button class="page-btn" data-page="${currentPage + 1}" ${currentPage === totalPages ? "disabled" : ""}>次へ</button>
+    `;
+
+    el.querySelectorAll(".page-btn:not([disabled])").forEach(btn => {
+        btn.addEventListener("click", () => {
+            currentPage = parseInt(btn.dataset.page);
+            renderList(patientId);
+            document.getElementById("logList").scrollTop = 0;
+        });
+    });
 }

@@ -492,6 +492,49 @@ h2 {
     #map         { height: 600px; }
 }
 
+/* ─── ページネーション ──────────────────── */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 8px;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid color-mix(in srgb, var(--border) 25%, transparent);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--text-main);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.page-btn:hover:not([disabled]):not(.active) {
+    background: var(--bg-active);
+}
+
+.page-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--text-on-primary);
+    cursor: default;
+}
+
+.page-btn[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-ellipsis {
+    color: var(--text-muted);
+    padding: 0 4px;
+}
+
 /* ─── ダークモード対応 ────────────────────── */
 body.dark-mode {
   background: #121014;
