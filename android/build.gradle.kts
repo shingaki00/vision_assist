@@ -19,19 +19,26 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
-// 古いプラグインの compileSdk を Android 36 へ動的整合
+// プラグインのみを対象に compileSdk を 36 へ安全に適用
 subprojects {
-    afterEvaluate {
-        project.extensions.findByName("android")?.let { android ->
-            try {
-                val method = android.javaClass.getMethod("compileSdkVersion", Int::class.javaPrimitiveType)
-                method.invoke(android, 36)
-            } catch (_: Exception) {
+    if (project.name != "app") {
+        val configureAndroid: () -> Unit = {
+            extensions.findByName("android")?.let { android ->
                 try {
-                    val method = android.javaClass.getMethod("setCompileSdk", Int::class.javaPrimitiveType)
+                    val method = android.javaClass.getMethod("compileSdkVersion", Int::class.javaPrimitiveType)
                     method.invoke(android, 36)
-                } catch (_: Exception) {}
+                } catch (_: Exception) {
+                    try {
+                        val method = android.javaClass.getMethod("setCompileSdk", Int::class.javaPrimitiveType)
+                        method.invoke(android, 36)
+                    } catch (_: Exception) {}
+                }
             }
+        }
+        if (state.executed) {
+            configureAndroid()
+        } else {
+            afterEvaluate { configureAndroid() }
         }
     }
 }

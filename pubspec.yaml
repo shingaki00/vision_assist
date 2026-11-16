@@ -1,0 +1,32 @@
+name: vision_assist
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # === ここから追加 ===
+  tflite_flutter: 0.11.0   # TFLite推論エンジン
+  image: ^4.2.0            # 画像デコード・リサイズ用
+  http: ^1.2.1             # CamS3からのHTTPストリーム受信
+  # ====================
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  # === モデルとラベルの読み込み設定を追加 ===
+  assets:
+    - assets/models/vidvipo_yolov8n.tflite
+    - assets/models/labels.txt
