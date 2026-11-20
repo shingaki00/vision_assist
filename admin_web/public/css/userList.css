@@ -52,7 +52,7 @@
 }
 
 /* ページタイトル */
-h1 {
+h2 {
   font-size: 22px;
   font-weight: 700;
   color: var(--primary);

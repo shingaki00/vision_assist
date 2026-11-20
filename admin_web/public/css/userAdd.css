@@ -46,7 +46,7 @@
 }
 
 /* ページタイトル */
-h1 {
+h2 {
   font-size: 22px;
   font-weight: 700;
   color: var(--primary);
@@ -162,7 +162,7 @@ body.dark-mode .form-input {
   color: #E6E1E6;
 }
 
-body.dark-mode h1,
+body.dark-mode h2,
 body.dark-mode .list-title {
   color: #E6E1E6;
 }
