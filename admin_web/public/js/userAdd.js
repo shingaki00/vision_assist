@@ -1,6 +1,5 @@
-//const { response } = require("express");
-
 document.getElementById("touroku").addEventListener("click", registerUser);
+
 function registerUser(event) {
   event.preventDefault();
 
@@ -11,9 +10,6 @@ function registerUser(event) {
     age: document.getElementById("age").value,
     emergency_note: document.getElementById("emergency_note").value,
   };
-
-  console.log(userData);
-  let flg = true;
 
   if (isNaN(userData.age) || userData.age < 0 || userData.age > 150) {
     alert("年齢を正しく入力してください");
@@ -32,19 +28,12 @@ function registerUser(event) {
   } else {
     fetch("http://localhost:3000/addUser", {
       method: "POST",
-
       headers: {
         "Content-Type": "application/json",
       },
-
       body: JSON.stringify(userData),
     })
-<<<<<<< HEAD
       .then((response) => {
-=======
-
-    .then((response) => {
->>>>>>> b104a26aebb1938d3c0fa770f7f8fe9e53969927
         if (!response.ok) throw new Error("登録失敗");
         return response.text();
       })
@@ -55,10 +44,6 @@ function registerUser(event) {
       .catch((error) => {
         console.error(error);
         alert("登録に失敗しました。もう一度お試しください");
-<<<<<<< HEAD
       });
-=======
-    });
->>>>>>> b104a26aebb1938d3c0fa770f7f8fe9e53969927
   }
 }

@@ -32,6 +32,14 @@ function saveData(data) {
   fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 4), "utf-8");
 }
 
+function localISOString(date = new Date()) {
+  const pad = n => String(n).padStart(2, "0");
+  return (
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
+    `T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+  );
+}
+
 function nextId(items) {
   return items.length ? Math.max(...items.map(i => i.id)) + 1 : 1;
 }
@@ -57,7 +65,7 @@ async function main() {
   data.walkingLogs.push({
     id: logId,
     patient_id: patientId,
-    start_time: startTime.toISOString(),
+    start_time: localISOString(startTime),
     end_time: null,
     log_id: logId,
   });
@@ -79,7 +87,7 @@ async function main() {
       log_id: logId,
       latitude,
       longitude,
-      timestamp: new Date().toISOString(),
+      timestamp: localISOString(),
     });
 
     saveData(fresh);
@@ -92,7 +100,7 @@ async function main() {
   const finalData = loadData();
   const log = finalData.walkingLogs.find(l => l.id === logId);
   if (log) {
-    log.end_time = new Date().toISOString();
+    log.end_time = localISOString();
     saveData(finalData);
     console.log(`[終了] log_id=${logId} の歩行を終了しました。画面を履歴表示に切り替えます。`);
   }
