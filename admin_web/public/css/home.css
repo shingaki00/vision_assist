@@ -414,6 +414,19 @@ body.dark-mode .activity-modal {
 body.dark-mode .modal-close:hover {
   color: var(--highlight);
 }
+/* ページ切り替え */
+#pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+#pagination button {
+  padding: 8px 15px;
+  cursor: pointer;
+}
 
 /* =========================
    アイコン

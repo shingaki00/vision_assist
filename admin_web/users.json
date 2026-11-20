@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ae2103c6-5636-4ba7-837f-d9c5e02e3701",
+    "mail_address": "user2@gmail.com",
+    "password_hash": "$2b$10$MW5Mg9WcTYTfk7VyAZ0TMOAIKjcceio.vrqhSx0svkB8oj67t1OdC",
+    "name": "佐藤 太郎",
+    "age": "79",
+    "emergency_note": "なし"
+  },
+  {
+    "id": "49a2d7d6-0125-4883-ba0e-de247e6cd7c9",
+    "mail_address": "user1@gmail.com",
+    "password_hash": "$2b$10$13HkR3AnU42NYjWg1gjXyuDoPfow35Vw/uSWNIHryzJan5PFHs8VK",
+    "name": "山田 太郎",
+    "age": "75",
+    "emergency_note": "なし"
+  },
+  {
+    "id": "fff765fc-b156-4afb-935f-d4c5977dd6c2",
+    "mail_address": "user3@gmail.com",
+    "password_hash": "$2b$10$6n52OCGmgBPjgQmZL60hRe5jp38uk2srCARQxZGKGtCR1GE8ZK7WS",
+    "name": "山田 花子",
+    "age": "71",
+    "emergency_note": "なし"
+  }
+]

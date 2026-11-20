@@ -1,33 +1,33 @@
 /* ─── カラー変数（歩行ログ・設定ページと共通） ──────────────── */
 :root {
-  --primary:          #804893;
-  --highlight:        #EEB1FF;
-  --secondary:        #69596C;
-  --border:           #3A2C3D;
-  --tertiary:         #82524F;
-  --error:            #BA1A1A;
- 
+  --primary: #804893;
+  --highlight: #eeb1ff;
+  --secondary: #69596c;
+  --border: #3a2c3d;
+  --tertiary: #82524f;
+  --error: #ba1a1a;
+
   /* テキスト */
-  --text-main:        #1C1B1E;
-  --text-sub:         #49454F;
-  --text-muted:       #79747E;
-  --text-on-primary:  #FFFFFF;
- 
+  --text-main: #1c1b1e;
+  --text-sub: #49454f;
+  --text-muted: #79747e;
+  --text-on-primary: #ffffff;
+
   /* 背景 */
-  --bg-card:          #FFFFFF;
-  --bg-active:        #f3d1ff;
-  --bg-hover:         rgb(230, 230, 230);
- 
+  --bg-card: #ffffff;
+  --bg-active: #f3d1ff;
+  --bg-hover: rgb(230, 230, 230);
+
   /* バッジ */
-  --badge-active-bg:   #F3E8F7;
+  --badge-active-bg: #f3e8f7;
   --badge-active-text: #804893;
-  --badge-inactive-bg: #EDE0E4;
-  --badge-inactive-text: #69596C;
- 
+  --badge-inactive-bg: #ede0e4;
+  --badge-inactive-text: #69596c;
+
   /* その他 */
-  --radius-card:      14px;
-  --radius-badge:     99px;
-  --shadow-card:      0 1px 4px rgba(60, 30, 70, 0.08);
+  --radius-card: 14px;
+  --radius-badge: 99px;
+  --shadow-card: 0 1px 4px rgba(60, 30, 70, 0.08);
 }
 
 /* ─── ページ全体コンテナ（歩行ログ等と統一） ──────────────── */
@@ -68,7 +68,10 @@ h1 {
   flex-wrap: wrap;
 }
 
-.search-icon {
+.search-icon,
+#select-mode,
+#select-all,
+#delete-user {
   padding: 9px 16px;
   font-size: 14px;
   border: 1.5px solid var(--primary);
@@ -76,7 +79,9 @@ h1 {
   background-color: var(--primary);
   color: var(--text-on-primary);
   cursor: pointer;
-  transition: background 0.15s, opacity 0.15s;
+  transition:
+    background 0.15s,
+    opacity 0.15s;
 }
 
 .search-icon:hover {
@@ -120,7 +125,11 @@ h1 {
   padding: 16px 20px;
   box-shadow: var(--shadow-card);
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.15s,
+    box-shadow 0.15s;
 }
 
 .patient-card:hover {
@@ -219,26 +228,26 @@ h1 {
 /* ─── ダークモード対応 ────────────────────── */
 body.dark-mode {
   background: #121014;
-  color: #E6E1E6;
+  color: #e6e1e6;
 }
 
 body.dark-mode .patient-card,
 body.dark-mode .modal-content,
 body.dark-mode #searchBox {
-  background: #1C1B1E;
-  border-color: #49454F;
-  color: #E6E1E6;
+  background: #1c1b1e;
+  border-color: #49454f;
+  color: #e6e1e6;
 }
 
 body.dark-mode .patient-card:hover {
-  background: #2D2831;
+  background: #2d2831;
 }
 
 body.dark-mode .patient-card h3,
 body.dark-mode .modal-content p {
-  color: #E6E1E6;
+  color: #e6e1e6;
 }
 
 body.dark-mode .patient-card p {
-  color: #938F99;
+  color: #938f99;
 }
