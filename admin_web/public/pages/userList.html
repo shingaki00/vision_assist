@@ -26,9 +26,18 @@
 
       <div class="search-area">
         <button class="search-icon" id="searchBtn">🔍</button>
-        <input type="text" id="searchBox" placeholder="患者名・IDを検索..." />
+        <input
+          type="text"
+          id="searchBox"
+          placeholder="患者名・メールアドレスを検索..."
+        />
       </div>
-
+      <div class="user-controles">
+        <button id="select-mode">選択</button>
+        <button id="select-all" hidden>すべて選択</button>
+        <button id="delete-user" hidden>選択したユーザーを削除</button>
+      </div>
+      <p id="selected-count" hidden>0件選択中</p>
       <div id="patientList"></div>
 
       <div id="modal" class="modal">
